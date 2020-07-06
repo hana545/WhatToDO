@@ -69,6 +69,11 @@ body {
     transform: scale(1.1);
     transition: all ease 400ms;
 }
+
+.light-groove-border{
+    border-left: 1px groove gainsboro;
+
+}
 ///navbar
 
 header {
@@ -92,6 +97,7 @@ nav {
     position: fixed;
     width: 100%;
     line-height: 60px;
+    z-index: 1;
 }
 
 nav ul {

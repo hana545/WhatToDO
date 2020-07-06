@@ -10984,6 +10984,10 @@ body {
   transition: all ease 400ms;
 }
 
+.light-groove-border {
+  border-left: 1px groove gainsboro;
+}
+
 header {
   width: 100%;
   height: 20vh;
@@ -11005,6 +11009,7 @@ nav {
   position: fixed;
   width: 100%;
   line-height: 60px;
+  z-index: 1;
 }
 
 nav ul {
