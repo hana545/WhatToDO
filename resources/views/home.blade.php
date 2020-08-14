@@ -13,7 +13,7 @@
             <div class="container">
                 <div class="row ">
                     <div class="col-md-6">
-                        <div class="card mb-4 box-shadow zoom">
+                        <div class="card mb-4 box-shadow zoom ">
                             <img class="card-img m-3 " style="height: 225px; " src="images/illustrations/map.svg">
                             <div class="card-body">
                                 <p class="card-text text-center" >
@@ -21,7 +21,7 @@
                                 </p>
                                 <div class="align-items-center">
                                     <p class="text-center">
-                                        <a href="#"><button type="button" style="background-color: #0f6674;" class="btn btn-outline-blue-org btn-lg zoom"><b>Search <i class="fa fa-search" aria-hidden="true"></i></b></button></a>
+                                        <a href="{{route('search')}}"><button type="button" style="background-color: #0f6674;" class="btn btn-outline-blue-org btn-lg zoom"><b>Search <i class="fa fa-search" aria-hidden="true"></i></b></button></a>
                                     </p>
                                 </div>
                             </div>
