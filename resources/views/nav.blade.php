@@ -2,7 +2,7 @@
     <div class="container-fluid mr-3">
         <a href="/"><img src="images/logo/logo-bw.png" style="height: 80%; width: 200px"></a>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button v-on:click="CheckSmallNav()" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -19,11 +19,11 @@
                             Options
                         </a>
                         <div class="dropdown-menu bg-black" aria-labelledby="navbarDropdown1">
-                            <a class="dropdown-item btn-outline-blue-org "  href="{{route('add_object')}}">Add object</a>
-                            <a class="dropdown-item btn-outline-blue-org" href="/approve">Confirm objects</a>
+                            <a class="dropdown-item btn-outline-blue "  href="{{route('add_object')}}">Add object</a>
+                            <a class="dropdown-item btn-outline-blue" href="/approve">Confirm objects</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item btn-outline-blue-org"  href="{{route('add_tag')}}">Add tags</a>
-                            <a class="dropdown-item btn-outline-blue-org"  href="{{route('add_category')}}">Add category</a>
+                            <a class="dropdown-item btn-outline-blue"  href="{{route('add_tag')}}">Add tags</a>
+                            <a class="dropdown-item btn-outline-blue"  href="{{route('add_category')}}">Add category</a>
                         </div>
                     </li>
                 @elseif (Auth::check())
@@ -43,13 +43,13 @@
                 @else
                     <li class="nav-item dropdown p-2">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{ Auth::user()->email }}
+                            {{ Auth::user()->name }}
                         </a>
                         <div class="dropdown-menu bg-black" aria-labelledby="navbarDropdown2">
 
-                            <a class="dropdown-item btn-outline-blue-org" href="{{route('user')}}">User profile</a>
+                            <a class="dropdown-item btn-outline-blue" href="{{route('user')}}">User profile</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item btn-outline-blue-org" href="{{ route('logout') }}" onclick="event.preventDefault();
+                            <a class="dropdown-item btn-outline-blue" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf

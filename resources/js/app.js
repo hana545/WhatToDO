@@ -47,63 +47,42 @@ Vue.component('map-component', require('./components/Map-Leaflet.vue').default);
 const app = new Vue({
     el: '#app',
     data: {
-        seenPhone: false,
-        seenEmail: false,
-        seenWebsite: false,
-        addmore: "Add one more",
-        remove: "Remove one",
         show: false,
 
-        all: true,
-        one:false,
-
+        lat: null,
+        lng: null,
+        center: null,
+        url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
+        attribution:
+            '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        zoom: 12,
+        myLocationstring: "You are here",
+        myLocation: null,
+        dicon:L.icon({
+            iconUrl: 'https://www.pngkey.com/png/full/933-9338142_icon-marker-circle.png',
+            iconUrl: 'https://cdn1.iconfinder.com/data/icons/ui-5/502/marker-512.png',
+            iconSize: [40, 40], // size of the icon
+        }),
+        redIcon: L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        }),
+        greenIcon: L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        }),
+        count: 0,
         location:null,
         gettingLocation: false,
-        error:null,
-
-            center: null,
-            url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
-            attribution:
-                '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-            zoom: 12,
-            marker:null,
-            dicon:L.icon({
-                iconUrl: 'https://www.pngkey.com/png/full/933-9338142_icon-marker-circle.png',
-                iconUrl: 'https://cdn1.iconfinder.com/data/icons/ui-5/502/marker-512.png',
-                iconSize: [40, 40], // size of the icon
-            }),
-            greenIcon: L.icon({
-                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34],
-                shadowSize: [41, 41]
-            }),
-            redIcon: L.icon({
-                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34],
-                shadowSize: [41, 41]
-            }),
-            goldIcon: L.icon({
-                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png',
-                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34],
-                shadowSize: [41, 41]
-            }),
-            showInside: false,
-
-
-            myLocationstring: "You are here",
-            myLocation: null,
-            location:null,
-            gettingLocation: false,
-            errorStr:null,
+        errorStr:null,
 
 
     },
@@ -116,34 +95,32 @@ const app = new Vue({
         toggleShow(){
             this.show = !this.show
         },
-        seeOne(){
-            this.one = true;
-            this.all = false;
-        },
-        showPlace(lat, lng){
-            this.center = L.latLng(lat, lng);
+
+        showPlace: function(placelat, placelng){
+            this.center = L.latLng(placelat, placelng);
             this.zoom = 15;
+            console.log("Place", this.center);
         },
-        showMe(){
+        showMe: function() {
+            this.center = L.latLng(this.lat, this.lng);
+            this.myLocation = L.latLng(this.lat, this.lng);
+            this.zoom = 14;
+            console.log("myloc", this.center);
+        },
+
+        GetLocation(){
             this.$getLocation({enableHighAccuracy: true})
                 .then(coordinates => {
                     this.gettingLocation = true;
-                    this.myLocation = L.latLng(coordinates.lat, coordinates.lng);
-                    this.center = L.latLng(coordinates.lat, coordinates.lng);
-                    this.zoom = 13;
-                });
-        }
-    },
-    mounted() {
-        this.$getLocation({enableHighAccuracy: true})
-            .then(coordinates => {
-                this.gettingLocation = true;
-                this.center = L.latLng(coordinates.lat, coordinates.lng);
-                this.myLocation = L.latLng(coordinates.lat, coordinates.lng);
+                    this.lat = coordinates.lat;
+                    this.lng = coordinates.lng;
+                    this.center = L.latLng(this.lat, this.lng);
+                    this.myLocation = L.latLng(this.lat, this.lng);
+                    console.log(this.myLocation);
                     $.ajax({
                         url:'/getgeo',
                         type:'get',
-                        data:{latitude:coordinates.lat,longitude:coordinates.lng},
+                        data:{latitude:this.lat, longitude:this.lng},
 
 
                         success:function(data)
@@ -151,55 +128,115 @@ const app = new Vue({
                             // alert('success');
                         }
                     });
-                //console.log('mouted-api.sh ', coordinates.lat, coordinates.lng);
-            });
-    },
-
-    updated() {
-        this.$getLocation({enableHighAccuracy: true})
-            .then(coordinates => {
-                this.gettingLocation = true;
-                this.center = L.latLng(coordinates.lat, coordinates.lng);
-                this.myLocation = L.latLng(coordinates.lat, coordinates.lng);
-                $.ajax({
-                    url:'/getgeo',
-                    type:'get',
-                    data:{latitude:coordinates.lat,longitude:coordinates.lng},
-
-
-                    success:function(data)
-                    {
-                        // alert('success');
-                    }
                 });
-                //console.log('mouted-api.sh ', coordinates.lat, coordinates.lng);
-            });
+        },
+        scrollNav: function (event) {
+            //if collapsed navbar is opened and scroll is on top, add
+            if($(".navbar-toggler").attr("aria-expanded") == "true" && $(window).scrollTop() == 0){
+                $(".navbar").addClass('bg-black');
+                ///if its not on top, add black background
+            } else if($(window).scrollTop()) {
+                $(".navbar").addClass('bg-black');
+            } else {
+                ///else transparent
+                $(".navbar").removeClass('bg-black');
+            }
+
+        },
+        CheckNav: function() {
+            if($(window).scrollTop()) {
+                $(".navbar").addClass('bg-black');
+            } else {
+                $(".navbar").removeClass('bg-black');
+            }
+        },
+        CheckSmallNav: function() {
+                $(".navbar").addClass('bg-black');
+
+
+        },
+        AlertTimeout: function () {
+            setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                    $(this).remove();
+                });
+            }, 2000);
+        }
     },
+    mounted: function () {
+        this.GetLocation();
+        this.AlertTimeout();
+        this.CheckNav();
+    },
+    created: function () {
+        window.addEventListener('scroll', this.scrollNav);
+
+    },
+    destroyed: function () {
+        window.removeEventListener('scroll', this.scrollNav);
+    }
 
 
 });
 
+$("#multiple_images").on('change', function() {
+
+    var input = document.getElementById( 'multiple_images' );
+    var infoArea = document.getElementById( 'file-upload-filename' );
+    // the change event gives us the input it occurred in
+    var input = event.srcElement;
+
+    if(input.files.length > 1){
+        var fileName = input.files.length + ' files'
+    } else {
+    // the input has an array of files in the `files` property, each one has a name that you can use. We're just using the name here.
+    var fileName = input.files[0].name;
+    }
+
+
+    // use fileName however fits your app best, i.e. add it into a div
+    infoArea.textContent = '- ' + fileName;
+    infoArea.style.display = 'initial';
+    if (fileName.length < 15){
+        document.getElementById( 'length_filename' ).style.width = '40%';
+    } else if (fileName.length < 30) {
+        document.getElementById('length_filename').style.width = '50%';
+    } else if (fileName.length < 50) {
+        document.getElementById('length_filename').style.width = '80%';
+    } else {
+        document.getElementById('length_filename').style.width = '100%';
+    }
+});
+
+$(document).ready(function(){
+    $('#rangeIndicator').on('change', function(e){
+        var id = e.target.value;
+        document.getElementById("rangeValue").innerHTML = id;
+        document.getElementById("inputRangeValue").value = id;
+
+    });
+    $('#rangeIndicator').change();
+});
 
 ///alert fade up
+/*
 window.setTimeout(function() {
     $(".alert").fadeTo(500, 0).slideUp(500, function(){
         $(this).remove();
     });
-}, 2000);
+}, 2000);*/
 ////
 
 
 // Scrolling Effect for nav
-
+/*
 $(window).on("scroll", function() {
     if($(window).scrollTop()) {
         $(".navbar").addClass('bg-black');
-    }
-
-    else {
+    } else {
         $(".navbar").removeClass('bg-black');
     }
-})
+})/*
 
 
 const $dropdown = $(".dropdown");
@@ -289,40 +326,69 @@ $("#locate").on("click", function(){
 
 */
 
-$("#picture").on('change', function() {
 
-    var input = document.getElementById( 'picture' );
-    var infoArea = document.getElementById( 'file-upload-filename' );
-    // the change event gives us the input it occurred in
-    var input = event.srcElement;
-
-    // the input has an array of files in the `files` property, each one has a name that you can use. We're just using the name here.
-    var fileName = input.files[0].name;
-
-    // use fileName however fits your app best, i.e. add it into a div
-    infoArea.textContent = '- ' + fileName;
-    infoArea.style.display = 'initial';
-    if (fileName.length < 15){
-        document.getElementById( 'length_filename' ).style.width = '40%';
-    } else if (fileName.length < 30) {
-        document.getElementById('length_filename').style.width = '50%';
-    } else if (fileName.length < 50) {
-        document.getElementById('length_filename').style.width = '80%';
-    } else {
-        document.getElementById('length_filename').style.width = '100%';
-    }
-});
 
 $(document).ready(function(){
-    $('#rangeIndicator').on('change', function(e){
-        var id = e.target.value;
-        document.getElementById("rangeValue").innerHTML = id;
-        document.getElementById("inputRangeValue").value = id;
 
+    /* 1. Visualizing things on Hover - See next part for action on click */
+    $('#stars li').on('mouseover', function(){
+        var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
+
+        // Now highlight all the stars that's not after the current hovered star
+        $(this).parent().children('li.star').each(function(e){
+            if (e < onStar) {
+                $(this).addClass('hover');
+            }
+            else {
+                $(this).removeClass('hover');
+            }
+        });
+
+    }).on('mouseout', function(){
+        $(this).parent().children('li.star').each(function(e){
+            $(this).removeClass('hover');
+        });
     });
-    $('#rangeIndicator').change();
+
+
+    /* 2. Action to perform on click */
+    $('#stars li').on('click', function(){
+
+        var onStar = parseInt($(this).data('value'), 10); // The star currently selected
+        var stars = $(this).parent().children('li.star');
+        var i = 0;
+        for (i = 0; i < stars.length; i++) {
+            $(stars[i]).removeClass('selected');
+            $(stars[i]).removeClass('chosen');
+        }
+
+        for (i = 0; i < onStar; i++) {
+            $(stars[i]).addClass('selected');
+
+        }
+
+        // JUST RESPONSE (Not needed)
+        //var ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
+        var ratingValue = i;
+        var msg = "Thanks! You are rating this place with " + ratingValue + " stars.";
+
+        responseMessage(msg);
+        $('.StarValue').attr('value', ratingValue);
+    });
+
+    $('.stars-button').on('click', function(){
+        console.log('click, clear');
+        $('.success-box img').attr('src',"");
+        $('.success-box img').hide();
+    });
+
+
 });
 
 
-
-
+function responseMessage(msg) {
+    $('.success-box').fadeIn(200);
+    $('.success-box img').attr('src',"https://superiusidea.hr/wp-content/uploads/2014/06/kvacica.png");
+    $('.success-box img').show();
+    $('.success-box div.text-message').html("<span>" + msg + "</span>");
+}

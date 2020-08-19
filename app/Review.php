@@ -3,10 +3,19 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User;
 
 class Review extends Model
 {
-    public function places(){
+    protected $fillable = [
+        'star', 'description'];
+
+
+    public function place(){
         return $this->belongsTo(Place::class);
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 }

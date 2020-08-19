@@ -77015,7 +77015,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var leaflet_dist_leaflet_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(leaflet_dist_leaflet_css__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var vue_browser_geolocation__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-browser-geolocation */ "./node_modules/vue-browser-geolocation/dist/vue-geolocation.js");
 /* harmony import */ var vue_browser_geolocation__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue_browser_geolocation__WEBPACK_IMPORTED_MODULE_3__);
-var _L$icon, _data;
+var _L$icon;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -77057,34 +77057,19 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('map-component', __webpack_
 
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app',
-  data: (_data = {
-    seenPhone: false,
-    seenEmail: false,
-    seenWebsite: false,
-    addmore: "Add one more",
-    remove: "Remove one",
+  data: {
     show: false,
-    all: true,
-    one: false,
-    location: null,
-    gettingLocation: false,
-    error: null,
+    lat: null,
+    lng: null,
     center: null,
     url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
     zoom: 12,
-    marker: null,
+    myLocationstring: "You are here",
+    myLocation: null,
     dicon: L.icon((_L$icon = {
       iconUrl: 'https://www.pngkey.com/png/full/933-9338142_icon-marker-circle.png'
     }, _defineProperty(_L$icon, "iconUrl", 'https://cdn1.iconfinder.com/data/icons/ui-5/502/marker-512.png'), _defineProperty(_L$icon, "iconSize", [40, 40]), _L$icon)),
-    greenIcon: L.icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    }),
     redIcon: L.icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
       shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -77093,18 +77078,19 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
       popupAnchor: [1, -34],
       shadowSize: [41, 41]
     }),
-    goldIcon: L.icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png',
+    greenIcon: L.icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
       shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
       iconSize: [25, 41],
       iconAnchor: [12, 41],
       popupAnchor: [1, -34],
       shadowSize: [41, 41]
     }),
-    showInside: false,
-    myLocationstring: "You are here",
-    myLocation: null
-  }, _defineProperty(_data, "location", null), _defineProperty(_data, "gettingLocation", false), _defineProperty(_data, "errorStr", null), _data),
+    count: 0,
+    location: null,
+    gettingLocation: false,
+    errorStr: null
+  },
   components: {
     LMap: vue2_leaflet__WEBPACK_IMPORTED_MODULE_1__["LMap"],
     LTileLayer: vue2_leaflet__WEBPACK_IMPORTED_MODULE_1__["LTileLayer"],
@@ -77120,107 +77106,165 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     toggleShow: function toggleShow() {
       this.show = !this.show;
     },
-    seeOne: function seeOne() {
-      this.one = true;
-      this.all = false;
-    },
-    showPlace: function showPlace(lat, lng) {
-      this.center = L.latLng(lat, lng);
+    showPlace: function showPlace(placelat, placelng) {
+      this.center = L.latLng(placelat, placelng);
       this.zoom = 15;
+      console.log("Place", this.center);
     },
     showMe: function showMe() {
+      this.center = L.latLng(this.lat, this.lng);
+      this.myLocation = L.latLng(this.lat, this.lng);
+      this.zoom = 14;
+      console.log("myloc", this.center);
+    },
+    GetLocation: function GetLocation() {
       var _this = this;
 
       this.$getLocation({
         enableHighAccuracy: true
       }).then(function (coordinates) {
         _this.gettingLocation = true;
-        _this.myLocation = L.latLng(coordinates.lat, coordinates.lng);
-        _this.center = L.latLng(coordinates.lat, coordinates.lng);
-        _this.zoom = 13;
+        _this.lat = coordinates.lat;
+        _this.lng = coordinates.lng;
+        _this.center = L.latLng(_this.lat, _this.lng);
+        _this.myLocation = L.latLng(_this.lat, _this.lng);
+        console.log(_this.myLocation);
+        $.ajax({
+          url: '/getgeo',
+          type: 'get',
+          data: {
+            latitude: _this.lat,
+            longitude: _this.lng
+          },
+          success: function success(data) {// alert('success');
+          }
+        });
       });
+    },
+    scrollNav: function scrollNav(event) {
+      //if collapsed navbar is opened and scroll is on top, add
+      if ($(".navbar-toggler").attr("aria-expanded") == "true" && $(window).scrollTop() == 0) {
+        $(".navbar").addClass('bg-black'); ///if its not on top, add black background
+      } else if ($(window).scrollTop()) {
+        $(".navbar").addClass('bg-black');
+      } else {
+        ///else transparent
+        $(".navbar").removeClass('bg-black');
+      }
+    },
+    CheckNav: function CheckNav() {
+      if ($(window).scrollTop()) {
+        $(".navbar").addClass('bg-black');
+      } else {
+        $(".navbar").removeClass('bg-black');
+      }
+    },
+    CheckSmallNav: function CheckSmallNav() {
+      $(".navbar").addClass('bg-black');
+    },
+    AlertTimeout: function AlertTimeout() {
+      setTimeout(function () {
+        $(".alert").fadeTo(500, 0).slideUp(500, function () {
+          $(this).remove();
+        });
+      }, 2000);
     }
   },
   mounted: function mounted() {
-    var _this2 = this;
-
-    this.$getLocation({
-      enableHighAccuracy: true
-    }).then(function (coordinates) {
-      _this2.gettingLocation = true;
-      _this2.center = L.latLng(coordinates.lat, coordinates.lng);
-      _this2.myLocation = L.latLng(coordinates.lat, coordinates.lng);
-      $.ajax({
-        url: '/getgeo',
-        type: 'get',
-        data: {
-          latitude: coordinates.lat,
-          longitude: coordinates.lng
-        },
-        success: function success(data) {// alert('success');
-        }
-      }); //console.log('mouted-api.sh ', coordinates.lat, coordinates.lng);
-    });
+    this.GetLocation();
+    this.AlertTimeout();
+    this.CheckNav();
   },
-  updated: function updated() {
-    var _this3 = this;
-
-    this.$getLocation({
-      enableHighAccuracy: true
-    }).then(function (coordinates) {
-      _this3.gettingLocation = true;
-      _this3.center = L.latLng(coordinates.lat, coordinates.lng);
-      _this3.myLocation = L.latLng(coordinates.lat, coordinates.lng);
-      $.ajax({
-        url: '/getgeo',
-        type: 'get',
-        data: {
-          latitude: coordinates.lat,
-          longitude: coordinates.lng
-        },
-        success: function success(data) {// alert('success');
-        }
-      }); //console.log('mouted-api.sh ', coordinates.lat, coordinates.lng);
-    });
-  }
-}); ///alert fade up
-
-window.setTimeout(function () {
-  $(".alert").fadeTo(500, 0).slideUp(500, function () {
-    $(this).remove();
-  });
-}, 2000); ////
-// Scrolling Effect for nav
-
-$(window).on("scroll", function () {
-  if ($(window).scrollTop()) {
-    $(".navbar").addClass('bg-black');
-  } else {
-    $(".navbar").removeClass('bg-black');
+  created: function created() {
+    window.addEventListener('scroll', this.scrollNav);
+  },
+  destroyed: function destroyed() {
+    window.removeEventListener('scroll', this.scrollNav);
   }
 });
-var $dropdown = $(".dropdown");
-var $dropdownToggle = $(".dropdown-toggle");
-var $dropdownMenu = $(".dropdown-menu");
-var showClass = "show";
-$(window).on("load resize", function () {
-  if (this.matchMedia("(min-width: 768px)").matches) {
-    $dropdown.hover(function () {
-      var $this = $(this);
-      $this.addClass(showClass);
-      $this.find($dropdownToggle).attr("aria-expanded", "true");
-      $this.find($dropdownMenu).addClass(showClass);
-    }, function () {
-      var $this = $(this);
-      $this.removeClass(showClass);
-      $this.find($dropdownToggle).attr("aria-expanded", "false");
-      $this.find($dropdownMenu).removeClass(showClass);
-    });
-  } else {
-    $dropdown.off("mouseenter mouseleave");
-  }
-}); ////_________________map______
+$("#multiple_images").on('change', function () {
+  var input = document.getElementById('multiple_images');
+  var infoArea = document.getElementById('file-upload-filename'); // the change event gives us the input it occurred in
 
+  var input = event.srcElement;
+
+  if (input.files.length > 1) {
+    var fileName = input.files.length + ' files';
+  } else {
+    // the input has an array of files in the `files` property, each one has a name that you can use. We're just using the name here.
+    var fileName = input.files[0].name;
+  } // use fileName however fits your app best, i.e. add it into a div
+
+
+  infoArea.textContent = '- ' + fileName;
+  infoArea.style.display = 'initial';
+
+  if (fileName.length < 15) {
+    document.getElementById('length_filename').style.width = '40%';
+  } else if (fileName.length < 30) {
+    document.getElementById('length_filename').style.width = '50%';
+  } else if (fileName.length < 50) {
+    document.getElementById('length_filename').style.width = '80%';
+  } else {
+    document.getElementById('length_filename').style.width = '100%';
+  }
+});
+$(document).ready(function () {
+  $('#rangeIndicator').on('change', function (e) {
+    var id = e.target.value;
+    document.getElementById("rangeValue").innerHTML = id;
+    document.getElementById("inputRangeValue").value = id;
+  });
+  $('#rangeIndicator').change();
+}); ///alert fade up
+
+/*
+window.setTimeout(function() {
+    $(".alert").fadeTo(500, 0).slideUp(500, function(){
+        $(this).remove();
+    });
+}, 2000);*/
+////
+// Scrolling Effect for nav
+
+/*
+$(window).on("scroll", function() {
+    if($(window).scrollTop()) {
+        $(".navbar").addClass('bg-black');
+    } else {
+        $(".navbar").removeClass('bg-black');
+    }
+})/*
+
+
+const $dropdown = $(".dropdown");
+const $dropdownToggle = $(".dropdown-toggle");
+const $dropdownMenu = $(".dropdown-menu");
+const showClass = "show";
+
+$(window).on("load resize", function() {
+    if (this.matchMedia("(min-width: 768px)").matches) {
+        $dropdown.hover(
+            function() {
+                const $this = $(this);
+                $this.addClass(showClass);
+                $this.find($dropdownToggle).attr("aria-expanded", "true");
+                $this.find($dropdownMenu).addClass(showClass);
+            },
+            function() {
+                const $this = $(this);
+                $this.removeClass(showClass);
+                $this.find($dropdownToggle).attr("aria-expanded", "false");
+                $this.find($dropdownMenu).removeClass(showClass);
+            }
+        );
+    } else {
+        $dropdown.off("mouseenter mouseleave");
+    }
+});
+
+
+////_________________map______
 /*
 var map = L.map('mapid');
 
@@ -77280,35 +77324,61 @@ $("#locate").on("click", function(){
 
 */
 
-$("#picture").on('change', function () {
-  var input = document.getElementById('picture');
-  var infoArea = document.getElementById('file-upload-filename'); // the change event gives us the input it occurred in
-
-  var input = event.srcElement; // the input has an array of files in the `files` property, each one has a name that you can use. We're just using the name here.
-
-  var fileName = input.files[0].name; // use fileName however fits your app best, i.e. add it into a div
-
-  infoArea.textContent = '- ' + fileName;
-  infoArea.style.display = 'initial';
-
-  if (fileName.length < 15) {
-    document.getElementById('length_filename').style.width = '40%';
-  } else if (fileName.length < 30) {
-    document.getElementById('length_filename').style.width = '50%';
-  } else if (fileName.length < 50) {
-    document.getElementById('length_filename').style.width = '80%';
-  } else {
-    document.getElementById('length_filename').style.width = '100%';
-  }
-});
 $(document).ready(function () {
-  $('#rangeIndicator').on('change', function (e) {
-    var id = e.target.value;
-    document.getElementById("rangeValue").innerHTML = id;
-    document.getElementById("inputRangeValue").value = id;
+  /* 1. Visualizing things on Hover - See next part for action on click */
+  $('#stars li').on('mouseover', function () {
+    var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
+    // Now highlight all the stars that's not after the current hovered star
+
+    $(this).parent().children('li.star').each(function (e) {
+      if (e < onStar) {
+        $(this).addClass('hover');
+      } else {
+        $(this).removeClass('hover');
+      }
+    });
+  }).on('mouseout', function () {
+    $(this).parent().children('li.star').each(function (e) {
+      $(this).removeClass('hover');
+    });
   });
-  $('#rangeIndicator').change();
+  /* 2. Action to perform on click */
+
+  $('#stars li').on('click', function () {
+    var onStar = parseInt($(this).data('value'), 10); // The star currently selected
+
+    var stars = $(this).parent().children('li.star');
+    var i = 0;
+
+    for (i = 0; i < stars.length; i++) {
+      $(stars[i]).removeClass('selected');
+      $(stars[i]).removeClass('chosen');
+    }
+
+    for (i = 0; i < onStar; i++) {
+      $(stars[i]).addClass('selected');
+    } // JUST RESPONSE (Not needed)
+    //var ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
+
+
+    var ratingValue = i;
+    var msg = "Thanks! You are rating this place with " + ratingValue + " stars.";
+    responseMessage(msg);
+    $('.StarValue').attr('value', ratingValue);
+  });
+  $('.stars-button').on('click', function () {
+    console.log('click, clear');
+    $('.success-box img').attr('src', "");
+    $('.success-box img').hide();
+  });
 });
+
+function responseMessage(msg) {
+  $('.success-box').fadeIn(200);
+  $('.success-box img').attr('src', "https://superiusidea.hr/wp-content/uploads/2014/06/kvacica.png");
+  $('.success-box img').show();
+  $('.success-box div.text-message').html("<span>" + msg + "</span>");
+}
 
 /***/ }),
 

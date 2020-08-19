@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="jumbotron jumbotron-fluid bg-transparent" style="overflow: hidden">
-        <div class="container text-center">
+    <div class=" jumbotron-fluid bg-transparent" style="overflow: hidden">
+        <div class="mt-5 container text-center">
             <h1  style="color: whitesmoke">Are you bored?</h1>
             <p class="lead" style="font-weight: revert; color: #9ebcdb">Search interesting places around you</p>
             <img class="img-fluid" src="images/illustrations/locations.svg" style="height: 180px; width: 410px;">
@@ -21,7 +21,7 @@
                                 </p>
                                 <div class="align-items-center">
                                     <p class="text-center">
-                                        <a href="{{route('search')}}"><button type="button" style="background-color: #0f6674;" class="btn btn-outline-blue-org btn-lg zoom"><b>Search <i class="fa fa-search" aria-hidden="true"></i></b></button></a>
+                                        <a href="{{route('search')}}"><button type="button"  class="btn btn-bluedark btn-lg zoom"><b>Search <i class="fa fa-search" aria-hidden="true"></i></b></button></a>
                                     </p>
                                 </div>
                             </div>
@@ -33,11 +33,11 @@
                             <img class="card-img-top m-3" style="height: 225px;" src="images/illustrations/category.svg">
                             <div class="card-body">
                                 <p class="card-text text-center">
-                                    <b>Search places by category</b>
+                                    <b>Add interesting places</b>
                                 </p>
                                 <div class="align-items-center">
                                     <p class="text-center">
-                                        <a href="#"><button type="button" style="background-color: #0f6674;" class="btn btn-outline-blue-org btn-lg zoom"><b>Search <i class="fa fa-search"></i></button></a>
+                                        <a href="{{route('add_object')}}"><button type="button" style="background-color: #0f6674;" class="btn btn-bluedark btn-lg zoom"><b>Add <i class="fa fa-search"></i></button></a>
                                     </p>
                                 </div>
                             </div>

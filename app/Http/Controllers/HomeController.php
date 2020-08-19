@@ -50,13 +50,26 @@ class HomeController extends Controller
     public function storeCategory(){
         $data = request()->validate([
             'name' => 'required|min:3',
-            'description' => 'required|min:3|max:255'
         ]);
 
         $category = new Category;
         $category->name = $data['name'];
-        $category->description = $data['description'];
         $category->save();
         return redirect('/addCategory');
+    }
+    public function destroyCategory(Category $category){
+
+        if (!$category->places->isEmpty()){
+            return redirect('/addCategory')->with('error', 'There are places under this category, you cant delete it');
+        }
+        $category->delete();
+
+        return redirect('/addCategory')->with('message', 'Succesfully deleted category');
+    }
+    public function destroyTag(Tag $tag){
+
+
+
+        return redirect('/addTag')->with('message', 'entered destroy');
     }
 }

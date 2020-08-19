@@ -49,46 +49,38 @@ $user = Auth::user();
                             <label for='phone'>Phone:</label>
                             <div class="form-group input-group">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text  bg-light"><i class="fas fa-signature"></i></span>
+                                    <span class="input-group-text  bg-light"><i class="fas fa-phone-alt"></i></span>
                                 </div>
-                                <input type="text" name="phone1" value="{{ old('phone1', $place->phone ?? '')}}" class="form-control" required>
+                                <input type="tel" name="phone1" value="{{ old('phone1', $place->phone ?? '')}}" class="form-control"  placeholder="1." >
                                 <div class="text-danger pb-3">{{ $errors->first('phone1') }}</div>
                             </div>
-                            <div class="form-group input-group" v-if="seenPhone">
+                            <div class="form-group input-group">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text  bg-light"><i class="fas fa-signature"></i></span>
+                                    <span class="input-group-text  bg-light"><i class="fas fa-phone-alt"></i></span>
                                 </div>
-                                <input type="text" name="phone2" value="{{ old('phone2', $place->phone ?? '')}}" class="form-control" >
+                                <input type="text" name="phone2" value="{{ old('phone2', $place->phone ?? '')}}" class="form-control" placeholder="2."  >
                                 <div class="text-danger pb-3">{{ $errors->first('phone2') }}</div>
                             </div>
 
-                            <div class="btn btn-secondary btn-sm" v-on:click="seenPhone = !seenPhone">
-                                <label  v-if="!seenPhone">@{{ addmore }} phone</label>
-                                <label  v-else-if="seenPhone">@{{ remove }} phone</label>
-                            </div>
                         </div>
 
                         <div class="col-sm-4">
                             <label for='name'>E-mail:</label>
                             <div class="form-group input-group">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text  bg-light"><i class="fas fa-signature"></i></span>
+                                    <span class="input-group-text  bg-light"><i class="fas fa-at"></i></span>
                                 </div>
-                                <input type="text" name="email1" value="{{ old('email1', $place->email ?? '')}}" class="form-control" >
+                                <input type="text" name="email1" value="{{ old('email1', $place->email ?? '')}}" class="form-control" placeholder="1.">
                                 <div class="text-danger pb-3">{{ $errors->first('email1') }}</div>
                             </div>
-                            <div class="form-group input-group" v-if="seenEmail">
+                            <div class="form-group input-group" >
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text  bg-light"><i class="fas fa-signature"></i></span>
+                                    <span class="input-group-text  bg-light"><i class="fas fa-at"></i></i></span>
                                 </div>
-                                <input type="text" name="email2" value="{{ old('email2', $place->email ?? '')}}" class="form-control" >
+                                <input type="text" name="email2" value="{{ old('email2', $place->email ?? '')}}" class="form-control" placeholder="2." >
                                 <div class="text-danger pb-3">{{ $errors->first('email2') }}</div>
                             </div>
 
-                            <div class="btn btn-secondary btn-sm" v-on:click="seenEmail = !seenEmail">
-                                <label  v-if="!seenEmail">@{{ addmore }} email</label>
-                                <label  v-else-if="seenEmail">@{{ remove }} email</label>
-                            </div>
                         </div>
 
 
@@ -96,23 +88,20 @@ $user = Auth::user();
                             <label for='name'>Website:</label>
                             <div class="form-group input-group">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text  bg-light"><i class="fas fa-signature"></i></span>
+                                    <span class="input-group-text  bg-light"><i class="fas fa-link"></i></i></span>
                                 </div>
                                 <input type="text" name="website1" value="{{ old('website1', $place->website ?? '')}}" placeholder="Place URL" class="form-control" >
                                 <div class="text-danger pb-3">{{ $errors->first('website2') }}</div>
                             </div>
-                            <div class="form-group input-group" v-if="seenWebsite">
+                            <div class="form-group input-group">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text  bg-light"><i class="fas fa-signature"></i></span>
+                                    <span class="input-group-text  bg-light"><i class="fas fa-link"></i></span>
                                 </div>
                                 <input type="text" name="website2" value="{{ old('website2', $place->website ?? '')}}" placeholder="Place URL" class="form-control" >
                                 <div class="text-danger pb-3">{{ $errors->first('website2') }}</div>
                             </div>
 
-                            <div class="btn btn-secondary btn-sm" v-on:click="seenWebsite = !seenWebsite">
-                                <label  v-if="!seenWebsite">@{{ addmore }} website</label>
-                                <label  v-else-if="seenWebsite">@{{ remove }} website</label>
-                            </div>
+
                         </div>
 
 
@@ -136,20 +125,20 @@ $user = Auth::user();
                 <div class="text-danger pb-3">{{ $errors->first('workhours') }}</div>
 
 
-                <label class="" for='picture'>Choose picture or leave blank for default:</label>
+
                 <div class="form-group input-group" id="length_filename" style="width: 40%">
                     <div class="input-group-prepend">
                         <span class="input-group-text  bg-light" ><i class="fas fa-image"></i></span>
                     </div>
 
-                    <label class ="image_button form-control col" for="picture"> Upload image
-                        <input type="file" class="inputfileevent form-control" id="picture" name="picture" autocomplete="picture">
+                    <label class ="image_button form-control col" for="multiple_images"> Upload image
+                        <input type="file" class="inputfile form-control" id="multiple_images" name="multiple_images[]" autocomplete="multiple_images" multiple>
                         <span id="file-upload-filename" class="col file-upload-filename" style="display: none"></span>
                     </label>
                 </div>
                 <div class="text-danger pb-3">{{ $errors->first('picture') }}</div>
-                slike
-                profile image
+
+
 
 
                 <label class="" for="category"></label>
@@ -165,12 +154,12 @@ $user = Auth::user();
                     </select>
                 </div>
                 <div class="text-danger pb-3">{{ $errors->first('category') }}</div>
-                <label class="" for="tags">Select appropriate tags min 3</label>
+                <label class="" for="tags">Select appropriate tags</label>
                 <div class="form-group input-group">
                 <div class="input-group-prepend">
                     <div class="btn-group-toggle mb-2 row justify-content-around" data-toggle="buttons">
                         @foreach ($tags as $tag)
-                            <label class="btn btn-secondary col-auto px-4">
+                            <label class="btn btn-blue-check col-auto px-2 m-1">
                                 <input type="checkbox" name="tag[]"
                                        value=" {{$tag->id}}">
                                 {{ $tag->name}}
@@ -182,7 +171,7 @@ $user = Auth::user();
                 </div>
 
                 </div>
-            <button type="submit" class="btn btn-lg btn-blue-org my-2 ml-4 px-5">Add place</button>
+            <button type="submit" class="btn btn-lg btn-blue my-2 ml-4 px-5">Add place</button>
             @csrf
 
             </form>
