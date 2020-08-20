@@ -6472,7 +6472,7 @@ L.Icon.Default.mergeOptions({
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css":
+/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css?66f3":
 /*!*******************************************************************************************************************************!*\
   !*** ./node_modules/css-loader??ref--6-1!./node_modules/postcss-loader/src??ref--6-2!./node_modules/leaflet/dist/leaflet.css ***!
   \*******************************************************************************************************************************/
@@ -31643,7 +31643,7 @@ window.L = exports;
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../css-loader??ref--6-1!../../postcss-loader/src??ref--6-2!./leaflet.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css");
+var content = __webpack_require__(/*! !../../css-loader??ref--6-1!../../postcss-loader/src??ref--6-2!./leaflet.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css?66f3");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -77514,8 +77514,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp\htdocs\WhatToDo\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\WhatToDo\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\xampp\htdocs\WhatToDO\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\WhatToDO\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

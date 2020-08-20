@@ -168,7 +168,7 @@
                 </div>
                 <div class="col-md-9">
                     <div id="map" v-if="gettingLocation" style="height: 600px">
-                        <l-map :center="center" :zoom="zoom" :no-blocking-animations="trueht" ref="mymap">
+                        <l-map :center="center" :zoom="zoom" :no-blocking-animations="true" ref="mymap">
                             <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
                             <l-marker :lat-lng="myLocation" :icon="redIcon"><l-tooltip :content="myLocationstring"></l-tooltip></l-marker>
                             @if($randomPlace)
