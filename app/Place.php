@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Place extends Model
 {
     protected $fillable = [
-        'name', 'address'
+        'name', 'search_name', 'address', 'lat', 'lng', 'description', 'category_id', 'user_id', 'approved'
     ];
 
     public function setSearchNameAttribute($value)

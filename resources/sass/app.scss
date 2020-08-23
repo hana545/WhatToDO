@@ -46,25 +46,50 @@ body {
     color: rgb(255,255,255,0.8);
     //text-shadow: 1px 1px #000000;
 }
+
+.blue-tag {
+    color: rgb(0,0,0,0.8);
+    background-color: rgba(38,191,186,1);
+    border-color:rgba(38,191,186,1);
+
+}
 //simple button - light blue (black) - hover:dark blue(white)
 .btn-blue {
     color: rgb(0,0,0,0.8);
     background-color: rgba(38,191,186,1);
+    border-color: rgba(38,191,186,1);
+
 
 }
 .btn-blue:hover {
     color: whitesmoke;
     background-color: #0f6674;
+    border-color:#0f6674;
 }
 .btn-bluedark {
     color: whitesmoke;
     background-color: #0f6674;
+    border-color: #0f6674;
     font-weight: bolder;
 
 }
 .btn-bluedark:hover {
     color: rgb(0,0,0,0.8);
     background-color: rgba(38,191,186,1);
+    border-color: rgba(38,191,186,1);
+}
+
+.btn-lightblue {
+    color: darkslategrey;
+    background-color: lightblue;
+    border-color: lightblue;
+    font-weight: bolder;
+
+}
+.btn-lightblue:hover {
+    color: whitesmoke;
+    background-color: #0f6674;
+    border-color:#0f6674;
 }
 ////
 ///buttons for navbar (transparent - blue)
@@ -82,8 +107,8 @@ body {
 /////
 //buttons for navigation filter (white to darkblue)
 .btn-outline-bluedark{
-    color: #0f6674;
-    background-color: white;
+    color: darkslategrey;//#0f6674;
+    background-color: lightblue;
     border: #0f6674;
     font-weight: lighter;
 }
@@ -430,4 +455,8 @@ pre {
 .file-upload-filename {
     background-color: #ffffff;
     color: darkslategrey;
+}
+
+.pac-container {
+    z-index: 1051 !important;
 }

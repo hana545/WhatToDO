@@ -40,7 +40,7 @@
                                 @auth
                                 <button type="button" id="openReview" class="btn btn-dark  btn-sm my-2 ml-4 center-block" v-if="!show" @click="toggleShow()">@if( $place->hasReview) Edit your review  @else Leave a review @endif</button>
                                 @endauth
-                                <form @if( $place->hasReview) action="updatereview/{{$place->UserReview->id}}"  @else action="storereview/{{$place->id}}" @endif method="POST" v-show="show">
+                                <form @if( $place->hasReview) action="/search/review/update/{{$place->UserReview->id}}"  @else action="/review/store/{{$place->id}}" @endif method="POST" v-show="show">
                                     <section class='rating-widget'>
                                         <!-- Rating Stars Box -->
 
@@ -83,13 +83,15 @@
                                     <div class="row mb-4 justify-content-center">
                                         <button type="button" class="btn btn-secondary mx-2" @click="toggleShow()">Close</button>
                                         <input type="submit" class="btn btn-blue mx-2" @if( $place->hasReview) value="Update review" @else value="Post review" @endif>
+                                        @if( $place->hasReview)<a href="/search/review/delete/{{$place->UserReview->id}}"><div class="btn btn-danger">Delete</div></a>@endif
+
                                     </div>
                                     @csrf
                                 </form>
                             </div>
                             <div class="row">
                                 @foreach($place->reviews as $review)
-                                    <section class='rating-widget col-md-6'>
+                                    <section class='rating-widget col-md-5'>
                                         <div class='rating-stars text-center'>
                                             <ul id='stars' class="col-md-6"  data-toggle="modal" data-target="#modalreview{{$place->id}}">
                                                 <li class='star-small @if($review->star >= 1) selected  @endif' title='Awful' data-value='1' >
@@ -111,9 +113,15 @@
                                             </ul>
                                         </div>
                                     </section>
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
 
-                                        {{$review->description}} --  {{$review->user->name}}
+                                        {{$review->description}} |  {{$review->user->name}}
+                                    </div>
+                                    <div class="col-md-2">
+
+                                        @if (Auth::check() && Auth::user()->type == true)
+                                            <a href="/search/review/delete/{{$review->id}}"><div class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></div></a>
+                                        @endif
                                     </div>
 
                                 @endforeach

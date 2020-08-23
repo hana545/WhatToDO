@@ -49,7 +49,7 @@ $user = Auth::user();
                     <li class=" col-lg-3 my-2">
                         <div class="row">
                             <div class="col-6">{{$category->name}}</div>
-                            <div class="col-6"><a href="/deleteCategory/{{$category->id}}"><div class="btn btn-danger">Delete</div></a></div>
+                            <div class="col-6"><a href="/category/delete/{{$category->id}}"><div class="btn btn-danger">Delete</div></a></div>
                         </div>
                     </li>
                 @endforeach

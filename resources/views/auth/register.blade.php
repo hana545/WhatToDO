@@ -50,16 +50,11 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="user_type" class="col-md-4 col-form-label text-md-right">Account Type</label>
-                            <div class="btn-"  style="margin-bottom: 10px">
-                                <label class="btn active btn-blue">
-                                    <input type="radio" name="user_type"  value=0 autocomplete="off" checked><b>User</b>
-                                </label>
-                                <label class="btn btn-blue">
-                                    <input type="radio" name="user_type" value=1 autocomplete="off"><b>Admin</b>
 
-                                </label>
-                            </div>
+
+                            <input type="radio" name="user_type"  value=0 autocomplete="off" checked style="display: none">
+
+
                             <div class="text-danger pb-3">{{ $errors->first('user_type') }}</div>
                         </div>
 

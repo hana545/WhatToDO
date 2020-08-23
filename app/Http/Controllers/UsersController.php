@@ -54,4 +54,18 @@ class UsersController extends Controller
 
 
     }
+
+    public function suspend(User $user){
+        $user->update([
+            'suspended' => 'true',
+        ]);
+        return redirect()->back()->with("success","User ". $user->email." suspended !");
+    }
+
+    public function unsuspend(User $user){
+        $user->update([
+            'suspended' => 'false',
+        ]);
+        return redirect()->back()->with("success","User ". $user->email." unsuspended !");
+    }
 }

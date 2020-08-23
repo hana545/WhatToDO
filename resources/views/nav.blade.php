@@ -1,6 +1,6 @@
 <nav class="nav navbar navbar-expand-md navbar-dark p-3 fixed-top ">
     <div class="container-fluid mr-3">
-        <a href="/"><img src="images/logo/logo-bw.png" style="height: 80%; width: 200px"></a>
+        <a href="/"><img src="{{ asset('images/logo/logo-bw.png') }}" style="height: 80%; width: 200px"></a>
 
         <button v-on:click="CheckSmallNav()" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -19,16 +19,18 @@
                             Options
                         </a>
                         <div class="dropdown-menu bg-black" aria-labelledby="navbarDropdown1">
-                            <a class="dropdown-item btn-outline-blue "  href="{{route('add_object')}}">Add object</a>
-                            <a class="dropdown-item btn-outline-blue" href="/approve">Confirm objects</a>
+                            <a class="dropdown-item btn-outline-blue "  href="{{route('add_object')}}">Add place</a>
+                            <a class="dropdown-item btn-outline-blue" href="/approve">Confirm places</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item btn-outline-blue"  href="{{route('add_tag')}}">Add tags</a>
-                            <a class="dropdown-item btn-outline-blue"  href="{{route('add_category')}}">Add category</a>
+                            <a class="dropdown-item btn-outline-blue"  href="{{route('add_tag')}}">Tags</a>
+                            <a class="dropdown-item btn-outline-blue"  href="{{route('add_category')}}">Category</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item btn-outline-blue"  href="{{route('manageAdminsUsers')}}">Manage admins/users</a>
                         </div>
                     </li>
                 @elseif (Auth::check())
                     <li class="nav-item p-2">
-                        <a class="nav-link" href="{{route('add_object')}}">Add object</a>
+                        <a class="nav-link @if(Auth::user()->suspended == true) disabled @endif " href="{{route('add_object')}}" >Add place</a>
                     </li>
                 @endif
                 @guest

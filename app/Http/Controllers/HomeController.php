@@ -45,7 +45,7 @@ class HomeController extends Controller
         ]);
         $tag = Tag::create($data);
 
-        return redirect('/addTag');
+        return redirect('tag/create');
     }
     public function storeCategory(){
         $data = request()->validate([
@@ -55,21 +55,20 @@ class HomeController extends Controller
         $category = new Category;
         $category->name = $data['name'];
         $category->save();
-        return redirect('/addCategory');
+        return redirect('category/create');
     }
     public function destroyCategory(Category $category){
 
         if (!$category->places->isEmpty()){
-            return redirect('/addCategory')->with('error', 'There are places under this category, you cant delete it');
+            return redirect('category/create')->with('error', 'There are places under this category, you cant delete it');
         }
         $category->delete();
 
-        return redirect('/addCategory')->with('message', 'Succesfully deleted category');
+        return redirect('category/create')->with('message', 'Succesfully deleted category');
     }
     public function destroyTag(Tag $tag){
 
 
-
-        return redirect('/addTag')->with('message', 'entered destroy');
+        return redirect('tag/create')->with('message', 'entered destroy');
     }
 }
