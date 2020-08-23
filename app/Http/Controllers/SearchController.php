@@ -21,9 +21,12 @@ class SearchController extends Controller
         $categories = Category::all();
         $tags = Tag::all();
         $range = 15;
+        $rangeEnabled = 0;
         //dd(session('lat'));
         $lat=session('lat');
         $lng=session('lng');
+        $center = ['lat' => $lat, 'lng' => $lng];
+
 
         foreach ($places as $place) {
             $place->dist = $this->getDistance($lat, $lng, $place->lat, $place->lng);
@@ -52,7 +55,11 @@ class SearchController extends Controller
             }
         };
 
-        $places = $places->where('dist', '<=', $range)->sortBy('dist');
+        if(!$rangeEnabled) {
+            $places = $places->where('dist', '<=', $range)->sortBy('dist');
+        } else {
+            $places = $places->sortBy('dist');
+        }
         $find = true;
         if (empty($places->first())) {
             $find = false;
@@ -62,9 +69,11 @@ class SearchController extends Controller
         $categories_req = [];
         $tags_req = [];
         $random = false;
+        $mysaveloc = false;
+        $mysavelocname = 'My saved location';
         //dd($find, $lat, $lng, $places);
         //dd(gettype($lat));
-        return view('search.index', compact('places', 'categories', 'tags', 'range', 'find', 'search_name', 'categories_req', 'tags_req', 'random', 'randomPlace'));
+        return view('search.index', compact('user','places', 'categories', 'tags', 'range', 'find', 'search_name', 'center', 'lat', 'lng', 'categories_req', 'tags_req', 'random', 'randomPlace', 'mysaveloc', 'mysavelocname'));
     }
 
     public function search(){
@@ -82,7 +91,7 @@ class SearchController extends Controller
 
         ///search by name
         $search_name = request('search_name');
-        if($search_name) $places = $places->where('search_name', 'like', strtolower($search_name).'%');
+        if($search_name) $places = $places->where('search_name', 'like', '%'.strtolower($search_name).'%');
 
         //search by categories
 
@@ -94,8 +103,22 @@ class SearchController extends Controller
 
         //search by range, pull unwanted tags, calculate review; sort by dist
         $range = request('range');
+        $rangeEnabled = request('rangeEnabled');
         $lat=session('lat');
         $lng=session('lng');
+        $mysaveloc = false;
+        $mysavelocname = 'My saved location';
+        if(request('location') != 1){
+            $savedLocationString = request('savedLocation');
+            $savedLocation = json_decode($savedLocationString, true);
+            $mysaveloc = true;
+            $mysavelocname = $savedLocation[0];
+            $lat = $savedLocation[1];
+            $lng =$savedLocation[2];
+        }
+
+        $center = ['lat' => $lat, 'lng' => $lng];
+
         foreach ($places as $num => $place) {
             $flag = false;
             if(!empty($tags_req)) {
@@ -117,7 +140,7 @@ class SearchController extends Controller
                 $sum = 0;
                 foreach ($place->reviews as $review) {
 
-                    if($user->id) {
+                    if($user) {
                         if ($review->user->id == $user->id) {
                             $place->hasReview = true;
                             $place->UserReview = $review;
@@ -135,7 +158,11 @@ class SearchController extends Controller
                 $place->avgStar = 0;
             }
         };
-        $places = $places->where('dist', '<=', $range)->sortBy('dist');
+        if(!$rangeEnabled) {
+            $places = $places->where('dist', '<=', $range)->sortBy('dist');
+        } else {
+            $places = $places->sortBy('dist');
+        }
         //if ($places->first()) $center = [$places->first()->lat, $places->first()->lng];
 
         //randomPick
@@ -149,8 +176,7 @@ class SearchController extends Controller
         }
 
 
-
-        return view('search.index', compact('places', 'categories', 'tags', 'range', 'find', 'search_name', 'categories_req', 'tags_req', 'random', 'randomPlace'));
+        return view('search.index', compact('user','places', 'categories', 'tags', 'range', 'find', 'search_name',  'center', 'lat', 'lng', 'categories_req', 'tags_req', 'random', 'randomPlace', 'mysaveloc', 'mysavelocname'));
     }
 
     public function getDistance(float $lat1, float $lng1, float $lat2, float $lng2){

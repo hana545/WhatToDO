@@ -32,6 +32,7 @@ class ReviewsController extends Controller
 
     }
     public function updateReview(Review $review){
+
         $data = request()->validate([
             'starvalue' => 'required|min:1|max:5',
             'text_review' => 'nullable',
@@ -45,6 +46,34 @@ class ReviewsController extends Controller
         ]);
 
         return redirect('/search')->with('message', 'Succesfully updated your review');
+
+    }
+    public function updateReview_fromUserProfile(Review $review){
+
+        $data = request()->validate([
+            'starvalue' => 'required|min:1|max:5',
+            'text_review' => 'nullable',
+
+        ]);
+        $user = Auth::user();
+        if(!$user) return redirect('/user/profile')->with('error', 'You need to login to leave a review');
+        $review->update([
+            'star' => $data['starvalue'],
+            'description' => $data['text_review'],
+        ]);
+
+        return redirect('/user/profile')->with('message', 'Succesfully updated your review');
+
+    }
+    public function destroy(Review $review){
+        $review->delete();
+        return redirect('/search')->with('message', 'Succesfully deleted your review');
+
+    }
+
+    public function destroy_fromUserProfile(Review $review){
+        $review->delete();
+        return redirect('/user/profile')->with('message', 'Succesfully deleted your review');
 
     }
 }

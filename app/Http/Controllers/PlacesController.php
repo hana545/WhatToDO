@@ -9,6 +9,7 @@ use \App\Email;
 use \App\Website;
 use \App\Review;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Geocoder\Facades\Geocoder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -23,7 +24,10 @@ class PlacesController extends Controller
         $days = ['Monday', 'Tuesday', 'Wendseday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
         $categories = Category::all();
         $tags = Tag::all();
-        return view('places.create', compact('days','categories', 'tags'));
+
+        $place= new Place;
+        $update=false;
+        return view('places.create', compact('days','categories', 'tags', 'update', 'place'));
     }
     public function store(){
         $user = Auth::user();
@@ -31,10 +35,7 @@ class PlacesController extends Controller
         $data = request()->validate([
             'name' => 'required|min:3',
             'address' => 'required|min:3',
-            'lat' => 'numeric',
-            'lng' => 'numeric',
             'description' => 'required|min:10|max:255',
-            'picture' => 'sometimes|file|image|max:4000',
             'phone1' => 'nullable|min:3|phone',
             'email1' => 'nullable|min:3|max:40|email',
             'website1' => 'nullable|min:3|max:70|url',
@@ -44,17 +45,20 @@ class PlacesController extends Controller
             'category' => 'required',
             'multiple_images.*' => 'sometimes|file|image|max:8000',
         ]);
+        $lat = Geocoder::getCoordinatesForAddress($data['address'])['lat'];
+        $lng = Geocoder::getCoordinatesForAddress($data['address'])['lng'];
+        $place = Place::create([
+            'name' =>  $data['name'],
+            'search_name' =>  $data['name'],
+            'address' =>  $data['address'],
+            'lat' =>  $lat,
+            'lng' =>  $lng,
+            'description' =>  $data['description'],
+            'category_id' =>  $data['category'],
+            'user_id' =>  $user->id,
+            'approved' =>  false,
+        ]);
 
-        $place = new Place();
-        $place->name = $data['name'];
-        $place->search_name = $data['name'];
-        $place->address = $data['address'];
-        $place->lat = $data['lat'];
-        $place->lng = $data['lng'];
-        $place->description = $data['description'];
-        $place->category_id = $data['category'];
-        $place->user_id = $user->id;
-        $place->approved = false;
         if(request()->has('multiple_images')) {
             // dd('uco');
             foreach($data['multiple_images'] as $img) {
@@ -62,55 +66,51 @@ class PlacesController extends Controller
                 $img_name = $img->store('uploads', 'public');
                 $img_data[] = $img_name;
             }
-            if($place->images) {
-                dd($img_data);
-                foreach(json_decode($place->images) as $img) {
-                    $img_data[] = $img;
-                }
-            }
+
 
             $place->images = json_encode($img_data);
+            $place->save();
            // dd( $place->images);
         }
-        $place->save();
+       // $place->save();
 
-        if(array_key_exists('phone1', $data) && !is_null($data['phone1'])) {
-            $phone1 = new Phone();
-            $phone1->number = $data['phone1'];
-            $phone1->place_id = $place->id;
-            $phone1->save();
+        if(!is_null($data['phone1'])) {
+            $phone1 = Phone::create([
+                'number' =>  $data['phone1'],
+                'place_id' =>  $place->id,
+            ]);
         }
-        if(array_key_exists('phone2', $data) && !is_null($data['phone2'])){
-            $phone2 = new Phone();
-            $phone2->number = $data['phone2'];
-            $phone2->place_id = $place->id;
-            $phone2->save();
+        if(!is_null($data['phone2'])){
+            $phone2 = Phone::create([
+                'number' =>  $data['phone2'],
+                'place_id' =>  $place->id,
+            ]);
         }
-        if(array_key_exists('email1', $data) && !is_null($data['email1'])) {
-            $email1 = new Email();
-            $email1->email = $data['email1'];
-            $email1->place_id = $place->id;
-            $email1->save();
+        if(!is_null($data['email1'])) {
+            $email1 = Email::create([
+                'email' =>  $data['email1'],
+                'place_id' =>  $place->id,
+            ]);
         }
-        if(array_key_exists('email2', $data) && !is_null($data['email2'])){
-            $email2 = new Email();
-            $email2->email = $data['email2'];
-            $email2->place_id = $place->id;
-            $email2->save();
-        }
-
-        if(array_key_exists('website1', $data) && !is_null($data['website1'])) {
-            $website1 = new Website();
-            $website1->url = $data['website1'];
-            $website1->place_id = $place->id;
-            $website1->save();
+        if(!is_null($data['email2'])){
+            $email2 = Email::create([
+                'email' =>  $data['email2'],
+                'place_id' =>  $place->id,
+            ]);
         }
 
-        if(array_key_exists('website2', $data) && !is_null($data['website2'])){
-            $website2 = new Website();
-            $website2->url = $data['website2'];
-            $website2->place_id = $place->id;
-            $website2->save();
+        if(!is_null($data['website1'])) {
+            $website1 = Website::create([
+                'url' =>  $data['website1'],
+                'place_id' =>  $place->id,
+            ]);
+        }
+
+        if(!is_null($data['website2'])){
+            $website2 = Website::create([
+                'url' =>  $data['website2'],
+                'place_id' =>  $place->id,
+            ]);
         }
         $user = auth()->user();
 
@@ -137,24 +137,227 @@ class PlacesController extends Controller
         return redirect('/approve')->with('message', 'You have approved '. $place->name);
     }
 
+    public function edit(Place $place){
+        $days = ['Monday', 'Tuesday', 'Wendseday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        $categories = Category::all();
+        $tags = Tag::all();
+        $update=true;
+        return view('places.create', compact('days','categories', 'tags', 'place', 'update'));
+    }
+    public function update(Place $place){
+
+
+        $user = Auth::user();
+
+        $data = request()->validate([
+            'name' => 'required|min:3',
+            'address' => 'required|min:3',
+            'description' => 'required|min:10|max:255',
+            'phone1' => 'nullable|min:3|phone',
+            'email1' => 'nullable|min:3|max:40|email',
+            'website1' => 'nullable|min:3|max:70|url',
+            'phone2' => 'nullable|numeric|phone',
+            'email2' => 'nullable|min:3|max:40|email',
+            'website2' => 'nullable|min:3|max:70|url',
+            'category' => 'required',
+            'multiple_images.*' => 'sometimes|file|image|max:8000',
+        ]);
+        if ($place->address == $data['address']){
+            $lat = $place->lat;
+            $lng = $place->lng;
+        } else {
+            $lat = Geocoder::getCoordinatesForAddress($data['address'])['lat'];
+            $lng = Geocoder::getCoordinatesForAddress($data['address'])['lng'];
+        }
+        $place->update([
+            'name' => $data['name'],
+            'address' => $data['address'],
+            'lat' => $lat,
+            'lng' => $lng,
+            'description' => $data['description'],
+            'category_id' => $data['category'],
+            'approved' => false,
+        ]);
+
+        //$lat = Geocoder::getCoordinatesForAddress($data['address'])['lat'];
+        //$lng = Geocoder::getCoordinatesForAddress($data['address'])['lng'];
+
+        //dd($lat);
+        if(request()->has('multiple_images')) {
+            foreach($data['multiple_images'] as $img) {
+                $img_name = $img->store('uploads', 'public');
+                $img_data[] = $img_name;
+            }
+
+            if($place->images) {
+                $place->update([
+                    'images' => json_encode($img_data),
+                ]);
+            } else {
+                $place->images = json_encode($img_data);
+                $place->save();
+
+            }
+
+        }
+
+
+        $website1 = null;
+        $website2 = null;
+        $email1 = null;
+        $email2 = null;
+        $phone1 = null;
+        $phone2 = null;
+
+        foreach($place->website as $val => $website){
+            if($val == 0)$website1 = $website;
+            if($val == 1)$website2 = $website;
+        }
+        foreach($place->emails as $val => $email){
+            if($val == 0)$email1 = $email;
+            if($val == 1)$email2 = $email;
+        }
+        foreach($place->phones as $val => $phone){
+            if($val == 0)$phone1 = $phone;
+            if($val == 1)$phone2 = $phone;
+        }
+        if(!is_null($data['phone1'])) {
+            if($phone1){
+                $phone1->update([
+                    'number' => $data['phone1'],
+                ]);
+            } else {
+                $phone1 = Phone::create([
+                    'number' =>  $data['phone1'],
+                    'place_id' =>  $place->id,
+                ]);
+            }
+        } else if ($phone1) {
+            $phone1->delete();
+        }
+        if(!is_null($data['phone2'])){
+            if($phone2) {
+                $phone2->update([
+                    'number' => $data['phone2'],
+                ]);
+            } else {
+                $phone2 = Phone::create([
+                    'number' =>  $data['phone2'],
+                    'place_id' =>  $place->id,
+                ]);
+            }
+        } else if ($phone2) {
+            $phone2->delete();
+        }
+        if(!is_null($data['email1'])) {
+            if($email1) {
+                $email1->update([
+                    'email' => $data['email1'],
+                ]);
+            } else {
+                $email1 = Email::create([
+                    'email' =>  $data['email1'],
+                    'place_id' =>  $place->id,
+                ]);
+            }
+        } else if($email1){
+            $email1->delete();
+        }
+        if(!is_null($data['email2'])){
+            if($email2) {
+                $email2->update([
+                    'email' => $data['email2'],
+                ]);
+            } else {
+                $email2 = Email::create([
+                    'email' =>  $data['email2'],
+                    'place_id' =>  $place->id,
+                ]);
+            }
+        } else if($email2) {
+            $email2->delete();
+        }
+
+        if(!is_null($data['website1'])) {
+            if($website1) {
+                $website1->update([
+                    'url' => $data['website1'],
+                ]);
+            } else {
+                $website1 = Website::create([
+                    'url' =>  $data['website1'],
+                    'place_id' =>  $place->id,
+                ]);
+            }
+        } else if ($website1) {
+            $website1->delete();
+        }
+
+        if(!is_null($data['website2'])){
+            if($place->website->last()) {
+                $place->website->last()->update([
+                    'url' => $data['website2'],
+                ]);
+            } else {
+                $website2 = Website::create([
+                    'url' =>  $data['website2'],
+                    'place_id' =>  $place->id,
+                ]);
+            }
+        } else if ($website2) {
+            $website2->delete();
+        }
+        foreach ($place->tags as $tag){
+            $place->tags()->detach($tag->id);
+        }
+        if (array_key_exists('tag', request()->input())) {
+            foreach (request('tag') as $tag) {
+                $place->tags()->syncWithoutDetaching($tag);
+            }
+        }
+
+        return redirect('/user/profile')->with('message', 'Succesfully updated object.  Waiting for approval');
+    }
+
+    public function destroy_from_search(Place $place){
+
+       self::destroy($place);
+       return redirect('/search')->with('message', 'Succesfully deleted object');
+
+    }
+    public function destroy_from_approve(Place $place){
+
+        self::destroy($place);
+        return redirect('/approve')->with('message', 'Succesfully deleted object');
+
+    }
+    public function destroy_from_userProfile(Place $place){
+
+        self::destroy($place);
+        return redirect('/user/profile')->with('message', 'Succesfully deleted object');
+
+    }
+
     public function destroy(Place $place){
 
         foreach ($place->phones as $phone){
-              //  $place->phones()->detach($phone->id);
                 $phone->delete();
         }
         foreach ($place->emails as $email){
-            //$place->emails()->detach($email->id);
             $email->delete();
         }
         foreach ($place->website as $website){
-            //$place->website()->detach($website->id);
             $website->delete();
+        }
+        foreach ($place->reviews as $review){
+            $review->delete();
+        }
+        foreach ($place->tags as $tag){
+            $place->tags()->detach($tag->id);
         }
 
         $place->delete();
 
-        return redirect('/approve')->with('message', 'Succesfully deleted object');
     }
 
 }

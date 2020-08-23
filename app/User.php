@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'type'
+        'name', 'email', 'password', 'type', 'suspended'
     ];
 
     /**
@@ -42,5 +42,8 @@ class User extends Authenticatable
     }
     public function reviews(){
         return $this->hasMany(Review::class);
+    }
+    public function locations(){
+        return $this->hasMany(Location::class);
     }
 }

@@ -1,16 +1,31 @@
 <div class="my-2">
     <div class="btn-group-toggle  row justify-content-around" data-toggle="buttons">
-        <label class="btn btn-blue-check col-auto px-4">
+        <label   v-on:click="hideLocations()" class="btn btn-blue-check col-auto px-4">
             <input type="radio" checked name="location"
                    value="1">
             Around me
         </label>
-        <label class="btn btn-blue-check col-auto px-4">
-            <input type="radio" name="location"
-                   value="0">
+        <label  class="btn btn-blue-check col-auto px-4 @guest disabled @endguest "  @guest title="You need to login to use saved locations"  @endguest>
+            <input v-on:click="showLocations()" type="radio"  name="location" @guest disabled @endguest
+                   value="2" >
             Around my saved locations
         </label>
+        @auth
+            <div class="col-8 mx-5 mt-4" v-show="showLoc">
+                <select name="savedLocation" class="form-control">
+                    <option value="" disabled="" selected>Select a location </option>
+                    @foreach($user->locations as $location)
+                        @php $latlng = json_encode([$location->name, $location->lat, $location->lng]) @endphp
+                        <option value="{{$latlng}}">{{$location->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+
+        @endauth
     </div>
+    <input type="text" value="{{$lat}}" ref="mylat" style="display: none">
+    <input type="text"  value="{{$lng}}" ref="mylng" style="display: none">
+    <br>
     <div class="collape" id="distance">
         <div class="col-12 mt-3">
             <input type="range" class="custom-range" min="0" max="150" step="1" id="rangeIndicator" value="{{ $range }}">

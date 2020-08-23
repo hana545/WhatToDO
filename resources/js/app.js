@@ -48,16 +48,23 @@ const app = new Vue({
     el: '#app',
     data: {
         show: false,
+        showMap: true,
+        showLoc: false,
 
-        lat: null,
-        lng: null,
+        clat: null,
+        clng: null,
         center: null,
+
+        llat: null,
+        llng: null,
+        myLocationstring: "You are here",
+        myLocation: null,
+        savedLoc : null,
         url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
         attribution:
             '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
         zoom: 12,
-        myLocationstring: "You are here",
-        myLocation: null,
+
         dicon:L.icon({
             iconUrl: 'https://www.pngkey.com/png/full/933-9338142_icon-marker-circle.png',
             iconUrl: 'https://cdn1.iconfinder.com/data/icons/ui-5/502/marker-512.png',
@@ -95,32 +102,42 @@ const app = new Vue({
         toggleShow(){
             this.show = !this.show
         },
+        toggleShowMap(){
+            this.showMap = !this.showMap
+        },
+        showLocations(){
+            this.showLoc = true;
+        },
+        hideLocations(){
+            this.showLoc = false;
+        },
+        ShowMap(){
+            this.showMap = true;
+        },
 
         showPlace: function(placelat, placelng){
             this.center = L.latLng(placelat, placelng);
             this.zoom = 15;
-            console.log("Place", this.center);
         },
         showMe: function() {
-            this.center = L.latLng(this.lat, this.lng);
-            this.myLocation = L.latLng(this.lat, this.lng);
+            this.center = L.latLng(this.llat, this.llng);
+            this.myLocation = L.latLng(this.llat, this.llng);
             this.zoom = 14;
-            console.log("myloc", this.center);
         },
 
         GetLocation(){
             this.$getLocation({enableHighAccuracy: true})
                 .then(coordinates => {
                     this.gettingLocation = true;
-                    this.lat = coordinates.lat;
-                    this.lng = coordinates.lng;
-                    this.center = L.latLng(this.lat, this.lng);
-                    this.myLocation = L.latLng(this.lat, this.lng);
-                    console.log(this.myLocation);
+
+                    this.llat = coordinates.lat;
+                    this.llng = coordinates.lng;
+                    this.myLocation = L.latLng(this.llat, this.llng);
+                    //send to session
                     $.ajax({
                         url:'/getgeo',
                         type:'get',
-                        data:{latitude:this.lat, longitude:this.lng},
+                        data:{latitude:this.llat, longitude:this.llng},
 
 
                         success:function(data)
@@ -161,12 +178,22 @@ const app = new Vue({
                     $(this).remove();
                 });
             }, 2000);
+        },
+
+        AdjustCenter: function(){
+            if(this.$refs.mylat) this.clat = this.$refs.mylat.value;
+            if(this.$refs.mylng) this.clng = this.$refs.mylng.value;
+            this.center = L.latLng(this.clat, this.clng);
+            this.savedLoc = L.latLng(this.clat, this.clng);
+
         }
     },
     mounted: function () {
         this.GetLocation();
         this.AlertTimeout();
         this.CheckNav();
+        this.AdjustCenter();
+
     },
     created: function () {
         window.addEventListener('scroll', this.scrollNav);
@@ -178,7 +205,11 @@ const app = new Vue({
 
 
 });
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $("#multiple_images").on('change', function() {
 
     var input = document.getElementById( 'multiple_images' );
@@ -218,6 +249,79 @@ $(document).ready(function(){
     $('#rangeIndicator').change();
 });
 
+$(document).ready(function(){
+
+    /* 1. Visualizing things on Hover - See next part for action on click */
+    $('#stars li').on('mouseover', function(){
+        var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
+
+        // Now highlight all the stars that's not after the current hovered star
+        $(this).parent().children('li.star').each(function(e){
+            if (e < onStar) {
+                $(this).addClass('hover');
+            }
+            else {
+                $(this).removeClass('hover');
+            }
+        });
+
+    }).on('mouseout', function(){
+        $(this).parent().children('li.star').each(function(e){
+            $(this).removeClass('hover');
+        });
+    });
+
+
+    /* 2. Action to perform on click */
+    $('#stars li').on('click', function(){
+
+        var onStar = parseInt($(this).data('value'), 10); // The star currently selected
+        var stars = $(this).parent().children('li.star');
+        var i = 0;
+        for (i = 0; i < stars.length; i++) {
+            $(stars[i]).removeClass('selected');
+            $(stars[i]).removeClass('chosen');
+        }
+
+        for (i = 0; i < onStar; i++) {
+            $(stars[i]).addClass('selected');
+
+        }
+
+        // JUST RESPONSE (Not needed)
+        //var ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
+        var ratingValue = i;
+        var msg = "Thanks! You are rating this place with " + ratingValue + " stars.";
+
+        responseMessage(msg);
+        $('.StarValue').attr('value', ratingValue);
+    });
+
+    $('.stars-button').on('click', function(){
+        console.log('click, clear');
+        $('.success-box img').attr('src',"");
+        $('.success-box img').hide();
+    });
+
+
+});
+
+
+function responseMessage(msg) {
+    $('.success-box').fadeIn(200);
+    $('.success-box img').attr('src',"https://superiusidea.hr/wp-content/uploads/2014/06/kvacica.png");
+    $('.success-box img').show();
+    $('.success-box div.text-message').html("<span>" + msg + "</span>");
+}
+
+
+$(document).ready(function() {
+    var input = document.getElementById('google_address');
+    var input1 = document.getElementById('google_location');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+    var autocomplete = new google.maps.places.Autocomplete(input1);
+
+});
 ///alert fade up
 /*
 window.setTimeout(function() {
@@ -328,67 +432,3 @@ $("#locate").on("click", function(){
 
 
 
-$(document).ready(function(){
-
-    /* 1. Visualizing things on Hover - See next part for action on click */
-    $('#stars li').on('mouseover', function(){
-        var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
-
-        // Now highlight all the stars that's not after the current hovered star
-        $(this).parent().children('li.star').each(function(e){
-            if (e < onStar) {
-                $(this).addClass('hover');
-            }
-            else {
-                $(this).removeClass('hover');
-            }
-        });
-
-    }).on('mouseout', function(){
-        $(this).parent().children('li.star').each(function(e){
-            $(this).removeClass('hover');
-        });
-    });
-
-
-    /* 2. Action to perform on click */
-    $('#stars li').on('click', function(){
-
-        var onStar = parseInt($(this).data('value'), 10); // The star currently selected
-        var stars = $(this).parent().children('li.star');
-        var i = 0;
-        for (i = 0; i < stars.length; i++) {
-            $(stars[i]).removeClass('selected');
-            $(stars[i]).removeClass('chosen');
-        }
-
-        for (i = 0; i < onStar; i++) {
-            $(stars[i]).addClass('selected');
-
-        }
-
-        // JUST RESPONSE (Not needed)
-        //var ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
-        var ratingValue = i;
-        var msg = "Thanks! You are rating this place with " + ratingValue + " stars.";
-
-        responseMessage(msg);
-        $('.StarValue').attr('value', ratingValue);
-    });
-
-    $('.stars-button').on('click', function(){
-        console.log('click, clear');
-        $('.success-box img').attr('src',"");
-        $('.success-box img').hide();
-    });
-
-
-});
-
-
-function responseMessage(msg) {
-    $('.success-box').fadeIn(200);
-    $('.success-box img').attr('src',"https://superiusidea.hr/wp-content/uploads/2014/06/kvacica.png");
-    $('.success-box img').show();
-    $('.success-box div.text-message').html("<span>" + msg + "</span>");
-}

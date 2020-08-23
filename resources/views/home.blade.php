@@ -33,11 +33,12 @@
                             <img class="card-img-top m-3" style="height: 225px;" src="images/illustrations/category.svg">
                             <div class="card-body">
                                 <p class="card-text text-center">
-                                    <b>Add interesting places</b>
+                                    @guest<b>Login to add interesting places</b> @endguest
+                                    @auth <b>Add interesting places</b> @endauth
                                 </p>
                                 <div class="align-items-center">
                                     <p class="text-center">
-                                        <a href="{{route('add_object')}}"><button type="button" style="background-color: #0f6674;" class="btn btn-bluedark btn-lg zoom"><b>Add <i class="fa fa-search"></i></button></a>
+                                        <a @guest href="{{ route('login') }}" @endguest @auth  href="{{ route('add_object') }}" @endauth><button type="button" style="background-color: #0f6674;" class="btn btn-bluedark btn-lg zoom"><b>@auth Add @endauth @guest Login @endguest <i class="fa fa-search"></i></button></a>
                                     </p>
                                 </div>
                             </div>

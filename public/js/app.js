@@ -6472,7 +6472,7 @@ L.Icon.Default.mergeOptions({
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css?66f3":
+/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css":
 /*!*******************************************************************************************************************************!*\
   !*** ./node_modules/css-loader??ref--6-1!./node_modules/postcss-loader/src??ref--6-2!./node_modules/leaflet/dist/leaflet.css ***!
   \*******************************************************************************************************************************/
@@ -31643,7 +31643,7 @@ window.L = exports;
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../css-loader??ref--6-1!../../postcss-loader/src??ref--6-2!./leaflet.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css?66f3");
+var content = __webpack_require__(/*! !../../css-loader??ref--6-1!../../postcss-loader/src??ref--6-2!./leaflet.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -77059,14 +77059,19 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app',
   data: {
     show: false,
-    lat: null,
-    lng: null,
+    showMap: true,
+    showLoc: false,
+    clat: null,
+    clng: null,
     center: null,
+    llat: null,
+    llng: null,
+    myLocationstring: "You are here",
+    myLocation: null,
+    savedLoc: null,
     url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
     zoom: 12,
-    myLocationstring: "You are here",
-    myLocation: null,
     dicon: L.icon((_L$icon = {
       iconUrl: 'https://www.pngkey.com/png/full/933-9338142_icon-marker-circle.png'
     }, _defineProperty(_L$icon, "iconUrl", 'https://cdn1.iconfinder.com/data/icons/ui-5/502/marker-512.png'), _defineProperty(_L$icon, "iconSize", [40, 40]), _L$icon)),
@@ -77106,16 +77111,26 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     toggleShow: function toggleShow() {
       this.show = !this.show;
     },
+    toggleShowMap: function toggleShowMap() {
+      this.showMap = !this.showMap;
+    },
+    showLocations: function showLocations() {
+      this.showLoc = true;
+    },
+    hideLocations: function hideLocations() {
+      this.showLoc = false;
+    },
+    ShowMap: function ShowMap() {
+      this.showMap = true;
+    },
     showPlace: function showPlace(placelat, placelng) {
       this.center = L.latLng(placelat, placelng);
       this.zoom = 15;
-      console.log("Place", this.center);
     },
     showMe: function showMe() {
-      this.center = L.latLng(this.lat, this.lng);
-      this.myLocation = L.latLng(this.lat, this.lng);
+      this.center = L.latLng(this.llat, this.llng);
+      this.myLocation = L.latLng(this.llat, this.llng);
       this.zoom = 14;
-      console.log("myloc", this.center);
     },
     GetLocation: function GetLocation() {
       var _this = this;
@@ -77124,17 +77139,16 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         enableHighAccuracy: true
       }).then(function (coordinates) {
         _this.gettingLocation = true;
-        _this.lat = coordinates.lat;
-        _this.lng = coordinates.lng;
-        _this.center = L.latLng(_this.lat, _this.lng);
-        _this.myLocation = L.latLng(_this.lat, _this.lng);
-        console.log(_this.myLocation);
+        _this.llat = coordinates.lat;
+        _this.llng = coordinates.lng;
+        _this.myLocation = L.latLng(_this.llat, _this.llng); //send to session
+
         $.ajax({
           url: '/getgeo',
           type: 'get',
           data: {
-            latitude: _this.lat,
-            longitude: _this.lng
+            latitude: _this.llat,
+            longitude: _this.llng
           },
           success: function success(data) {// alert('success');
           }
@@ -77168,12 +77182,19 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
           $(this).remove();
         });
       }, 2000);
+    },
+    AdjustCenter: function AdjustCenter() {
+      if (this.$refs.mylat) this.clat = this.$refs.mylat.value;
+      if (this.$refs.mylng) this.clng = this.$refs.mylng.value;
+      this.center = L.latLng(this.clat, this.clng);
+      this.savedLoc = L.latLng(this.clat, this.clng);
     }
   },
   mounted: function mounted() {
     this.GetLocation();
     this.AlertTimeout();
     this.CheckNav();
+    this.AdjustCenter();
   },
   created: function created() {
     window.addEventListener('scroll', this.scrollNav);
@@ -77181,7 +77202,12 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   destroyed: function destroyed() {
     window.removeEventListener('scroll', this.scrollNav);
   }
-});
+}); ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 $("#multiple_images").on('change', function () {
   var input = document.getElementById('multiple_images');
   var infoArea = document.getElementById('file-upload-filename'); // the change event gives us the input it occurred in
@@ -77216,6 +77242,68 @@ $(document).ready(function () {
     document.getElementById("inputRangeValue").value = id;
   });
   $('#rangeIndicator').change();
+});
+$(document).ready(function () {
+  /* 1. Visualizing things on Hover - See next part for action on click */
+  $('#stars li').on('mouseover', function () {
+    var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
+    // Now highlight all the stars that's not after the current hovered star
+
+    $(this).parent().children('li.star').each(function (e) {
+      if (e < onStar) {
+        $(this).addClass('hover');
+      } else {
+        $(this).removeClass('hover');
+      }
+    });
+  }).on('mouseout', function () {
+    $(this).parent().children('li.star').each(function (e) {
+      $(this).removeClass('hover');
+    });
+  });
+  /* 2. Action to perform on click */
+
+  $('#stars li').on('click', function () {
+    var onStar = parseInt($(this).data('value'), 10); // The star currently selected
+
+    var stars = $(this).parent().children('li.star');
+    var i = 0;
+
+    for (i = 0; i < stars.length; i++) {
+      $(stars[i]).removeClass('selected');
+      $(stars[i]).removeClass('chosen');
+    }
+
+    for (i = 0; i < onStar; i++) {
+      $(stars[i]).addClass('selected');
+    } // JUST RESPONSE (Not needed)
+    //var ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
+
+
+    var ratingValue = i;
+    var msg = "Thanks! You are rating this place with " + ratingValue + " stars.";
+    responseMessage(msg);
+    $('.StarValue').attr('value', ratingValue);
+  });
+  $('.stars-button').on('click', function () {
+    console.log('click, clear');
+    $('.success-box img').attr('src', "");
+    $('.success-box img').hide();
+  });
+});
+
+function responseMessage(msg) {
+  $('.success-box').fadeIn(200);
+  $('.success-box img').attr('src', "https://superiusidea.hr/wp-content/uploads/2014/06/kvacica.png");
+  $('.success-box img').show();
+  $('.success-box div.text-message').html("<span>" + msg + "</span>");
+}
+
+$(document).ready(function () {
+  var input = document.getElementById('google_address');
+  var input1 = document.getElementById('google_location');
+  var autocomplete = new google.maps.places.Autocomplete(input);
+  var autocomplete = new google.maps.places.Autocomplete(input1);
 }); ///alert fade up
 
 /*
@@ -77323,62 +77411,6 @@ $("#locate").on("click", function(){
 });
 
 */
-
-$(document).ready(function () {
-  /* 1. Visualizing things on Hover - See next part for action on click */
-  $('#stars li').on('mouseover', function () {
-    var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
-    // Now highlight all the stars that's not after the current hovered star
-
-    $(this).parent().children('li.star').each(function (e) {
-      if (e < onStar) {
-        $(this).addClass('hover');
-      } else {
-        $(this).removeClass('hover');
-      }
-    });
-  }).on('mouseout', function () {
-    $(this).parent().children('li.star').each(function (e) {
-      $(this).removeClass('hover');
-    });
-  });
-  /* 2. Action to perform on click */
-
-  $('#stars li').on('click', function () {
-    var onStar = parseInt($(this).data('value'), 10); // The star currently selected
-
-    var stars = $(this).parent().children('li.star');
-    var i = 0;
-
-    for (i = 0; i < stars.length; i++) {
-      $(stars[i]).removeClass('selected');
-      $(stars[i]).removeClass('chosen');
-    }
-
-    for (i = 0; i < onStar; i++) {
-      $(stars[i]).addClass('selected');
-    } // JUST RESPONSE (Not needed)
-    //var ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
-
-
-    var ratingValue = i;
-    var msg = "Thanks! You are rating this place with " + ratingValue + " stars.";
-    responseMessage(msg);
-    $('.StarValue').attr('value', ratingValue);
-  });
-  $('.stars-button').on('click', function () {
-    console.log('click, clear');
-    $('.success-box img').attr('src', "");
-    $('.success-box img').hide();
-  });
-});
-
-function responseMessage(msg) {
-  $('.success-box').fadeIn(200);
-  $('.success-box img').attr('src', "https://superiusidea.hr/wp-content/uploads/2014/06/kvacica.png");
-  $('.success-box img').show();
-  $('.success-box div.text-message').html("<span>" + msg + "</span>");
-}
 
 /***/ }),
 

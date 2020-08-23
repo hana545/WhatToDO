@@ -23935,25 +23935,48 @@ body {
   color: rgba(255, 255, 255, 0.8);
 }
 
+.blue-tag {
+  color: rgba(0, 0, 0, 0.8);
+  background-color: #26bfba;
+  border-color: #26bfba;
+}
+
 .btn-blue {
   color: rgba(0, 0, 0, 0.8);
   background-color: #26bfba;
+  border-color: #26bfba;
 }
 
 .btn-blue:hover {
   color: whitesmoke;
   background-color: #0f6674;
+  border-color: #0f6674;
 }
 
 .btn-bluedark {
   color: whitesmoke;
   background-color: #0f6674;
+  border-color: #0f6674;
   font-weight: bolder;
 }
 
 .btn-bluedark:hover {
   color: rgba(0, 0, 0, 0.8);
   background-color: #26bfba;
+  border-color: #26bfba;
+}
+
+.btn-lightblue {
+  color: darkslategrey;
+  background-color: lightblue;
+  border-color: lightblue;
+  font-weight: bolder;
+}
+
+.btn-lightblue:hover {
+  color: whitesmoke;
+  background-color: #0f6674;
+  border-color: #0f6674;
 }
 
 .btn-outline-blue {
@@ -23970,8 +23993,8 @@ body {
 }
 
 .btn-outline-bluedark {
-  color: #0f6674;
-  background-color: white;
+  color: darkslategrey;
+  background-color: lightblue;
   border: #0f6674;
   font-weight: lighter;
 }
@@ -24319,5 +24342,9 @@ pre {
 .file-upload-filename {
   background-color: #ffffff;
   color: darkslategrey;
+}
+
+.pac-container {
+  z-index: 1051 !important;
 }
 

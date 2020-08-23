@@ -42,7 +42,7 @@ $user = Auth::user();
                     <li class=" col-sm-3 my-2">
                         <div class="row">
                             <div class="col-5">{{$tag->name}}</div>
-                            <div class="col-7"><a href="/deleteTag/{{$tag->id}}"><div class="btn btn-danger">Delete</div></a></div>
+                            <div class="col-7"><a href="/tag/delete/{{$tag->id}}"><div class="btn btn-danger">Delete</div></a></div>
                         </div>
                     </li>
                 @endforeach

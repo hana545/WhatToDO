@@ -17,19 +17,19 @@
                                     <!-- Rating Stars Box -->
                                     <div class='rating-stars text-center'>
                                         <ul id='stars'>
-                                            <li class='star @if($place->avgStar >= 1) selected  @endif' title='Awful' data-value='1' >
+                                            <li class='star-static @if($place->avgStar >= 1) selected  @endif' title='Awful' data-value='1' >
                                                 <i class='fa fa-star fa-fw'></i>
                                             </li>
-                                            <li class='star @if($place->avgStar >= 2) selected  @endif' title='Bad' data-value='2'>
+                                            <li class='star-static @if($place->avgStar >= 2) selected  @endif' title='Bad' data-value='2'>
                                                 <i class='fa fa-star fa-fw'></i>
                                             </li>
-                                            <li class='star @if($place->avgStar >= 3) selected  @endif' title='Good' data-value='3'>
+                                            <li class='star-static @if($place->avgStar >= 3) selected  @endif' title='Good' data-value='3'>
                                                 <i class='fa fa-star fa-fw'></i>
                                             </li>
-                                            <li class='star @if($place->avgStar >= 4) selected  @endif' title='Very good' data-value='4'>
+                                            <li class='star-static @if($place->avgStar >= 4) selected  @endif' title='Very good' data-value='4'>
                                                 <i class='fa fa-star fa-fw'></i>
                                             </li>
-                                            <li class='star @if($place->avgStar >= 5) selected  @endif'  title='Excellent!!!' data-value='5'>
+                                            <li class='star-static @if($place->avgStar >= 5) selected  @endif'  title='Excellent!!!' data-value='5'>
                                                 <i class='fa fa-star fa-fw'></i>
                                             </li>
                                         </ul>
@@ -70,7 +70,7 @@
                             </div>
                             <div class="col-8  text-center text-white">
                                 @foreach($place->tags as $tag)
-                                    <label class="btn btn-blue-check col-auto px-2 m-1">
+                                    <label class="btn blue-tag col-auto px-2 m-1">
                                         {{ $tag->name}}
                                     </label>
                                 @endforeach
@@ -168,6 +168,9 @@
 
 
             <div class="modal-footer">
+                @if (Auth::check() && Auth::user()->type == true)
+                    <a href="search/palce/delete/{{$place->id}}"><div class="btn btn-danger">Delete this place</div></a>
+                @endif
             </div>
             </div>
         </div>
