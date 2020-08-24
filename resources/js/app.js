@@ -60,7 +60,7 @@ const app = new Vue({
         myLocationstring: "You are here",
         myLocation: null,
         savedLoc : null,
-        url: "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
+        url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
         attribution:
             '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
         zoom: 12,
@@ -124,50 +124,27 @@ const app = new Vue({
             this.myLocation = L.latLng(this.llat, this.llng);
             this.zoom = 14;
         },
-
-        GetLocation(){
-            this.$getLocation({enableHighAccuracy: true})
-                .then(coordinates => {
-                    this.gettingLocation = true;
-
-                    this.llat = coordinates.lat;
-                    this.llng = coordinates.lng;
-                    this.myLocation = L.latLng(this.llat, this.llng);
-                    //send to session
-                    $.ajax({
-                        url:'/getgeo',
-                        type:'get',
-                        data:{latitude:this.llat, longitude:this.llng},
+        /*
+                GetLocation(){
+                    this.$getLocation({enableHighAccuracy: true})
+                        .then(coordinates => {
+                            this.gettingLocation = true;
 
 
-                        success:function(data)
-                        {
-                            // alert('success');
-                        }
-                    });
-                });
-        },
-        SetCenter(){
-
-                    this.gettingLocation = true;
-
-                    this.llat = 45.3190435;
-                    this.llng = 14.475843;
-                    this.myLocation = L.latLng(this.llat, this.llng);
-                    //send to session
-                    $.ajax({
-                        url:'/getgeo',
-                        type:'get',
-                        data:{latitude:this.llat, longitude:this.llng},
+                            //send to session
+                            $.ajax({
+                                url:'/getgeo',
+                                type:'get',
+                                data:{latitude:this.llat, longitude:this.llng},
 
 
-                        success:function(data)
-                        {
-                            // alert('success');
-                        }
-                    });
-                });
-        },
+                                success:function(data)
+                                {
+                                    // alert('success');
+                                }
+                            });
+                        });
+                },*/
         scrollNav: function (event) {
             //if collapsed navbar is opened and scroll is on top, add
             if($(".navbar-toggler").attr("aria-expanded") == "true" && $(window).scrollTop() == 0){
@@ -189,7 +166,7 @@ const app = new Vue({
             }
         },
         CheckSmallNav: function() {
-                $(".navbar").addClass('bg-black');
+            $(".navbar").addClass('bg-black');
 
 
         },
@@ -204,14 +181,19 @@ const app = new Vue({
         AdjustCenter: function(){
             if(this.$refs.mylat) this.clat = this.$refs.mylat.value;
             if(this.$refs.mylng) this.clng = this.$refs.mylng.value;
+            this.gettingLocation = true;
             this.center = L.latLng(this.clat, this.clng);
-            this.savedLoc = L.latLng(this.clat, this.clng);
+            this.myLocation = L.latLng(this.clat, this.clng);
+            //  this.savedLoc  = L.latLng(this.clat, this.clng);
+
+            console.log('center', this.center);
+            console.log('myLocation', this.myLocation);
+            console.log('savedLoc', this.savedLoc);
 
         }
     },
     mounted: function () {
         //this.GetLocation();
-        this.SetCenter();
         this.AlertTimeout();
         this.CheckNav();
         this.AdjustCenter();

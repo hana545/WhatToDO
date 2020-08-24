@@ -9,11 +9,13 @@ use \App\Review;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use function MongoDB\BSON\toJSON;
 
 class SearchController extends Controller
 {
     public function index(){
+        $response = Http::get('http://ip-api.com/json');
 
         $user = Auth::user();
         $places = Place::where('approved', '=', '1')->get();
@@ -23,8 +25,8 @@ class SearchController extends Controller
         $range = 15;
         $rangeEnabled = 0;
         //dd(session('lat'));
-        $lat=session('lat');
-        $lng=session('lng');
+        $lat=$response->json()['lat'];
+        $lng=$response->json()['lon'];
         $center = ['lat' => $lat, 'lng' => $lng];
 
 
@@ -44,8 +46,8 @@ class SearchController extends Controller
 
                         }
                     }
-                        $sum += $review->star;
-                        $count++;
+                    $sum += $review->star;
+                    $count++;
 
 
                 }
@@ -77,6 +79,7 @@ class SearchController extends Controller
     }
 
     public function search(){
+        $response = Http::get('http://ip-api.com/json');
         //dd(request());
         //for search and remembering filter variables
         $categories = Category::all();
@@ -104,8 +107,8 @@ class SearchController extends Controller
         //search by range, pull unwanted tags, calculate review; sort by dist
         $range = request('range');
         $rangeEnabled = request('rangeEnabled');
-        $lat=session('lat');
-        $lng=session('lng');
+        $lat=$response->json()['lat'];
+        $lng=$response->json()['lon'];
         $mysaveloc = false;
         $mysavelocname = 'My saved location';
         if(request('location') != 1){
@@ -194,7 +197,7 @@ class SearchController extends Controller
         return $d;
     }
 
-        public function getCoordinates(Request $request)
+    public function getCoordinates(Request $request)
     {
         session(['lat' => $request->latitude]);
         session(['lng' => $request->longitude]);

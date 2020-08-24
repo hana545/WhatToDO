@@ -1,6 +1,6 @@
 <nav class="nav navbar navbar-expand-md navbar-dark p-3 fixed-top ">
     <div class="container-fluid mr-3">
-        <a href="/"><img src="{{ asset('images/logo/logo-bw.png') }}" style="height: 80%; width: 200px"></a>
+        <a href="/"><img src="{{ asset('images/logo/logo-bw.png') }}" style="height: 80%; width: 200px"> </a>
 
         <button v-on:click="CheckSmallNav()" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
