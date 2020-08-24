@@ -60,7 +60,7 @@ const app = new Vue({
         myLocationstring: "You are here",
         myLocation: null,
         savedLoc : null,
-        url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
+        url: "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
         attribution:
             '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
         zoom: 12,
