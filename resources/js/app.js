@@ -147,6 +147,27 @@ const app = new Vue({
                     });
                 });
         },
+        SetCenter(){
+
+                    this.gettingLocation = true;
+
+                    this.llat = 45.3190435;
+                    this.llng = 14.475843;
+                    this.myLocation = L.latLng(this.llat, this.llng);
+                    //send to session
+                    $.ajax({
+                        url:'/getgeo',
+                        type:'get',
+                        data:{latitude:this.llat, longitude:this.llng},
+
+
+                        success:function(data)
+                        {
+                            // alert('success');
+                        }
+                    });
+                });
+        },
         scrollNav: function (event) {
             //if collapsed navbar is opened and scroll is on top, add
             if($(".navbar-toggler").attr("aria-expanded") == "true" && $(window).scrollTop() == 0){
@@ -189,7 +210,8 @@ const app = new Vue({
         }
     },
     mounted: function () {
-        this.GetLocation();
+        //this.GetLocation();
+        this.SetCenter();
         this.AlertTimeout();
         this.CheckNav();
         this.AdjustCenter();
