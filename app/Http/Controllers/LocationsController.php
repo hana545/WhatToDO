@@ -7,6 +7,9 @@ use App\Location;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Geocoder\Facades\Geocoder;
 
+use Illuminate\Support\Facades\Http;
+use function MongoDB\BSON\toJSON;
+
 class LocationsController extends Controller
 {
     public function store(){
@@ -15,8 +18,12 @@ class LocationsController extends Controller
             'name' => 'required|min:3',
             'address' => 'required|min:3',
         ]);
-        $lat = Geocoder::getCoordinatesForAddress($data['address'])['lat'];
-        $lng = Geocoder::getCoordinatesForAddress($data['address'])['lng'];
+        $address = $data['address'];
+        $address = str_replace(" ","+", $address);
+        $response = Http::get('https://maps.googleapis.com/maps/api/geocode/json?address='.$address.'&key=AIzaSyAY9df1pMrDrLQ7JcEFuBZh0CdtpUFMdAY');
+        $latlng = $response->json()['results'][0]['geometry']['location'];
+        $lat = $latlng['lat'];
+        $lng = $latlng['lng'];
         $location = Location::create([
             'name' => $data['name'],
             'address' => $data['address'],
@@ -40,8 +47,12 @@ class LocationsController extends Controller
             $lat = $location->lat;
             $lng = $location->lng;
         } else {
-            $lat = Geocoder::getCoordinatesForAddress($data['address'])['lat'];
-            $lng = Geocoder::getCoordinatesForAddress($data['address'])['lng'];
+            $address = $data['address'];
+            $address = str_replace(" ","+", $address);
+            $response = Http::get('https://maps.googleapis.com/maps/api/geocode/json?address='.$address.'&key=AIzaSyAY9df1pMrDrLQ7JcEFuBZh0CdtpUFMdAY');
+            $latlng = $response->json()['results'][0]['geometry']['location'];
+            $lat = $latlng['lat'];
+            $lng = $latlng['lng'];p
         }
         $location->update([
             'name' => $data['name'],
