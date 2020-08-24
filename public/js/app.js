@@ -6472,7 +6472,7 @@ L.Icon.Default.mergeOptions({
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css":
+/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css?66f3":
 /*!*******************************************************************************************************************************!*\
   !*** ./node_modules/css-loader??ref--6-1!./node_modules/postcss-loader/src??ref--6-2!./node_modules/leaflet/dist/leaflet.css ***!
   \*******************************************************************************************************************************/
@@ -31643,7 +31643,7 @@ window.L = exports;
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../css-loader??ref--6-1!../../postcss-loader/src??ref--6-2!./leaflet.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css");
+var content = __webpack_require__(/*! !../../css-loader??ref--6-1!../../postcss-loader/src??ref--6-2!./leaflet.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css?66f3");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -77132,29 +77132,24 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
       this.myLocation = L.latLng(this.llat, this.llng);
       this.zoom = 14;
     },
-    GetLocation: function GetLocation() {
-      var _this = this;
 
-      this.$getLocation({
-        enableHighAccuracy: true
-      }).then(function (coordinates) {
-        _this.gettingLocation = true;
-        _this.llat = coordinates.lat;
-        _this.llng = coordinates.lng;
-        _this.myLocation = L.latLng(_this.llat, _this.llng); //send to session
-
-        $.ajax({
-          url: '/getgeo',
-          type: 'get',
-          data: {
-            latitude: _this.llat,
-            longitude: _this.llng
-          },
-          success: function success(data) {// alert('success');
-          }
-        });
-      });
-    },
+    /*
+            GetLocation(){
+                this.$getLocation({enableHighAccuracy: true})
+                    .then(coordinates => {
+                        this.gettingLocation = true;
+                          //send to session
+                        $.ajax({
+                            url:'/getgeo',
+                            type:'get',
+                            data:{latitude:this.llat, longitude:this.llng},
+                              success:function(data)
+                            {
+                                // alert('success');
+                            }
+                        });
+                    });
+            },*/
     scrollNav: function scrollNav(event) {
       //if collapsed navbar is opened and scroll is on top, add
       if ($(".navbar-toggler").attr("aria-expanded") == "true" && $(window).scrollTop() == 0) {
@@ -77186,12 +77181,17 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     AdjustCenter: function AdjustCenter() {
       if (this.$refs.mylat) this.clat = this.$refs.mylat.value;
       if (this.$refs.mylng) this.clng = this.$refs.mylng.value;
+      this.gettingLocation = true;
       this.center = L.latLng(this.clat, this.clng);
-      this.savedLoc = L.latLng(this.clat, this.clng);
+      this.myLocation = L.latLng(this.clat, this.clng); //  this.savedLoc  = L.latLng(this.clat, this.clng);
+
+      console.log('center', this.center);
+      console.log('myLocation', this.myLocation);
+      console.log('savedLoc', this.savedLoc);
     }
   },
   mounted: function mounted() {
-    this.GetLocation();
+    //this.GetLocation();
     this.AlertTimeout();
     this.CheckNav();
     this.AdjustCenter();

@@ -15,7 +15,12 @@ use function MongoDB\BSON\toJSON;
 class SearchController extends Controller
 {
     public function index(){
-        $response = Http::get('http://ip-api.com/json');
+        //$response = Http::get('http://ip-api.com/json');
+        //$lat=$response->json()['lat'];
+        //$lng=$response->json()['lon'];
+        $lat=45.343270499999996;
+        $lng=14.4424539;
+        $center = ['lat' => $lat, 'lng' => $lng];
 
         $user = Auth::user();
         $places = Place::where('approved', '=', '1')->get();
@@ -25,9 +30,7 @@ class SearchController extends Controller
         $range = 15;
         $rangeEnabled = 0;
         //dd(session('lat'));
-        $lat=$response->json()['lat'];
-        $lng=$response->json()['lon'];
-        $center = ['lat' => $lat, 'lng' => $lng];
+
 
 
         foreach ($places as $place) {
@@ -79,7 +82,7 @@ class SearchController extends Controller
     }
 
     public function search(){
-        $response = Http::get('http://ip-api.com/json');
+        //$response = Http::get('http://ip-api.com/json');
         //dd(request());
         //for search and remembering filter variables
         $categories = Category::all();
@@ -107,9 +110,11 @@ class SearchController extends Controller
         //search by range, pull unwanted tags, calculate review; sort by dist
         $range = request('range');
         $rangeEnabled = request('rangeEnabled');
-        $lat=$response->json()['lat'];
-        $lng=$response->json()['lon'];
-        $mysaveloc = false;
+        //$lat=$response->json()['lat'];
+        //$lng=$response->json()['lon'];
+
+        $lat=45.343270499999996;
+        $lng=14.4424539;        $mysaveloc = false;
         $mysavelocname = 'My saved location';
         if(request('location') != 1){
             $savedLocationString = request('savedLocation');
