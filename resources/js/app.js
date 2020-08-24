@@ -60,7 +60,7 @@ const app = new Vue({
         myLocationstring: "You are here",
         myLocation: null,
         savedLoc : null,
-        url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
+        url: "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
         attribution:
             '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
         zoom: 12,
@@ -125,32 +125,29 @@ const app = new Vue({
             this.zoom = 14;
         },
 
-                GetLocation(){
-                   /* this.$getLocation({enableHighAccuracy: true})
-                        .then(coordinates => {
-                            this.gettingLocation = true;
+        GetLocation(){
+            this.$getLocation({enableHighAccuracy: true})
+                .then(coordinates => {
+                    this.gettingLocation = true;
+                    this.llat = coordinates.lat;
+                    this.llng = coordinates.lng;
+                    this.myLocation = L.latLng(this.llat, this.llng);
+                    console.log(this.myLocation);
 
-                            this.llat = coordinates.latitude;
-                            this.llng = coordinates.longitude;
-                            this.gettingLocation = true;
-                            this.myLocation  = L.latLng(this.llat, this.llng);
-                            //send to session
-                            $.ajax({
-                                url:'/getgeo',
-                                type:'get',
-                                data:{latitude:this.llat, longitude:this.llng},
-
-
-                                success:function(data)
-                                {
-                                    // alert('success');
-                                }
-                            });
-                        });
-                    */
+                    //send to session
+                    $.ajax({
+                        url:'/getgeo',
+                        type:'get',
+                        data:{latitude:this.llat, longitude:this.llng},
 
 
-                },
+                        success:function(data)
+                        {
+                            // alert('success');
+                        }
+                    });
+                });
+        },
         scrollNav: function (event) {
             //if collapsed navbar is opened and scroll is on top, add
             if($(".navbar-toggler").attr("aria-expanded") == "true" && $(window).scrollTop() == 0){
@@ -184,49 +181,26 @@ const app = new Vue({
             }, 2000);
         },
 
-        AdjustCenterToSavedLoc: function(){
+        AdjustCenterForSavedLoc: function(){
             if(this.$refs.mylat) this.clat = this.$refs.mylat.value;
             if(this.$refs.mylng) this.clng = this.$refs.mylng.value;
-            this.gettingLocation = true;
             this.center = L.latLng(this.clat, this.clng);
             this.savedLoc  = L.latLng(this.clat, this.clng);
 
 
-            console.log(this.center);
-
-
         }
     },
-    beforeCreate: function () {
-        $.ajax({
-            type : 'POST',
-            data: '',
-            url: "https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyAY9df1pMrDrLQ7JcEFuBZh0CdtpUFMdAY",
-            success: function(result){
-                this.llat = result['location']['lat'];
-                this.llng = result['location']['lng'];
-                this.gettingLocation = true;
-                this.myLocation  = L.latLng(this.llat, this.llng);
+    mounted: function () {
+        this.GetLocation();
+        this.AlertTimeout();
+        this.CheckNav();
+        this.AdjustCenterForSavedLoc();
 
-                console.log(   'zapisap' );
-                $('#lat').html(result['location']['lat']);
-                $('#lng').html(result['location']['lng']);
-
-            }});
     },
     created: function () {
-
         window.addEventListener('scroll', this.scrollNav);
 
     },
-    mounted: function () {
-        console.log(   this.myLocation );
-        this.AlertTimeout();
-        this.CheckNav();
-        this.AdjustCenterToSavedLoc();
-
-    },
-
     destroyed: function () {
         window.removeEventListener('scroll', this.scrollNav);
     }
@@ -248,8 +222,8 @@ $("#multiple_images").on('change', function() {
     if(input.files.length > 1){
         var fileName = input.files.length + ' files'
     } else {
-    // the input has an array of files in the `files` property, each one has a name that you can use. We're just using the name here.
-    var fileName = input.files[0].name;
+        // the input has an array of files in the `files` property, each one has a name that you can use. We're just using the name here.
+        var fileName = input.files[0].name;
     }
 
 
