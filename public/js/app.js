@@ -77133,28 +77133,25 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
       this.zoom = 14;
     },
     GetLocation: function GetLocation() {
-      var _this = this;
-
-      this.$getLocation({
-        enableHighAccuracy: true
-      }).then(function (coordinates) {
-        _this.gettingLocation = true;
-        _this.llat = coordinates.latitude;
-        _this.llng = coordinates.longitude;
-        _this.gettingLocation = true;
-        _this.myLocation = L.latLng(_this.llat, _this.llng); //send to session
-
-        $.ajax({
-          url: '/getgeo',
-          type: 'get',
-          data: {
-            latitude: _this.llat,
-            longitude: _this.llng
-          },
-          success: function success(data) {// alert('success');
-          }
-        });
-      });
+      /* this.$getLocation({enableHighAccuracy: true})
+           .then(coordinates => {
+               this.gettingLocation = true;
+                this.llat = coordinates.latitude;
+               this.llng = coordinates.longitude;
+               this.gettingLocation = true;
+               this.myLocation  = L.latLng(this.llat, this.llng);
+               //send to session
+               $.ajax({
+                   url:'/getgeo',
+                   type:'get',
+                   data:{latitude:this.llat, longitude:this.llng},
+                     success:function(data)
+                   {
+                       // alert('success');
+                   }
+               });
+           });
+       */
     },
     scrollNav: function scrollNav(event) {
       //if collapsed navbar is opened and scroll is on top, add
@@ -77184,22 +77181,39 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         });
       }, 2000);
     },
-    AdjustCenter: function AdjustCenter() {
+    AdjustCenterToSavedLoc: function AdjustCenterToSavedLoc() {
       if (this.$refs.mylat) this.clat = this.$refs.mylat.value;
       if (this.$refs.mylng) this.clng = this.$refs.mylng.value;
       this.gettingLocation = true;
       this.center = L.latLng(this.clat, this.clng);
       this.savedLoc = L.latLng(this.clat, this.clng);
+      console.log(this.center);
     }
   },
-  mounted: function mounted() {
-    this.GetLocation();
-    this.AlertTimeout();
-    this.CheckNav();
-    this.AdjustCenter();
+  beforeCreate: function beforeCreate() {
+    $.ajax({
+      type: 'POST',
+      data: '',
+      url: "https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyAY9df1pMrDrLQ7JcEFuBZh0CdtpUFMdAY",
+      success: function success(result) {
+        this.llat = result['location']['lat'];
+        this.llng = result['location']['lng'];
+        this.gettingLocation = true;
+        this.myLocation = L.latLng(this.llat, this.llng);
+        console.log('zapisap');
+        $('#lat').html(result['location']['lat']);
+        $('#lng').html(result['location']['lng']);
+      }
+    });
   },
   created: function created() {
     window.addEventListener('scroll', this.scrollNav);
+  },
+  mounted: function mounted() {
+    console.log(this.myLocation);
+    this.AlertTimeout();
+    this.CheckNav();
+    this.AdjustCenterToSavedLoc();
   },
   destroyed: function destroyed() {
     window.removeEventListener('scroll', this.scrollNav);

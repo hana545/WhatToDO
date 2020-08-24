@@ -15,9 +15,10 @@ use function MongoDB\BSON\toJSON;
 class SearchController extends Controller
 {
     public function index(){
-        //$response = Http::get('http://ip-api.com/json');
+        //$response = Http::post('https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyAY9df1pMrDrLQ7JcEFuBZh0CdtpUFMdAY');
         //$lat=$response->json()['lat'];
         //$lng=$response->json()['lon'];
+       // dd($response);
         $lat=45.343270499999996;
         $lng=14.4424539;
         $center = ['lat' => $lat, 'lng' => $lng];

@@ -126,7 +126,7 @@ const app = new Vue({
         },
 
                 GetLocation(){
-                    this.$getLocation({enableHighAccuracy: true})
+                   /* this.$getLocation({enableHighAccuracy: true})
                         .then(coordinates => {
                             this.gettingLocation = true;
 
@@ -147,6 +147,9 @@ const app = new Vue({
                                 }
                             });
                         });
+                    */
+
+
                 },
         scrollNav: function (event) {
             //if collapsed navbar is opened and scroll is on top, add
@@ -181,7 +184,7 @@ const app = new Vue({
             }, 2000);
         },
 
-        AdjustCenter: function(){
+        AdjustCenterToSavedLoc: function(){
             if(this.$refs.mylat) this.clat = this.$refs.mylat.value;
             if(this.$refs.mylng) this.clng = this.$refs.mylng.value;
             this.gettingLocation = true;
@@ -189,19 +192,41 @@ const app = new Vue({
             this.savedLoc  = L.latLng(this.clat, this.clng);
 
 
+            console.log(this.center);
+
+
         }
     },
-    mounted: function () {
-        this.GetLocation();
-        this.AlertTimeout();
-        this.CheckNav();
-        this.AdjustCenter();
+    beforeCreate: function () {
+        $.ajax({
+            type : 'POST',
+            data: '',
+            url: "https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyAY9df1pMrDrLQ7JcEFuBZh0CdtpUFMdAY",
+            success: function(result){
+                this.llat = result['location']['lat'];
+                this.llng = result['location']['lng'];
+                this.gettingLocation = true;
+                this.myLocation  = L.latLng(this.llat, this.llng);
 
+                console.log(   'zapisap' );
+                $('#lat').html(result['location']['lat']);
+                $('#lng').html(result['location']['lng']);
+
+            }});
     },
     created: function () {
+
         window.addEventListener('scroll', this.scrollNav);
 
     },
+    mounted: function () {
+        console.log(   this.myLocation );
+        this.AlertTimeout();
+        this.CheckNav();
+        this.AdjustCenterToSavedLoc();
+
+    },
+
     destroyed: function () {
         window.removeEventListener('scroll', this.scrollNav);
     }

@@ -5,7 +5,8 @@
         <div class="m-5 mb-2     text-white p-3 row">
             <div class="col-md-4">
                 <h2>What do you want to search?</h2>
-
+                <span>Your Latitude : </span><span id="lat"></span><br>
+                <span>Your Longitude : </span><span id="lng"></span><br>
                 @if(session()->has('message'))
                     <div class="alert alert-success" role="alert" style="border-width: 1px; border-color: #27864f">
                         <strong>Success</strong> {{ session()->get('message') }}
