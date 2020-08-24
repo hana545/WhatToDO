@@ -9,6 +9,7 @@ use \App\Email;
 use \App\Website;
 use \App\Review;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Spatie\Geocoder\Facades\Geocoder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -45,8 +46,12 @@ class PlacesController extends Controller
             'category' => 'required',
             'multiple_images.*' => 'sometimes|file|image|max:8000',
         ]);
-        $lat = Geocoder::getCoordinatesForAddress($data['address'])['lat'];
-        $lng = Geocoder::getCoordinatesForAddress($data['address'])['lng'];
+        $address = $data['address'];
+        $address = str_replace(" ","+", $address);
+        $response = Http::get('https://maps.googleapis.com/maps/api/geocode/json?address='.$address.'&key=AIzaSyAY9df1pMrDrLQ7JcEFuBZh0CdtpUFMdAY');
+        $latlng = $response->json()['results'][0]['geometry']['location'];
+        $lat = $latlng['lat'];
+        $lng = $latlng['lng'];
         $place = Place::create([
             'name' =>  $data['name'],
             'search_name' =>  $data['name'],
@@ -166,8 +171,12 @@ class PlacesController extends Controller
             $lat = $place->lat;
             $lng = $place->lng;
         } else {
-            $lat = Geocoder::getCoordinatesForAddress($data['address'])['lat'];
-            $lng = Geocoder::getCoordinatesForAddress($data['address'])['lng'];
+            $address = $data['address'];
+            $address = str_replace(" ","+", $address);
+            $response = Http::get('https://maps.googleapis.com/maps/api/geocode/json?address='.$address.'&key=AIzaSyAY9df1pMrDrLQ7JcEFuBZh0CdtpUFMdAY');
+            $latlng = $response->json()['results'][0]['geometry']['location'];
+            $lat = $latlng['lat'];
+            $lng = $latlng['lng'];
         }
         $place->update([
             'name' => $data['name'],
@@ -179,10 +188,7 @@ class PlacesController extends Controller
             'approved' => false,
         ]);
 
-        //$lat = Geocoder::getCoordinatesForAddress($data['address'])['lat'];
-        //$lng = Geocoder::getCoordinatesForAddress($data['address'])['lng'];
 
-        //dd($lat);
         if(request()->has('multiple_images')) {
             foreach($data['multiple_images'] as $img) {
                 $img_name = $img->store('uploads', 'public');
@@ -200,7 +206,6 @@ class PlacesController extends Controller
             }
 
         }
-
 
         $website1 = null;
         $website2 = null;

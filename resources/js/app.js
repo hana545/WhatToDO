@@ -124,13 +124,16 @@ const app = new Vue({
             this.myLocation = L.latLng(this.llat, this.llng);
             this.zoom = 14;
         },
-        /*
+
                 GetLocation(){
                     this.$getLocation({enableHighAccuracy: true})
                         .then(coordinates => {
                             this.gettingLocation = true;
 
-
+                            this.llat = coordinates.latitude;
+                            this.llng = coordinates.longitude;
+                            this.gettingLocation = true;
+                            this.myLocation  = L.latLng(this.llat, this.llng);
                             //send to session
                             $.ajax({
                                 url:'/getgeo',
@@ -144,7 +147,7 @@ const app = new Vue({
                                 }
                             });
                         });
-                },*/
+                },
         scrollNav: function (event) {
             //if collapsed navbar is opened and scroll is on top, add
             if($(".navbar-toggler").attr("aria-expanded") == "true" && $(window).scrollTop() == 0){
@@ -183,17 +186,13 @@ const app = new Vue({
             if(this.$refs.mylng) this.clng = this.$refs.mylng.value;
             this.gettingLocation = true;
             this.center = L.latLng(this.clat, this.clng);
-            this.myLocation = L.latLng(this.clat, this.clng);
-            //  this.savedLoc  = L.latLng(this.clat, this.clng);
+            this.savedLoc  = L.latLng(this.clat, this.clng);
 
-            console.log('center', this.center);
-            console.log('myLocation', this.myLocation);
-            console.log('savedLoc', this.savedLoc);
 
         }
     },
     mounted: function () {
-        //this.GetLocation();
+        this.GetLocation();
         this.AlertTimeout();
         this.CheckNav();
         this.AdjustCenter();
