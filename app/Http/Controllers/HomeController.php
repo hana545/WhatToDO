@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use \App\Tag;
 use \App\Category;
 
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -14,12 +16,8 @@ class HomeController extends Controller
      *
      * @return void
      */
-/*
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-*/
+
+
     /**
      * Show the application dashboard.
      *

@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 Auth::routes(['verify' => true]);
 
 
-Route::get('/', 'HomeController@index')->name('home')->middleware('verified');
+Route::get('/', 'HomeController@index')->name('home');
 
 //for users
 Route::get('/user/profile', 'UsersController@index')->name('user')->middleware(['verified', 'auth']);
@@ -28,8 +28,8 @@ Route::get('/user/suspend/{user}', 'UsersController@suspend')->name('suspend_use
 Route::get('/user/unsuspend/{user}', 'UsersController@unsuspend')->name('unsuspend_user')->middleware(['verified', 'auth'])->middleware('admin');
 
 //for searching
-Route::get('/search', 'SearchController@index')->name('search')->middleware('verified');;
-Route::post('/search', 'SearchController@search')->name('search_objects')->middleware('verified');;
+Route::get('/search', 'SearchController@index')->name('search');
+Route::post('/search', 'SearchController@search')->name('search_objects');
 Route::get('/getgeo', 'SearchController@getCoordinates');
 
 ///for tags
