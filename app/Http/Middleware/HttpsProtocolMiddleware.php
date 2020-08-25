@@ -15,16 +15,11 @@ class HttpsProtocolMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (!app()->environment('local')) {
-            // for Proxies
-            Request::setTrustedProxies([$request->getClientIp()],
-                Request::HEADER_X_FORWARDED_ALL);
-
-            if (!$request->isSecure()) {
-                return redirect()->secure($request->getRequestUri());
-            }
+        if (!$request->secure() && app()->environment('production')) {
+            return redirect()->secure($request->getRequestUri());
         }
 
         return $next($request);
+
     }
 }
