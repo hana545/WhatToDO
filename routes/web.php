@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 
 Route::get('/', 'HomeController@index')->name('home');
@@ -29,7 +29,7 @@ Route::get('/user/unsuspend/{user}', 'UsersController@unsuspend')->name('unsuspe
 
 //for searching
 Route::get('/search', 'SearchController@index')->name('search')->middleware('auth');
-Route::post('/search', 'SearchController@search')->name('search_objects')->middleware('auth');;
+Route::post('/search', 'SearchController@search')->name('search_objects')->middleware('auth');
 Route::get('/getgeo', 'SearchController@getCoordinates');
 
 ///for tags
