@@ -28,8 +28,8 @@ Route::get('/user/suspend/{user}', 'UsersController@suspend')->name('suspend_use
 Route::get('/user/unsuspend/{user}', 'UsersController@unsuspend')->name('unsuspend_user')->middleware(['verified', 'auth'])->middleware('admin');
 
 //for searching
-Route::get('/search', 'SearchController@index')->name('search');
-Route::post('/search', 'SearchController@search')->name('search_objects');
+Route::get('/search', 'SearchController@index')->name('search')->middleware('https');
+Route::post('/search', 'SearchController@search')->name('search_objects')->middleware('https');
 Route::get('/getgeo', 'SearchController@getCoordinates');
 
 ///for tags
