@@ -22,7 +22,7 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 import Vue from 'vue';
 
-import { LMap, LMarker, LTileLayer, LPopup, LTooltip} from "vue2-leaflet";
+import { LMap, LMarker, LTileLayer, LPopup, LTooltip, LControl} from "vue2-leaflet";
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
@@ -93,7 +93,7 @@ const app = new Vue({
 
 
     },
-    components: { LMap, LTileLayer, LMarker, LPopup, LTooltip},
+    components: { LMap, LTileLayer, LMarker, LPopup, LTooltip, LControl},
     props: {
         places: [Object, String, Array],
         find: [Boolean, Number],
@@ -124,7 +124,6 @@ const app = new Vue({
             this.myLocation = L.latLng(this.llat, this.llng);
             this.zoom = 14;
         },
-
         GetLocation(){
             this.$getLocation({enableHighAccuracy: true})
                 .then(coordinates => {
@@ -132,7 +131,6 @@ const app = new Vue({
                     this.llat = coordinates.lat;
                     this.llng = coordinates.lng;
                     this.myLocation = L.latLng(this.llat, this.llng);
-                    console.log(this.myLocation);
 
                     //send to session
                     $.ajax({
@@ -181,20 +179,56 @@ const app = new Vue({
             }, 2000);
         },
 
+        image_adjustment: function () {
+            var input = document.getElementById( 'multiple_images' );
+            var infoArea = document.getElementById( 'file-upload-filename' );
+            // the change event gives us the input it occurred in
+            var input = event.srcElement;
+
+            if(input.files.length > 1){
+                var fileName = input.files.length + ' files'
+            } else {
+                // the input has an array of files in the `files` property, each one has a name that you can use. We're just using the name here.
+                var fileName = input.files[0].name;
+            }
+
+            // use fileName however fits your app best, i.e. add it into a div
+            infoArea.textContent = '- ' + fileName;
+            infoArea.style.display = 'initial';
+
+        },
+
         AdjustCenterForSavedLoc: function(){
             if(this.$refs.mylat) this.clat = this.$refs.mylat.value;
             if(this.$refs.mylng) this.clng = this.$refs.mylng.value;
             this.center = L.latLng(this.clat, this.clng);
             this.savedLoc  = L.latLng(this.clat, this.clng);
+        },
 
+        GoogleAutocomplete (){
+            if (document.getElementById('google_address')){
+                var input = document.getElementById('google_address');
+                var autocomplete = new google.maps.places.Autocomplete(input);
+            }
+            if (document.getElementById('google_location')){
+                var input1 = document.getElementById('google_location');
+                var autocomplete = new google.maps.places.Autocomplete(input1);
+            }
+        },
+        ChangeRange: function (event) {
+            var range = event.target.value;
+            document.getElementById("rangeValue").innerHTML = range;
+            document.getElementById("inputRangeValue").value = range;
 
-        }
+        },
     },
     mounted: function () {
         this.GetLocation();
         this.AlertTimeout();
         this.CheckNav();
         this.AdjustCenterForSavedLoc();
+        this.GoogleAutocomplete();
+
 
     },
     created: function () {
@@ -212,6 +246,7 @@ const app = new Vue({
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
 $("#multiple_images").on('change', function() {
 
     var input = document.getElementById( 'multiple_images' );
@@ -250,7 +285,7 @@ $(document).ready(function(){
     });
     $('#rangeIndicator').change();
 });
-
+*/
 $(document).ready(function(){
 
     /* 1. Visualizing things on Hover - See next part for action on click */
@@ -317,13 +352,6 @@ function responseMessage(msg) {
 }
 
 
-$(document).ready(function() {
-    var input = document.getElementById('google_address');
-    var input1 = document.getElementById('google_location');
-    var autocomplete = new google.maps.places.Autocomplete(input);
-    var autocomplete = new google.maps.places.Autocomplete(input1);
-
-});
 ///alert fade up
 /*
 window.setTimeout(function() {

@@ -20,7 +20,7 @@
                 @endif
                 @if(session()->has('error'))
                     <div class="alert alert-danger" role="alert" style="border-width: 1px; border-color: #27864f">
-                        <strong>Success</strong> {{ session()->get('error') }}
+                        <strong>Error</strong> {{ session()->get('error') }}
                     </div>
                 @endif
 
@@ -50,13 +50,13 @@
                 <div class="tab-pane active" id="default">
                     <div class="text-white m-4 p-5">
                         <div class="text-center">
-                            <h3>Hello {{ Auth::user()->name }}.</h3>
+                            <h3> Hello {{ Auth::user()->name }}.</h3>
+                            <img class="img-fluid" src="{{asset('images/illustrations/mobile_user.svg')}}" style="height: 180px; width: 410px;">
 
-                            <img class=" m-3 " style="height: 225px; " src="{{asset('images/illustrations/mobile_user.svg')}}">
-                            @if(Auth::user()->suspended == true)
+                        @if(Auth::user()->suspended == true)
                                 <h5 class="text-danger">Your account have been suspended. You cant add new places, reviews or save you locations any more</h5>
                             @else
-                                <h5>Here you can edit your reveiws, update you account and so much more...</h5>
+                                <h5>Here you can edit your reviews, update you account and so much more...</h5>
                             @endif
 
                         </div>

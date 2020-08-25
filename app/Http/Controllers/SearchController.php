@@ -166,6 +166,24 @@ class SearchController extends Controller
             }else {
                 $place->avgStar = 0;
             }
+            $t=time();
+            $daystart1= strtolower(date("l",$t)).'_start1';
+            $dayend1= strtolower(date("l",$t)).'_end1';
+            $daystart2= strtolower(date("l",$t)).'_start2';
+            $dayend2= strtolower(date("l",$t)).'_end2'; $t=date("H:i",$t);
+            $place->open = false;
+            if($place->workhour->$daystart1 && $place->workhour->$dayend1){
+                if( $place->workhour->$daystart1->format('H:i')  <= $t  && $place->workhour->$dayend1 >= $t){
+                   $place->open = true;
+                }
+            } else if ($place->workhour->$daystart2 && $place->workhour->$dayend2){
+                if( $place->workhour->$daystart2->format('H:i')  <= $t  && $place->workhour->$dayend2 >= $t){
+                    $place->open = true;
+                }
+            }
+
+            //if( ($place->workhour->$daystart1->format('H:i')  <= $t && $place->workhour->$dayend1 >= $t ) || ($place->workhour->$daystart2 <= $t && $place->workhour->$dayend2 >= $t )) {{$day}}@endif
+
         };
         if(!$rangeEnabled) {
             $places = $places->where('dist', '<=', $range)->sortBy('dist');

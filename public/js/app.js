@@ -6472,7 +6472,7 @@ L.Icon.Default.mergeOptions({
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css":
+/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css?66f3":
 /*!*******************************************************************************************************************************!*\
   !*** ./node_modules/css-loader??ref--6-1!./node_modules/postcss-loader/src??ref--6-2!./node_modules/leaflet/dist/leaflet.css ***!
   \*******************************************************************************************************************************/
@@ -31643,7 +31643,7 @@ window.L = exports;
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../css-loader??ref--6-1!../../postcss-loader/src??ref--6-2!./leaflet.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css");
+var content = __webpack_require__(/*! !../../css-loader??ref--6-1!../../postcss-loader/src??ref--6-2!./leaflet.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css?66f3");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -77101,7 +77101,8 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     LTileLayer: vue2_leaflet__WEBPACK_IMPORTED_MODULE_1__["LTileLayer"],
     LMarker: vue2_leaflet__WEBPACK_IMPORTED_MODULE_1__["LMarker"],
     LPopup: vue2_leaflet__WEBPACK_IMPORTED_MODULE_1__["LPopup"],
-    LTooltip: vue2_leaflet__WEBPACK_IMPORTED_MODULE_1__["LTooltip"]
+    LTooltip: vue2_leaflet__WEBPACK_IMPORTED_MODULE_1__["LTooltip"],
+    LControl: vue2_leaflet__WEBPACK_IMPORTED_MODULE_1__["LControl"]
   },
   props: {
     places: [Object, String, Array],
@@ -77141,8 +77142,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         _this.gettingLocation = true;
         _this.llat = coordinates.lat;
         _this.llng = coordinates.lng;
-        _this.myLocation = L.latLng(_this.llat, _this.llng);
-        console.log(_this.myLocation); //send to session
+        _this.myLocation = L.latLng(_this.llat, _this.llng); //send to session
 
         $.ajax({
           url: '/getgeo',
@@ -77184,11 +77184,44 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         });
       }, 2000);
     },
+    image_adjustment: function image_adjustment() {
+      var input = document.getElementById('multiple_images');
+      var infoArea = document.getElementById('file-upload-filename'); // the change event gives us the input it occurred in
+
+      var input = event.srcElement;
+
+      if (input.files.length > 1) {
+        var fileName = input.files.length + ' files';
+      } else {
+        // the input has an array of files in the `files` property, each one has a name that you can use. We're just using the name here.
+        var fileName = input.files[0].name;
+      } // use fileName however fits your app best, i.e. add it into a div
+
+
+      infoArea.textContent = '- ' + fileName;
+      infoArea.style.display = 'initial';
+    },
     AdjustCenterForSavedLoc: function AdjustCenterForSavedLoc() {
       if (this.$refs.mylat) this.clat = this.$refs.mylat.value;
       if (this.$refs.mylng) this.clng = this.$refs.mylng.value;
       this.center = L.latLng(this.clat, this.clng);
       this.savedLoc = L.latLng(this.clat, this.clng);
+    },
+    GoogleAutocomplete: function GoogleAutocomplete() {
+      if (document.getElementById('google_address')) {
+        var input = document.getElementById('google_address');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+      }
+
+      if (document.getElementById('google_location')) {
+        var input1 = document.getElementById('google_location');
+        var autocomplete = new google.maps.places.Autocomplete(input1);
+      }
+    },
+    ChangeRange: function ChangeRange(event) {
+      var range = event.target.value;
+      document.getElementById("rangeValue").innerHTML = range;
+      document.getElementById("inputRangeValue").value = range;
     }
   },
   mounted: function mounted() {
@@ -77196,6 +77229,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     this.AlertTimeout();
     this.CheckNav();
     this.AdjustCenterForSavedLoc();
+    this.GoogleAutocomplete();
   },
   created: function created() {
     window.addEventListener('scroll', this.scrollNav);
@@ -77209,41 +77243,47 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-$("#multiple_images").on('change', function () {
-  var input = document.getElementById('multiple_images');
-  var infoArea = document.getElementById('file-upload-filename'); // the change event gives us the input it occurred in
+/*
+$("#multiple_images").on('change', function() {
 
-  var input = event.srcElement;
+    var input = document.getElementById( 'multiple_images' );
+    var infoArea = document.getElementById( 'file-upload-filename' );
+    // the change event gives us the input it occurred in
+    var input = event.srcElement;
 
-  if (input.files.length > 1) {
-    var fileName = input.files.length + ' files';
-  } else {
-    // the input has an array of files in the `files` property, each one has a name that you can use. We're just using the name here.
-    var fileName = input.files[0].name;
-  } // use fileName however fits your app best, i.e. add it into a div
+    if(input.files.length > 1){
+        var fileName = input.files.length + ' files'
+    } else {
+        // the input has an array of files in the `files` property, each one has a name that you can use. We're just using the name here.
+        var fileName = input.files[0].name;
+    }
 
 
-  infoArea.textContent = '- ' + fileName;
-  infoArea.style.display = 'initial';
-
-  if (fileName.length < 15) {
-    document.getElementById('length_filename').style.width = '40%';
-  } else if (fileName.length < 30) {
-    document.getElementById('length_filename').style.width = '50%';
-  } else if (fileName.length < 50) {
-    document.getElementById('length_filename').style.width = '80%';
-  } else {
-    document.getElementById('length_filename').style.width = '100%';
-  }
+    // use fileName however fits your app best, i.e. add it into a div
+    infoArea.textContent = '- ' + fileName;
+    infoArea.style.display = 'initial';
+    if (fileName.length < 15){
+        document.getElementById( 'length_filename' ).style.width = '40%';
+    } else if (fileName.length < 30) {
+        document.getElementById('length_filename').style.width = '50%';
+    } else if (fileName.length < 50) {
+        document.getElementById('length_filename').style.width = '80%';
+    } else {
+        document.getElementById('length_filename').style.width = '100%';
+    }
 });
-$(document).ready(function () {
-  $('#rangeIndicator').on('change', function (e) {
-    var id = e.target.value;
-    document.getElementById("rangeValue").innerHTML = id;
-    document.getElementById("inputRangeValue").value = id;
-  });
-  $('#rangeIndicator').change();
+
+$(document).ready(function(){
+    $('#rangeIndicator').on('change', function(e){
+        var id = e.target.value;
+        document.getElementById("rangeValue").innerHTML = id;
+        document.getElementById("inputRangeValue").value = id;
+
+    });
+    $('#rangeIndicator').change();
 });
+*/
+
 $(document).ready(function () {
   /* 1. Visualizing things on Hover - See next part for action on click */
   $('#stars li').on('mouseover', function () {
@@ -77298,14 +77338,7 @@ function responseMessage(msg) {
   $('.success-box img').attr('src', "https://superiusidea.hr/wp-content/uploads/2014/06/kvacica.png");
   $('.success-box img').show();
   $('.success-box div.text-message').html("<span>" + msg + "</span>");
-}
-
-$(document).ready(function () {
-  var input = document.getElementById('google_address');
-  var input1 = document.getElementById('google_location');
-  var autocomplete = new google.maps.places.Autocomplete(input);
-  var autocomplete = new google.maps.places.Autocomplete(input1);
-}); ///alert fade up
+} ///alert fade up
 
 /*
 window.setTimeout(function() {

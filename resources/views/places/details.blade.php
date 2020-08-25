@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <div class=" clearfix">
                     <div class="container-fluid">
-                        <div class="p-3 border-bottom text-center text-white-muted">
+                        <div class="p-3 border-bottom text-center text-white-muted grey-box">
                             <h6> <i>{{ $place->description }}</i></h6>
                             <h6>
                                 <section class='rating-widget'>
@@ -53,7 +53,7 @@
                         <div class="row ">
                             <div class="col-4   text-center border-right text-white">
                                 <div class="p-2">
-                                    <p> <i class="fas fa-th-list"></i> <strong>Category:</strong></p>
+                                    <p> <i class="fas fa-tag"></i><strong> Category:</strong></p>
                                 </div>
                             </div>
                             <div class="col-8  text-center text-white">
@@ -65,7 +65,7 @@
                         <div class="row ">
                             <div class="col-4   text-center border-right text-white">
                                 <div class="p-2">
-                                    <p> <i class="fas fa-th-list"></i> <strong>Tags:</strong></p>
+                                    <p> <i class="fas fa-hashtag"></i> <strong>Tags:</strong></p>
                                 </div>
                             </div>
                             <div class="col-8  text-center text-white">
@@ -77,7 +77,7 @@
                             </div>
                         </div>
                         @if ($place->phones->isNotEmpty() || $place->emails->isNotEmpty() || $place->website->isNotEmpty())
-                        <div class="p-3 border-bottom border-top text-center text-white-muted">
+                        <div class="p-3 border-bottom border-top text-center text-white-muted grey-box">
                             <h6> <i>Contact</i></h6>
                         </div>
                         @if($place->phones->isNotEmpty())
@@ -129,18 +129,21 @@
                             </div>
                         @endif
                         @else
-                            <div class="p-3 border-bottom border-top text-center text-white-muted">
+                            <div class="p-3 border-bottom border-top text-center text-white-muted grey-box">
                                 <h6> <i>There are no contacts</i></h6>
                             </div>
                         @endif
+                        @include('places.workhours', ['place' => $place])
                         @if($place->images)
-                            <div class="p-3 border-bottom border-top text-center text-white-muted">
+                            <div class="p-3 border-bottom border-top text-center text-white-muted grey-box">
                                 <h6> <i>Pictures</i></h6>
                             </div>
+                            <div class="justify-content-center">
+                                <a class="btn btn-blue mt-3 mb-2" data-toggle="collapse" href="#collapseGallery" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                    Open for gallery <i class="fas fa-images"></i>
+                                </a>
+                            </div>
 
-                            <a class="btn btn-blue mt-3 mb-2" data-toggle="collapse" href="#collapseGallery" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                Open for gallery <i class="fas fa-images"></i>
-                            </a>
 
                             <div class="collapse ml-3" id="collapseGallery">
                                 <div class="row">
@@ -157,7 +160,7 @@
                                 </div>
                             </div>
                         @else
-                            <div class="p-3 border-bottom border-top text-center text-white-muted">
+                            <div class="p-3 border-bottom border-top text-center text-white-muted grey-box">
                                 <h6> <i>There are no pictures</i></h6>
                             </div>
                         @endif
@@ -169,7 +172,11 @@
 
             <div class="modal-footer">
                 @if (Auth::check() && Auth::user()->type == true)
-                    <a href="search/palce/delete/{{$place->id}}"><div class="btn btn-danger">Delete this place</div></a>
+                    <form action="/search/place/delete/{{$place->id}}" method="post">
+                        <input class="btn btn-danger" type="submit" value="Delete this place" />
+                        @method('delete')
+                        @csrf
+                    </form>
                 @endif
             </div>
             </div>

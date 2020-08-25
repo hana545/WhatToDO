@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class=" bg-transparent" id="search_map">
-        <div class="m-5 mb-2     text-white p-3 row">
-            <div class="col-md-4">
+    <div class="bg-transparent" id="search_map">
+        <div class="p-3 mt-3 mb-2 text-white row">
+            <div class="col-lg-4">
                 <h2>What do you want to search?</h2>
 
                 @if(session()->has('message'))
@@ -23,7 +23,7 @@
                 @endif
 
             </div>
-            <div class="col-md-8">
+            <div class="col-lg-8">
                 <!-- Search form -->
                 <div class="container" >
                     <form  action="{{route('search_objects')}}" method="POST">
@@ -68,20 +68,21 @@
             </div>
         </div>
         <div class="container-fluid justify-content-center m-1 mb-0 ">
-            <a href="#map" class=""><button class="btn btn-blue m-2" v-if="showMap"  v-on:click="showMe()" id="locate">Show my location!</button></a>
-            <button class="btn btn-blue m-2"  v-on:click="toggleShowMap()"><span v-if="showMap">Hide map</span><span v-if="!showMap">Show map</span></button>
+
+            <a href="#map" class=""><button class="btn btn-blue m-2"  v-on:click="showMe()" id="locate">Show my location!</button></a>
+             <button class="btn btn-blue m-2"  v-on:click="toggleShowMap()"><span v-if="showMap">Hide map</span><span v-if="!showMap">Show map</span></button>
 
             <div class="row">
-                <div class="overflow-auto" v-bind:class="{ 'col-md-3' : showMap, 'row': !showMap }" style="height: 700px">
+                <div class="overflow-auto" v-bind:class="{ 'col-md-3' : showMap, 'row': !showMap}" @if($places->count() > 3) style="height: 700px" @endif>
                     @if(!$find)
                         <div class="container text-white" >
                             <div class=" text-center" >
                                 There are no matching objects
+                                <label class="btn blue-tag col-auto px-2 m-1">
+                                   in range of {{$range}}km
+                                </label>
                                 @if(!empty($categories_req) || !empty($tags_req) || !empty($search_name))
                                     with
-                                    <label class="btn blue-tag col-auto px-2 m-1">
-                                        range of {{$range}}km
-                                    </label>
                                 @endif
                                 @if(!empty($search_name))
                                     <label class="btn blue-tag col-auto px-2 m-1">
@@ -145,12 +146,9 @@
                                             <p class="col-sm"> {{ $place->address }}</p>
                                         </h6>
                                         <h6 class="card-text text-muted row">
-                                            <p class="col-sm-5"> {{ $place->category->name }}</p>
-                                            <p class="col-sm-7"><i class="fas fa-route mx-2 col-sm-1"></i>~{{ number_format($place->dist, 2, '.', '') }}km</p></h6>
-                                        <h6 class="card-text text-muted row">
-                                            <p class="col-sm-5 border-right"> </p>
-                                            <p class="col-sm-7"></p>
-                                        </h6>
+                                            <p class="col-sm-5"> <i class="fas fa-tag"></i>   {{ $place->category->name }}</p>
+                                            <p class="col-sm-7">@if($place->open)<span class="text-success"><i class="fas fa-door-open"></i> Opened </span> @else <span class="text-danger"><i class=" fas fa-door-closed"></i> Closed</span> @endif</p></h6>
+
                                         <button type="button" class="btn btn-blue  btn-md my-2 ml-4 center-block" data-toggle="modal" data-target="#modal{{$place->id}}">Details</button>
                                         <a href="#map"><button  class="btn btn-dark btn-sm"  v-on:click="showPlace({{$place->lat}},{{$place->lng}}); ShowMap()">Show on map</button></a>
 
@@ -220,7 +218,21 @@
                                     <l-marker :lat-lng="{'lat': {{$place->lat}}, 'lng': {{$place->lng}}}"><l-tooltip :content="'{{$place->name}}'"></l-tooltip></l-marker>
                                 @endforeach
                             @endif
+                            <l-control position="topleft" >
+                                <button v-on:click="showMe"  class="btn m-2" style="background: honeydew">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </button>
+                            </l-control>
+                            <l-control position="topright" class="p-2" style="background: honeydew">
+                                <h4>Legend</h4>
+                                <i class="dot" style="background: red"></i><span> Your location</span><br>
+                                <i class="dot" style="background: blue"></i><span>Places</span><br>
+                                <i class="dot" style="background: green"></i><span>Saved location</span><br>
+                            </l-control>
+
                         </l-map>
+
+
                     </div>
                 </div>
 

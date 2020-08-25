@@ -21,7 +21,7 @@
 
                 <p>Hana Radojčić</p>
 
-                <p>For my collage final project</p>
+                <p>For my college final project</p>
             </div>
             <div class="col-12">
                 <hr class="light-100">

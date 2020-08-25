@@ -2,10 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Support\Facades\Auth;
 use Closure;
+use Illuminate\Support\Facades\Auth;
 
-class IsAdmin
+class SuspendedUser
 {
     /**
      * Handle an incoming request.
@@ -14,13 +14,12 @@ class IsAdmin
      * @param  \Closure  $next
      * @return mixed
      */
-
     public function handle($request, Closure $next)
     {
-        if (Auth::user() &&  Auth::user()->type == 1) {
+        if (Auth::user() &&  Auth::user()->suspended == 0) {
             return $next($request);
         }
 
-        return redirect('/')->with('error', 'You are not an admin');
+        return redirect('/')->with('error', 'You are suspended');
     }
 }

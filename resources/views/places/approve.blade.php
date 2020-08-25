@@ -32,9 +32,14 @@ $user = Auth::user();
                                 <h6 class="card-text text-muted row">
                                     <p class="col-sm-5"> {{ $place->category->name }}</p>
                                 </h6>
-                                <button type="button" class="btn btn-lightblue  btn-md my-2 ml-4 center-block" data-toggle="modal" data-target="#modal{{$place->id}}">Details</button>
-                                <a href="approve/{{$place->id}}"><div class="btn btn-blue">Approve</div></a>
-                                <a href="approve/place/delete/{{$place->id}}"><div class="btn btn-danger">Delete</div></a>
+                                <form action="approve/place/delete/{{$place->id}}" method="post">
+                                    <button type="button" class="btn btn-lightblue  btn-md my-2 ml-4 center-block" data-toggle="modal" data-target="#modal{{$place->id}}">Details</button>
+                                    <a href="approve/{{$place->id}}"><div class="btn btn-blue">Approve</div></a>
+                                    <input class="btn btn-danger" type="submit" value="Delete" />
+                                    @method('delete')
+                                    @csrf
+                                </form>
+
                             </div>
                         </div>
                     </div>

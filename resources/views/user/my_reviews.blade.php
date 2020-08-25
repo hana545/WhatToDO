@@ -17,12 +17,12 @@
             <ul class="">
                 @foreach($user->reviews as $review)
                     <li class="row p-2">
-                        <div class="col-md-3">
+                        <div class="col-md-3 p-1">
 
-                            {{$review->place->name}}
+                            <h5>{{$review->place->name}}</h5>
                         </div>
                         <section class='rating-widget col-md-3'>
-                            <div class='rating-stars text-center'>
+                            <div class='rating-stars'>
                                 <ul id='stars' class="col-md-6"  >
                                     <li class='star-small @if($review->star >= 1) selected  @endif' title='Awful' data-value='1' >
                                         <i class='fa fa-star fa-fw'></i>
@@ -46,10 +46,12 @@
                         <div class="col-md-4">
                             {{$review->description}}
                         </div>
-                        <div class="col-md-2">
-                            @if(Auth::user()->suspended == false)<div class="btn btn-blue" data-toggle="modal" data-target="#modalreview{{$review->id}}">Edit</div>@endif
-                            <a href="/user/review/delete/{{$review->id}}"><div class="btn btn-danger"><i class="fa fa-trash"></i></div></a>
-                        </div>
+                        <form action="/user/review/delete/{{$review->id}}" method="post" class="col-md-2">
+                            @if(Auth::user()->suspended == false)<div class="btn btn-sm btn-blue" data-toggle="modal" data-target="#modalreview{{$review->id}}">Edit</div>@endif
+                            <button class="btn btn-sm btn-danger" type="submit"><i class="fa fa-trash"></i></button>
+                            @method('delete')
+                            @csrf
+                        </form>
                     </li>
                     <hr class="light-muted-100">
 

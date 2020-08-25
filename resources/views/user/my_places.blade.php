@@ -18,9 +18,8 @@
             <ul>
                 @foreach($user->places as $place)
                     <li class="row py-1">
-                        <div class="col-md-3">
-
-                            {{$place->name}}
+                        <div class="col-md-3 p-1">
+                            <h5>  {{$place->name}}</h5>
                         </div>
                         <div class="col-md-4">
                             {{$place->description}}
@@ -28,11 +27,13 @@
                         <div class="col-md-2">
                             {{$place->approved}}
                         </div>
-                        <div class="col-md-3">
+                        <form action="/user/place/delete/{{$place->id}}" method="post" class="col-md-3">
                             <button type="button" class="btn btn-blue btn-sm my-2 ml-4 center-block" data-toggle="modal" data-target="#modal{{$place->id}}">Details</button>
                             @if(Auth::user()->suspended == false)<a href="/place/edit/{{$place->id}}"><div class="btn  btn-sm  btn-blue">Edit</div></a>@endif
-                            <a href="/user/place/delete/{{$place->id}}"><div class="btn  btn-sm  btn-danger"><i class="fa fa-trash"></i></div></a>
-                        </div>
+                            <button class="btn btn-sm btn-danger" type="submit"><i class="fa fa-trash"></i></button>
+                            @method('delete')
+                            @csrf
+                        </form>
                     </li>
                     <hr class="light-muted-100">
 

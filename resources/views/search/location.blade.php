@@ -28,9 +28,9 @@
     <br>
     <div class="collape" id="distance">
         <div class="col-12 mt-3">
-            <input type="range" class="custom-range" min="0" max="150" step="1" id="rangeIndicator" value="{{ $range }}">
+            <input type="range" class="custom-range" min="0" max="150" step="1" id="rangeIndicator" v-on:input="ChangeRange($event)" value="{{ $range }}">
             <input type="hidden" id="inputRangeValue" name="range" value="{{ $range }}">
-            <span>Range Value: <span id="rangeValue"></span>km
+            <span>Range Value: <span id="rangeValue">{{$range}}</span>km
         </div>
     </div>
 </div>

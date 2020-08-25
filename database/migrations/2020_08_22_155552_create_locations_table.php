@@ -17,8 +17,8 @@ class CreateLocationsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('address');
-            $table->decimal('lat', 12, 6)->nullable();
-            $table->decimal('lng', 12, 6)->nullable();
+            $table->decimal('lat', 12, 6);
+            $table->decimal('lng', 12, 6);
             $table->unsignedBigInteger('user_id')->index();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

@@ -91,9 +91,12 @@
                             </div>
                             <div class="row">
                                 @foreach($place->reviews as $review)
-                                    <section class='rating-widget col-md-5'>
+                                    <div class="col-md-2">
+                                        {{ $review->created_at->format('d.m.Y') }}
+                                    </div>
+                                    <section class='rating-widget col-md-2'>
                                         <div class='rating-stars text-center'>
-                                            <ul id='stars' class="col-md-6"  data-toggle="modal" data-target="#modalreview{{$place->id}}">
+                                            <ul id='stars' class="col-md"  data-toggle="modal" data-target="#modalreview{{$place->id}}">
                                                 <li class='star-small @if($review->star >= 1) selected  @endif' title='Awful' data-value='1' >
                                                     <i class='fa fa-star fa-fw'></i>
                                                 </li>
@@ -113,11 +116,14 @@
                                             </ul>
                                         </div>
                                     </section>
-                                    <div class="col-md-5">
+                                    <div class="col-md-4 border-right">
 
-                                        {{$review->description}} |  {{$review->user->name}}
+                                        {{$review->description}}
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
+                                       {{$review->user->name}}
+                                    </div>
+                                    <div class="col-md-1">
 
                                         @if (Auth::check() && Auth::user()->type == true)
                                             <a href="/search/review/delete/{{$review->id}}"><div class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></div></a>
