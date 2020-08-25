@@ -56,6 +56,7 @@ Route::post('/search/review/update/{review}', 'ReviewsController@updateReview')-
 Route::post('/user/review/update/{review}', 'ReviewsController@updateReview_fromUserProfile')->name('updateReview_fromUserProfile')->middleware(['verified', 'auth', 'suspended']);
 Route::delete('/user/review/delete/{review}', 'ReviewsController@destroy_fromUserProfile')->name('delete_review_FromUserProfile')->middleware(['verified', 'auth']);;
 Route::delete('/search/review/delete/{review}', 'ReviewsController@destroy')->name('delete_review')->middleware(['verified', 'auth']);;
+Route::get('/search/review/delete/{review}', 'ReviewsController@destroy')->name('delete_review')->middleware(['verified', 'auth']);;
 
 //locations
 Route::post('/location/store', 'LocationsController@store')->name('store_location')->middleware(['verified', 'auth', 'suspended']);

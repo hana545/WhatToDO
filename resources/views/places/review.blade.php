@@ -126,7 +126,11 @@
                                     <div class="col-md-1">
 
                                         @if (Auth::check() && Auth::user()->type == true)
-                                            <a href="/search/review/delete/{{$review->id}}"><div class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></div></a>
+                                            <form action="/search/review/delete/{{$review->id}}" method="post">
+                                                <button class="btn btn-sm btn-danger" type="submit" ><i class="fa fa-trash"></i></button>
+                                                @method('delete')
+                                                @csrf
+                                            </form>
                                         @endif
                                     </div>
 
