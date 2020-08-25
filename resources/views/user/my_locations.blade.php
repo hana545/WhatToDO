@@ -23,7 +23,6 @@
                             {{$location->address}}
                         </div>
                         <form action="/location/delete/{{$location->id}}" method="post" class="col-3">
-                            <button type="button" class="btn btn-blue btn-sm my-2 ml-4 center-block" data-toggle="modal" data-target="#modal{{$place->id}}">Details</button>
                             @if(Auth::user()->suspended == false)<div class="btn  btn-sm  btn-blue" data-toggle="modal" data-target="#modalLocation{{$location->id}}">Edit</div>@endif
                             <button class="btn btn-sm btn-danger" type="submit"><i class="fa fa-trash"></i></button>
                             @method('delete')
