@@ -6472,7 +6472,7 @@ L.Icon.Default.mergeOptions({
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css?66f3":
+/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css":
 /*!*******************************************************************************************************************************!*\
   !*** ./node_modules/css-loader??ref--6-1!./node_modules/postcss-loader/src??ref--6-2!./node_modules/leaflet/dist/leaflet.css ***!
   \*******************************************************************************************************************************/
@@ -31643,7 +31643,7 @@ window.L = exports;
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../css-loader??ref--6-1!../../postcss-loader/src??ref--6-2!./leaflet.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css?66f3");
+var content = __webpack_require__(/*! !../../css-loader??ref--6-1!../../postcss-loader/src??ref--6-2!./leaflet.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -77142,14 +77142,17 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         _this.gettingLocation = true;
         _this.llat = coordinates.lat;
         _this.llng = coordinates.lng;
-        _this.myLocation = L.latLng(_this.llat, _this.llng); //send to session
+        _this.myLocation = L.latLng(_this.llat, _this.llng);
+        var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        console.log(tz); //send to session
 
         $.ajax({
           url: '/getgeo',
           type: 'get',
           data: {
             latitude: _this.llat,
-            longitude: _this.llng
+            longitude: _this.llng,
+            timezone: tz
           },
           success: function success(data) {// alert('success');
           }
@@ -77182,7 +77185,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         $(".alert").fadeTo(500, 0).slideUp(500, function () {
           $(this).remove();
         });
-      }, 2000);
+      }, 3000);
     },
     image_adjustment: function image_adjustment() {
       var input = document.getElementById('multiple_images');

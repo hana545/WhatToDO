@@ -68,7 +68,10 @@ class HomeController extends Controller
     }
     public function destroyTag(Tag $tag){
 
-
-        return redirect('tag/create')->with('message', 'entered destroy');
+        if($tag->places->count() == 0){
+            $tag->delete();
+            return redirect('tag/create')->with('message', 'Succesfully deleted tag');
+        }
+        return redirect('tag/create')->with('error', 'There are places connected to this tag, you cant delete it');
     }
 }

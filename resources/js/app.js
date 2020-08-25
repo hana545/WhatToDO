@@ -131,12 +131,13 @@ const app = new Vue({
                     this.llat = coordinates.lat;
                     this.llng = coordinates.lng;
                     this.myLocation = L.latLng(this.llat, this.llng);
-
+                    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                    console.log(tz);
                     //send to session
                     $.ajax({
                         url:'/getgeo',
                         type:'get',
-                        data:{latitude:this.llat, longitude:this.llng},
+                        data:{latitude:this.llat, longitude:this.llng, timezone:tz},
 
 
                         success:function(data)
@@ -176,7 +177,7 @@ const app = new Vue({
                 $(".alert").fadeTo(500, 0).slideUp(500, function(){
                     $(this).remove();
                 });
-            }, 2000);
+            }, 3000);
         },
 
         image_adjustment: function () {

@@ -204,10 +204,10 @@
                     @endif
                 </div>
                 <div class="col-md-9" v-if="showMap">
-                    <div id="map" v-if="gettingLocation" style="height: 600px">
+                    <div id="map" v-if="center" style="height: 600px">
                         <l-map :center="center" :zoom="zoom" :no-blocking-animations="true" ref="mymap">
                             <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-                            <l-marker :lat-lng="myLocation" :icon="redIcon"><l-tooltip :content="myLocationstring"></l-tooltip></l-marker>
+                            <l-marker v-if="gettingLocation" :lat-lng="myLocation" :icon="redIcon"><l-tooltip :content="myLocationstring"></l-tooltip></l-marker>
                             @if($mysaveloc)
                                 <l-marker :lat-lng="savedLoc" :icon="greenIcon" ><l-tooltip :content="'{{$mysavelocname}}'"></l-tooltip></l-marker>
                             @endif

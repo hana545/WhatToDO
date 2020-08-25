@@ -19,9 +19,9 @@ class SearchController extends Controller
         //$lat=$response->json()['lat'];
         //$lng=$response->json()['lon'];
        // dd($response);
-        $lat=45.343270499999996;
-        $lng=14.4424539;
-        $center = ['lat' => $lat, 'lng' => $lng];
+
+        $lat=session('lat');
+        $lng=session('lng');
 
         $user = Auth::user();
         $places = Place::where('approved', '=', '1')->get();
@@ -59,6 +59,26 @@ class SearchController extends Controller
             }else {
                 $place->avgStar = 0;
             }
+            date_default_timezone_set(session('timezone'));
+            $t=time();
+            $daystart1= strtolower(date("l",$t)).'_start1';
+            $dayend1= strtolower(date("l",$t)).'_end1';
+            $daystart2= strtolower(date("l",$t)).'_start2';
+            $dayend2= strtolower(date("l",$t)).'_end2';
+            $t=date("H:i",$t);
+
+            $place->open = false;
+
+            if($place->workhour->$daystart1 && $place->workhour->$dayend1){
+                if( $place->workhour->$daystart1->format('H:i')  <= $t  && $place->workhour->$dayend1->format('H:i') >= $t){
+                    $place->open = true;
+                }
+            }
+            if ($place->workhour->$daystart2 && $place->workhour->$dayend2){
+                if($place->workhour->$daystart2->format('H:i') <= $t &&  $place->workhour->$dayend2->format('H:i')  >= $t){
+                  $place->open = true;
+                }
+            }
         };
 
         if(!$rangeEnabled) {
@@ -79,7 +99,7 @@ class SearchController extends Controller
         $mysavelocname = 'My saved location';
         //dd($find, $lat, $lng, $places);
         //dd(gettype($lat));
-        return view('search.index', compact('user','places', 'categories', 'tags', 'range', 'find', 'search_name', 'center', 'lat', 'lng', 'categories_req', 'tags_req', 'random', 'randomPlace', 'mysaveloc', 'mysavelocname'));
+        return view('search.index', compact('user','places', 'categories', 'tags', 'range', 'find', 'search_name', 'lat', 'lng', 'categories_req', 'tags_req', 'random', 'randomPlace', 'mysaveloc', 'mysavelocname'));
     }
 
     public function search(){
@@ -111,11 +131,10 @@ class SearchController extends Controller
         //search by range, pull unwanted tags, calculate review; sort by dist
         $range = request('range');
         $rangeEnabled = request('rangeEnabled');
-        //$lat=$response->json()['lat'];
-        //$lng=$response->json()['lon'];
 
-        $lat=45.343270499999996;
-        $lng=14.4424539;        $mysaveloc = false;
+        $lat=session('lat');
+        $lng=session('lng');
+        $mysaveloc = false;
         $mysavelocname = 'My saved location';
         if(request('location') != 1){
             $savedLocationString = request('savedLocation');
@@ -125,8 +144,6 @@ class SearchController extends Controller
             $lat = $savedLocation[1];
             $lng =$savedLocation[2];
         }
-
-        $center = ['lat' => $lat, 'lng' => $lng];
 
         foreach ($places as $num => $place) {
             $flag = false;
@@ -166,6 +183,7 @@ class SearchController extends Controller
             }else {
                 $place->avgStar = 0;
             }
+            date_default_timezone_set(session('timezone'));
             $t=time();
             $daystart1= strtolower(date("l",$t)).'_start1';
             $dayend1= strtolower(date("l",$t)).'_end1';
@@ -182,7 +200,6 @@ class SearchController extends Controller
                 }
             }
 
-            //if( ($place->workhour->$daystart1->format('H:i')  <= $t && $place->workhour->$dayend1 >= $t ) || ($place->workhour->$daystart2 <= $t && $place->workhour->$dayend2 >= $t )) {{$day}}@endif
 
         };
         if(!$rangeEnabled) {
@@ -203,7 +220,7 @@ class SearchController extends Controller
         }
 
 
-        return view('search.index', compact('user','places', 'categories', 'tags', 'range', 'find', 'search_name',  'center', 'lat', 'lng', 'categories_req', 'tags_req', 'random', 'randomPlace', 'mysaveloc', 'mysavelocname'));
+        return view('search.index', compact('user','places', 'categories', 'tags', 'range', 'find', 'search_name', 'lat', 'lng', 'categories_req', 'tags_req', 'random', 'randomPlace', 'mysaveloc', 'mysavelocname'));
     }
 
     public function getDistance(float $lat1, float $lng1, float $lat2, float $lng2){
@@ -225,6 +242,7 @@ class SearchController extends Controller
     {
         session(['lat' => $request->latitude]);
         session(['lng' => $request->longitude]);
+        session(['timezone' => $request->timezone]);
 
 
     }
