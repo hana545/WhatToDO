@@ -40,10 +40,10 @@ class PlacesController extends Controller
             'name' => 'required|min:3',
             'address' => 'required|min:3',
             'description' => 'required|min:10|max:255',
-            'phone1' => 'nullable|min:3|phone',
+            'phone1' => 'nullable|min:3',
             'email1' => 'nullable|min:3|max:40|email',
             'website1' => 'nullable|min:3|max:70|url',
-            'phone2' => 'nullable|numeric|phone',
+            'phone2' => 'nullable|numeric',
             'email2' => 'nullable|min:3|max:40|email',
             'website2' => 'nullable|min:3|max:70|url',
 
@@ -241,10 +241,10 @@ class PlacesController extends Controller
             'name' => 'required|min:3',
             'address' => 'required|min:3',
             'description' => 'required|min:10|max:255',
-            'phone1' => 'nullable|min:3|phone',
+            'phone1' => 'nullable|min:3',
             'email1' => 'nullable|min:3|max:40|email',
             'website1' => 'nullable|min:3|max:70|url',
-            'phone2' => 'nullable|numeric|phone',
+            'phone2' => 'nullable|numeric',
             'email2' => 'nullable|min:3|max:40|email',
             'website2' => 'nullable|min:3|max:70|url',
 
@@ -433,7 +433,7 @@ class PlacesController extends Controller
         }
 
 
-        $workhours = Workhour::update([
+        $place->workhour->update([
             'monday_start1' => $data['monday-start1'],
             'monday_end1' => $data['monday-end1'],
             'monday_start2' => $data['monday-start2'],
