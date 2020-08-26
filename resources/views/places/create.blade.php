@@ -15,7 +15,6 @@ $user = Auth::user();
                     <div class="card-header text-center">
                         <h2>Create new place</br></h2>
                     </div>
-
                     <form @if(!$update) action="{{route('store_object')}}" @else action="/place/update/{{$place->id}}" @endif method="POST" class="px-2 mx-1 row card-body" enctype="multipart/form-data">
                         <div class="col-md">
                             <label for='name'>Name: <span class="text-danger">*</span></label>
@@ -108,7 +107,7 @@ $user = Auth::user();
                                         </div>
                                         <input type="text" name="website1" value="{{ old('website1', $website1->url ?? '')}}" placeholder="Place URL" class="form-control" >
                                     </div>
-                                    <div class="text-danger pb-3">{{ $errors->first('website2') }}</div>
+                                    <div class="text-danger pb-3">{{ $errors->first('website1') }}</div>
                                     <div class="form-group input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text  bg-light"><i class="fas fa-link"></i></span>
@@ -117,79 +116,118 @@ $user = Auth::user();
                                     </div>
                                     <div class="text-danger pb-3">{{ $errors->first('website2') }}</div>
 
-
                                 </div>
-
-
                             </div>
 
+                        <div class="form-group input-group justify-content-center">
+                            <label for='workhours' class="pb-3 mb-4"><h5><i class="fa fa-clock"></i> Workhours:</h5></label>
+                                <ul style="width: 100%">
+                                    <div class="row grey-box">
+                                        <label  class="col-md-3 text-center">Monday</label>
+                                        <span class="col-md-1 text-center"></span>
+                                        <input type="time" name="monday-start1"  class="col-md-3"  @if(in_array('monday_start1', $place->workhours) && !old('monday-start1')) value="{{$place->workhour->monday_start1->format('H:i')}}" @else value="{{old('monday-start1')}}" @endif >
+                                        <span class="col-md-1 text-center"><i class="fas fa-minus"></i></span>
+                                        <input type="time" name="monday-end1"  class="col-md-3" @if(in_array('monday_end1', $place->workhours) && !old('monday-end1')) value="{{$place->workhour->monday_end1->format('H:i')}}" @else value="{{old('monday-end1')}}" @endif >
+                                         </div>
 
-                        <label for='workhours'>Workhours:</label>
-                        <div class="form-group input-group">
-
-                                <ul style="width: 70%">
-{{in_array('monday_start1', $place->workhours)}}
-                                    <div class="row"><label  class="col-md-4 text-center">Monday</label>
-                                        <input type="time" name="monday-start1"  class="col-md-4"  @if(in_array('monday_start1', $place->workhours) && !old('monday-start1')) value="{{$place->workhour->monday_start1->format('H:i')}}" @else value="{{old('monday-start1')}}" @endif >
-                                        <input type="time" name="monday-end1"  class="col-md-4" @if(in_array('monday_end1', $place->workhours) && !old('monday-end1')) value="{{$place->workhour->monday_end1->format('H:i')}}" @else value="{{old('monday-end1')}}" @endif > </div>
                                     @if( $errors->first('monday-start1'))<div class="text-danger pb-3">{{ $errors->first('monday-start1') }}</div> @endif @if( $errors->first('monday-end1') )<div class="text-danger pb-3">{{ $errors->first('monday-end1') }}</div>@endif
-                                    <div class="row  mb-1"><label  class="col-md-4 text-center"></label>
-                                        <input type="time" name="monday-start2"  class="col-md-4" @if(in_array('monday_start2', $place->workhours)) && !old('monday-start2')) value="{{$place->workhour->monday_start2->format('H:i')}}" @else value="{{old('monday-start2')}}" @endif>
-                                        <input type="time" name="monday-end2"  class="col-md-4" @if(in_array('monday_end2', $place->workhours) && !old('monday-end2')) value="{{$place->workhour->monday_end2->format('H:i')}}" @else value="{{old('monday-end2')}}" @endif></div>
+                                    <div class="row  mb-2" >
+                                        <label  class="col-md-3 text-center"></label>
+                                        <span class="col-md-1 text-right"><i class="fas fa-plus-square"></i></span>
+                                        <input type="time" name="monday-start2"  class="col-md-3" @if(in_array('monday_start2', $place->workhours)) && !old('monday-start2')) value="{{$place->workhour->monday_start2->format('H:i')}}" @else value="{{old('monday-start2')}}" @endif>
+                                        <span class="col-md-1 text-center"><i class="fas fa-minus"></i></span>
+                                        <input type="time" name="monday-end2"  class="col-md-3" @if(in_array('monday_end2', $place->workhours) && !old('monday-end2')) value="{{$place->workhour->monday_end2->format('H:i')}}" @else value="{{old('monday-end2')}}" @endif></div>
+
                                     @if( $errors->first('monday-start2'))<div class="text-danger pb-3">{{ $errors->first('monday-start2') }}</div> @endif @if( $errors->first('monday-end2') )<div class="text-danger pb-3">{{ $errors->first('monday-end2') }}</div>@endif
 
-                                    <div class="row"><label  class="col-md-4 text-center">Tuesday</label>
-                                        <input type="time" name="tuesday-start1" class="col-md-4"  @if(in_array('tuesday_start1', $place->workhours)  && !old('tuesday-start1')) value="{{$place->workhour->tuesday_start1->format('H:i')}}" @else value="{{old('tuesday-start1')}}" @endif >
-                                        <input type="time" name="tuesday-end1"  class="col-md-4" @if(in_array('tuesday_end1', $place->workhours) && !old('tuesday-end1')) value="{{$place->workhour->tuesday_end1->format('H:i')}}" @else value="{{old('tuesday-end1')}}" @endif></div>
+                                    <div class="row grey-box ">
+                                        <label  class="col-md-3 text-center" >Tuesday</label>
+                                        <span class="col-md-1 text-center"></span>
+                                        <input type="time" name="tuesday-start1" class="col-md-3"  @if(in_array('tuesday_start1', $place->workhours)  && !old('tuesday-start1')) value="{{$place->workhour->tuesday_start1->format('H:i')}}" @else value="{{old('tuesday-start1')}}" @endif >
+                                        <span class="col-md-1 text-center"><i class="fas fa-minus"></i></span>
+                                        <input type="time" name="tuesday-end1"  class="col-md-3" @if(in_array('tuesday_end1', $place->workhours) && !old('tuesday-end1')) value="{{$place->workhour->tuesday_end1->format('H:i')}}" @else value="{{old('tuesday-end1')}}" @endif></div>
                                     @if( $errors->first('tuesday-start1'))<div class="text-danger pb-3">{{ $errors->first('tuesday-start1') }}</div> @endif @if( $errors->first('tuesday-end1') )<div class="text-danger pb-3">{{ $errors->first('tuesday-end1') }}</div>@endif
-                                    <div class="row  mb-1"><label  class="col-md-4 text-center"></label>
-                                        <input type="time" name="tuesday-start2" class="col-md-4" @if(in_array('tuesday_start2', $place->workhours) && !old('tuesday-start2')) value="{{$place->workhour->tuesday_start2->format('H:i')}}" @else value="{{old('tuesday-start2')}}" @endif>
-                                        <input type="time" name="tuesday-end2"  class="col-md-4" @if(in_array('tuesday_end2', $place->workhours) && !old('tuesday-end2')) value="{{$place->workhour->tuesday_end2->format('H:i')}}" @else value="{{old('tuesday-end2')}}" @endif></div>
+                                    <div class="row  mb-1">
+                                        <label  class="col-md-3 text-center" ></label>
+                                        <span class="col-md-1 text-right"><i class="fas fa-plus-square"></i></span>
+                                        <input type="time" name="tuesday-start2" class="col-md-3" @if(in_array('tuesday_start2', $place->workhours) && !old('tuesday-start2')) value="{{$place->workhour->tuesday_start2->format('H:i')}}" @else value="{{old('tuesday-start2')}}" @endif>
+                                        <span class="col-md-1 text-center"><i class="fas fa-minus"></i></span>
+                                        <input type="time" name="tuesday-end2"  class="col-md-3" @if(in_array('tuesday_end2', $place->workhours) && !old('tuesday-end2')) value="{{$place->workhour->tuesday_end2->format('H:i')}}" @else value="{{old('tuesday-end2')}}" @endif></div>
                                     @if( $errors->first('tuesday-start2'))<div class="text-danger pb-3">{{ $errors->first('tuesday-start2') }}</div> @endif @if( $errors->first('tuesday-end2') )<div class="text-danger pb-3">{{ $errors->first('tuesday-end2') }}</div>@endif
 
-                                    <div class="row"><label  class="col-md-4 text-center">Wednesday</label>
-                                        <input type="time" name="wednesday-start1" class="col-md-4" @if(in_array('wednesday_start1', $place->workhours)  && !old('wednesday-start1')) value="{{$place->workhour->wednesday_start1->format('H:i')}}" @else value="{{old('wednesday-start1')}}" @endif >
-                                        <input type="time" name="wednesday-end1"  class="col-md-4" @if(in_array('wednesday_end1', $place->workhours) && !old('wednesday-end1')) value="{{$place->workhour->wednesday_end1->format('H:i')}}" @else value="{{old('wednesday-end1')}}" @endif ></div>
+                                    <div class="row grey-box">
+                                        <label  class="col-md-3 text-center">Wednesday</label>
+                                        <span class="col-md-1 text-center"></span>
+                                        <input type="time" name="wednesday-start1" class="col-md-3" @if(in_array('wednesday_start1', $place->workhours)  && !old('wednesday-start1')) value="{{$place->workhour->wednesday_start1->format('H:i')}}" @else value="{{old('wednesday-start1')}}" @endif >
+                                        <span class="col-md-1 text-center"><i class="fas fa-minus"></i></span>
+                                        <input type="time" name="wednesday-end1"  class="col-md-3" @if(in_array('wednesday_end1', $place->workhours) && !old('wednesday-end1')) value="{{$place->workhour->wednesday_end1->format('H:i')}}" @else value="{{old('wednesday-end1')}}" @endif ></div>
                                     @if( $errors->first('wednesday-start1'))<div class="text-danger pb-3">{{ $errors->first('wednesday-start1') }}</div> @endif @if( $errors->first('wednesday-end1') )<div class="text-danger pb-3">{{ $errors->first('wednesday-end1') }}</div>@endif
-                                    <div class="row  mb-1"><label  class="col-md-4 text-center"></label>
-                                        <input type="time" name="wednesday-start2" class="col-md-4" @if(in_array('wednesday_start2', $place->workhours) && !old('wednesday-start2')) value="{{$place->workhour->wednesday_start2->format('H:i')}}" @else value="{{old('wednesday-start2')}}" @endif>
-                                        <input type="time" name="wednesday-end2"  class="col-md-4" @if(in_array('wednesday_end2', $place->workhours) && !old('wednesday-end2')) value="{{$place->workhour->wednesday_end2->format('H:i')}}" @else value="{{old('wednesday-end2')}}" @endif></div>
+                                    <div class="row  mb-1" >
+                                        <label  class="col-md-3 text-center" ></label>
+                                        <span class="col-md-1 text-right"><i class="fas fa-plus-square"></i></span>
+                                        <input type="time" name="wednesday-start2" class="col-md-3" @if(in_array('wednesday_start2', $place->workhours) && !old('wednesday-start2')) value="{{$place->workhour->wednesday_start2->format('H:i')}}" @else value="{{old('wednesday-start2')}}" @endif>
+                                        <span class="col-md-1 text-center"><i class="fas fa-minus"></i></span>
+                                        <input type="time" name="wednesday-end2"  class="col-md-3" @if(in_array('wednesday_end2', $place->workhours) && !old('wednesday-end2')) value="{{$place->workhour->wednesday_end2->format('H:i')}}" @else value="{{old('wednesday-end2')}}" @endif></div>
                                     @if( $errors->first('wednesday-start2'))<div class="text-danger pb-3">{{ $errors->first('wednesday-start2') }}</div> @endif @if( $errors->first('wednesday-end2') )<div class="text-danger pb-3">{{ $errors->first('wednesday-end2') }}</div>@endif
 
-                                    <div class="row"><label  class="col-md-4 text-center">Thursday</label>
-                                        <input type="time" name="thursday-start1" class="col-md-4" @if(in_array('thursday_start1', $place->workhours)  && !old('thursday-start1')) value="{{$place->workhour->thursday_start1->format('H:i')}}" @else value="{{old('thursday-start1')}}" @endif>
-                                        <input type="time" name="thursday-end1"  class="col-md-4" @if(in_array('thursday_end1', $place->workhours) && !old('thursday-end1')) value="{{$place->workhour->thursday_end1->format('H:i')}}" @else value="{{old('thursday-end1')}}" @endif ></div>
+                                    <div class="row grey-box">
+                                        <label  class="col-md-3 text-center">Thursday</label>
+                                        <span class="col-md-1 text-center"></span>
+                                        <input type="time" name="thursday-start1" class="col-md-3" @if(in_array('thursday_start1', $place->workhours)  && !old('thursday-start1')) value="{{$place->workhour->thursday_start1->format('H:i')}}" @else value="{{old('thursday-start1')}}" @endif>
+                                        <span class="col-md-1 text-center"><i class="fas fa-minus"></i></span>
+                                        <input type="time" name="thursday-end1"  class="col-md-3" @if(in_array('thursday_end1', $place->workhours) && !old('thursday-end1')) value="{{$place->workhour->thursday_end1->format('H:i')}}" @else value="{{old('thursday-end1')}}" @endif ></div>
                                     @if( $errors->first('thursday-start1'))<div class="text-danger pb-3">{{ $errors->first('thursday-start1') }}</div> @endif @if( $errors->first('thursday-end1') )<div class="text-danger pb-3">{{ $errors->first('thursday-end1') }}</div>@endif
-                                    <div class="row  mb-1"><label  class="col-md-4 text-center "></label>
-                                        <input type="time" name="thursday-start2" class="col-md-4" @if(in_array('thursday_start2', $place->workhours) && !old('thursday-start2')) value="{{$place->workhour->thursday_start2->format('H:i')}}" @else value="{{old('thursday-start2')}}" @endif>
-                                        <input type="time" name="thursday-end2"  class="col-md-4" @if(in_array('thursday_end2', $place->workhours) && !old('thursday-end2')) value="{{$place->workhour->thursday_end2->format('H:i')}}" @else value="{{old('thursday-end2')}}" @endif></div>
+                                    <div class="row  mb-1" >
+                                        <label  class="col-md-3 text-center" ></label>
+                                        <span class="col-md-1 text-right"><i class="fas fa-plus-square"></i></span>
+                                        <input type="time" name="thursday-start2" class="col-md-3" @if(in_array('thursday_start2', $place->workhours) && !old('thursday-start2')) value="{{$place->workhour->thursday_start2->format('H:i')}}" @else value="{{old('thursday-start2')}}" @endif>
+                                        <span class="col-md-1 text-center"><i class="fas fa-minus"></i></span>
+                                        <input type="time" name="thursday-end2"  class="col-md-3" @if(in_array('thursday_end2', $place->workhours) && !old('thursday-end2')) value="{{$place->workhour->thursday_end2->format('H:i')}}" @else value="{{old('thursday-end2')}}" @endif></div>
                                     @if( $errors->first('thursday-start2'))<div class="text-danger pb-3">{{ $errors->first('thursday-start2') }}</div> @endif @if( $errors->first('thursday-end2') )<div class="text-danger pb-3">{{ $errors->first('thursday-end2') }}</div>@endif
 
-                                    <div class="row"><label  class="col-md-4 text-center">Friday</label>
-                                        <input type="time" name="friday-start1" class="col-md-4" @if(in_array('friday_start1', $place->workhours)  && !old('friday-start1')) value="{{$place->workhour->friday_start1->format('H:i')}}" @else value="{{old('friday-start1')}}" @endif>
-                                        <input type="time" name="friday-end1"  class="col-md-4" @if(in_array('friday_end1', $place->workhours) && !old('friday-end1')) value="{{$place->workhour->friday_end1->format('H:i')}}" @else value="{{old('friday-end1')}}" @endif ></div>
+                                    <div class="row grey-box">
+                                        <label  class="col-md-3 text-center">Friday</label>
+                                        <span class="col-md-1 text-center"></span>
+                                        <input type="time" name="friday-start1" class="col-md-3" @if(in_array('friday_start1', $place->workhours)  && !old('friday-start1')) value="{{$place->workhour->friday_start1->format('H:i')}}" @else value="{{old('friday-start1')}}" @endif>
+                                        <span class="col-md-1 text-center"><i class="fas fa-minus"></i></span>
+                                        <input type="time" name="friday-end1"  class="col-md-3" @if(in_array('friday_end1', $place->workhours) && !old('friday-end1')) value="{{$place->workhour->friday_end1->format('H:i')}}" @else value="{{old('friday-end1')}}" @endif ></div>
                                     @if( $errors->first('friday-start1'))<div class="text-danger pb-3">{{ $errors->first('friday-start1') }}</div> @endif @if( $errors->first('friday-end1') )<div class="text-danger pb-3">{{ $errors->first('friday-end1') }}</div>@endif
-                                    <div class="row  mb-1"><label  class="col-md-4 text-center"></label>
-                                        <input type="time" name="friday-start2" class="col-md-4" @if(in_array('friday_start2', $place->workhours) && !old('friday-start2')) value="{{$place->workhour->friday_start2->format('H:i')}}" @else value="{{old('friday-start2')}}" @endif>
-                                        <input type="time" name="friday-end2"  class="col-md-4" @if(in_array('friday_end2', $place->workhours) && !old('friday-end2')) value="{{$place->workhour->friday_end2->format('H:i')}}" @else value="{{old('friday-end2')}}" @endif></div>
+                                    <div class="row  mb-1" >
+                                        <label  class="col-md-3 text-center"></label>
+                                        <span class="col-md-1 text-right"><i class="fas fa-plus-square"></i></span>
+                                        <input type="time" name="friday-start2" class="col-md-3" @if(in_array('friday_start2', $place->workhours) && !old('friday-start2')) value="{{$place->workhour->friday_start2->format('H:i')}}" @else value="{{old('friday-start2')}}" @endif>
+                                        <span class="col-md-1 text-center"><i class="fas fa-minus"></i></span>
+                                        <input type="time" name="friday-end2"  class="col-md-3" @if(in_array('friday_end2', $place->workhours) && !old('friday-end2')) value="{{$place->workhour->friday_end2->format('H:i')}}" @else value="{{old('friday-end2')}}" @endif></div>
                                     @if( $errors->first('friday-start2'))<div class="text-danger pb-3">{{ $errors->first('friday-start2') }}</div> @endif @if( $errors->first('friday-end2') )<div class="text-danger pb-3">{{ $errors->first('friday-end2') }}</div>@endif
 
-                                    <div class="row"><label  class="col-md-4 text-center">Saturday</label>
-                                        <input type="time" name="saturday-start1" class="col-md-4" @if(in_array('saturday_start1', $place->workhours)  && !old('saturday-start1')) value="{{$place->workhour->saturday_start1->format('H:i')}}" @else value="{{old('saturday-start1')}}" @endif>
-                                        <input type="time" name="saturday-end1"  class="col-md-4" @if(in_array('saturday_end1', $place->workhours) && !old('saturday-end1')) value="{{$place->workhour->saturday_end1->format('H:i')}}" @else value="{{old('saturday-end1')}}" @endif ></div>
+                                    <div class="row grey-box">
+                                        <label  class="col-md-3 text-center">Saturday</label>
+                                        <span class="col-md-1 text-center"></span>
+                                        <input type="time" name="saturday-start1" class="col-md-3" @if(in_array('saturday_start1', $place->workhours)  && !old('saturday-start1')) value="{{$place->workhour->saturday_start1->format('H:i')}}" @else value="{{old('saturday-start1')}}" @endif>
+                                        <span class="col-md-1 text-center"><i class="fas fa-minus"></i></span>
+                                        <input type="time" name="saturday-end1"  class="col-md-3" @if(in_array('saturday_end1', $place->workhours) && !old('saturday-end1')) value="{{$place->workhour->saturday_end1->format('H:i')}}" @else value="{{old('saturday-end1')}}" @endif ></div>
                                     @if( $errors->first('saturday-start1'))<div class="text-danger pb-3">{{ $errors->first('saturday-start1') }}</div> @endif @if( $errors->first('saturday-end1') )<div class="text-danger pb-3">{{ $errors->first('saturday-end1') }}</div>@endif
-                                    <div class="row  mb-1"><label  class="col-md-4 text-center"></label>
-                                        <input type="time" name="saturday-start2" class="col-md-4" @if(in_array('saturday_start2', $place->workhours) && !old('saturday-start2')) value="{{$place->workhour->saturday_start2->format('H:i')}}" @else value="{{old('saturday-start2')}}" @endif>
-                                        <input type="time" name="saturday-end2"  class="col-md-4" @if(in_array('saturday_end2', $place->workhours) && !old('saturday-end2')) value="{{$place->workhour->saturday_end2->format('H:i')}}" @else value="{{old('saturday-end2')}}" @endif></div>
+                                    <div class="row  mb-1">
+                                        <label  class="col-md-3 text-center" ></label>
+                                        <span class="col-md-1 text-right"><i class="fas fa-plus-square"></i></span>
+                                        <input type="time" name="saturday-start2" class="col-md-3" @if(in_array('saturday_start2', $place->workhours) && !old('saturday-start2')) value="{{$place->workhour->saturday_start2->format('H:i')}}" @else value="{{old('saturday-start2')}}" @endif>
+                                        <span class="col-md-1 text-center"><i class="fas fa-minus"></i></span>
+                                        <input type="time" name="saturday-end2"  class="col-md-3" @if(in_array('saturday_end2', $place->workhours) && !old('saturday-end2')) value="{{$place->workhour->saturday_end2->format('H:i')}}" @else value="{{old('saturday-end2')}}" @endif></div>
                                     @if( $errors->first('saturday-start2'))<div class="text-danger pb-3">{{ $errors->first('saturday-start2') }}</div> @endif @if( $errors->first('saturday-end2') )<div class="text-danger pb-3">{{ $errors->first('saturday-end2') }}</div>@endif
 
-                                    <div class="row"><label  class="col-md-4 text-center">Sunday</label>
-                                        <input type="time" name="sunday-start1" class="col-md-4" @if(in_array('sunday_start1', $place->workhours)  && !old('sunday-start1')) value="{{$place->workhour->sunday_start1->format('H:i')}}" @else value="{{old('sunday-start1')}}" @endif>
-                                        <input type="time" name="sunday-end1"  class="col-md-4" @if(in_array('sunday_end1', $place->workhours) && !old('sunday-end1')) value="{{$place->workhour->sunday_end1->format('H:i')}}" @else value="{{old('sunday-end1')}}" @endif ></div>
+                                    <div class="row grey-box">
+                                        <label  class="col-md-3 text-center">Sunday</label>
+                                        <span class="col-md-1 text-center"></span>
+                                        <input type="time" name="sunday-start1" class="col-md-3" @if(in_array('sunday_start1', $place->workhours)  && !old('sunday-start1')) value="{{$place->workhour->sunday_start1->format('H:i')}}" @else value="{{old('sunday-start1')}}" @endif>
+                                        <span class="col-md-1 text-center"><i class="fas fa-minus"></i></span>
+                                        <input type="time" name="sunday-end1"  class="col-md-3" @if(in_array('sunday_end1', $place->workhours) && !old('sunday-end1')) value="{{$place->workhour->sunday_end1->format('H:i')}}" @else value="{{old('sunday-end1')}}" @endif ></div>
                                     @if( $errors->first('sunday-start1'))<div class="text-danger pb-3">{{ $errors->first('sunday-start1') }}</div> @endif @if( $errors->first('sunday-end1') )<div class="text-danger pb-3">{{ $errors->first('sunday-end1') }}</div>@endif
-                                    <div class="row  mb-1"><label  class="col-md-4 text-center"></label>
-                                        <input type="time" name="sunday-start2" class="col-md-4" @if(in_array('sunday_start2', $place->workhours) && !old('sunday-start2')) value="{{$place->workhour->sunday_start2->format('H:i')}}" @else value="{{old('sunday-start2')}}" @endif >
-                                        <input type="time" name="sunday-end2"  class="col-md-4" @if(in_array('sunday_end2', $place->workhours) && !old('sunday-end2')) value="{{$place->workhour->sunday_end2->format('H:i')}}" @else value="{{old('sunday-end2')}}" @endif></div>
+                                    <div class="row  mb-1">
+                                        <label  class="col-md-3 text-center" ></label>
+                                        <span class="col-md-1 text-right"><i class="fas fa-plus-square"></i></span>
+                                        <input type="time" name="sunday-start2" class="col-md-3" @if(in_array('sunday_start2', $place->workhours) && !old('sunday-start2')) value="{{$place->workhour->sunday_start2->format('H:i')}}" @else value="{{old('sunday-start2')}}" @endif >
+                                        <span class="col-md-1 text-center"><i class="fas fa-minus"></i></span>
+                                        <input type="time" name="sunday-end2"  class="col-md-3" @if(in_array('sunday_end2', $place->workhours) && !old('sunday-end2')) value="{{$place->workhour->sunday_end2->format('H:i')}}" @else value="{{old('sunday-end2')}}" @endif></div>
                                     @if( $errors->first('sunday-start2'))<div class="text-danger pb-3">{{ $errors->first('sunday-start2') }}</div> @endif @if( $errors->first('sunday-end2') )<div class="text-danger pb-3">{{ $errors->first('sunday-end2') }}</div>@endif
                                 </ul>
 
@@ -246,7 +284,7 @@ $user = Auth::user();
                                                 <input type="checkbox" name="tag[]"
                                                        value=" {{$tag->id}}"  @foreach($place->tags as $checkedTag)
                                                                                 @if($tag->id==$checkedTag->id)  checked @endif
-                                                                                @endforeach @if(old('tag')) @if(in_array($tag->id, old('tag'))) checked @endif @endif>
+                                                                                @endforeach >
                                                 {{ $tag->name}}
                                             </label>
                                         @endforeach

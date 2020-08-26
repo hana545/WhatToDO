@@ -24,8 +24,8 @@ class PlacesController extends Controller
 
     public function create(){
         $days = ['Monday', 'Tuesday', 'Wendseday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-        $categories = Category::all();
-        $tags = Tag::all();
+        $categories = Category::all()->sortBy('name');
+        $tags = Tag::all()->sortBy('name');
 
         $place= new Place;
         $workhours = new Workhour;
@@ -228,7 +228,8 @@ class PlacesController extends Controller
         $days = ['Monday', 'Tuesday', 'Wendseday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
         $categories = Category::all();
         $tags = Tag::all();
-        $place->workhours = $this->CheckWorkhours($place->workhour);
+        $place->workhours = [];
+        if($place->workhour) $place->workhours = $this->CheckWorkhours($place->workhour);
         $update=true;
         return view('places.create', compact('days','categories', 'tags', 'place', 'update'));
     }
@@ -432,43 +433,83 @@ class PlacesController extends Controller
             $website2->delete();
         }
 
+        if($place->workhour) {
+            $place->workhour->update([
+                'monday_start1' => $data['monday-start1'],
+                'monday_end1' => $data['monday-end1'],
+                'monday_start2' => $data['monday-start2'],
+                'monday_end2' => $data['monday-end2'],
 
-        $place->workhour->update([
-            'monday_start1' => $data['monday-start1'],
-            'monday_end1' => $data['monday-end1'],
-            'monday_start2' => $data['monday-start2'],
-            'monday_end2' => $data['monday-end2'],
+                'tuesday_start1' => $data['tuesday-start1'],
+                'tuesday_end1' => $data['tuesday-end1'],
+                'tuesday_start2' => $data['tuesday-start2'],
+                'tuesday_end2' => $data['tuesday-end2'],
 
-            'tuesday_start1' => $data['tuesday-start1'],
-            'tuesday_end1' => $data['tuesday-end1'],
-            'tuesday_start2' => $data['tuesday-start2'],
-            'tuesday_end2' => $data['tuesday-end2'],
+                'wednesday_start1' => $data['wednesday-start1'],
+                'wednesday_end1' => $data['wednesday-end1'],
+                'wednesday_start2' => $data['wednesday-start2'],
+                'wednesday_end2' => $data['wednesday-end2'],
 
-            'wednesday_start1' => $data['wednesday-start1'],
-            'wednesday_end1' => $data['wednesday-end1'],
-            'wednesday_start2' => $data['wednesday-start2'],
-            'wednesday_end2' => $data['wednesday-end2'],
+                'thursday_start1' => $data['thursday-start1'],
+                'thursday_end1' => $data['thursday-end1'],
+                'thursday_start2' => $data['thursday-start2'],
+                'thursday_end2' => $data['thursday-end2'],
 
-            'thursday_start1' => $data['thursday-start1'],
-            'thursday_end1' => $data['thursday-end1'],
-            'thursday_start2' => $data['thursday-start2'],
-            'thursday_end2' => $data['thursday-end2'],
+                'friday_start1' => $data['friday-start1'],
+                'friday_end1' => $data['friday-end1'],
+                'friday_start2' => $data['friday-start2'],
+                'friday_end2' => $data['friday-end2'],
 
-            'friday_start1' => $data['friday-start1'],
-            'friday_end1' => $data['friday-end1'],
-            'friday_start2' => $data['friday-start2'],
-            'friday_end2' => $data['friday-end2'],
+                'saturday_start1' => $data['saturday-start1'],
+                'saturday_end1' => $data['saturday-end1'],
+                'saturday_start2' => $data['saturday-start2'],
+                'saturday_end2' => $data['saturday-end2'],
 
-            'saturday_start1' => $data['saturday-start1'],
-            'saturday_end1' => $data['saturday-end1'],
-            'saturday_start2' => $data['saturday-start2'],
-            'saturday_end2' => $data['saturday-end2'],
+                'sunday_start1' => $data['sunday-start1'],
+                'sunday_end1' => $data['sunday-end1'],
+                'sunday_start2' => $data['sunday-start2'],
+                'sunday_end2' => $data['sunday-end2'],
+            ]);
+        } else {
+            $workhours = Workhour::create([
+                'monday_start1' => $data['monday-start1'],
+                'monday_end1' => $data['monday-end1'],
+                'monday_start2' => $data['monday-start2'],
+                'monday_end2' => $data['monday-end2'],
 
-            'sunday_start1' => $data['sunday-start1'],
-            'sunday_end1' => $data['sunday-end1'],
-            'sunday_start2' => $data['sunday-start2'],
-            'sunday_end2' => $data['sunday-end2'],
-        ]);
+                'tuesday_start1' => $data['tuesday-start1'],
+                'tuesday_end1' => $data['tuesday-end1'],
+                'tuesday_start2' => $data['tuesday-start2'],
+                'tuesday_end2' => $data['tuesday-end2'],
+
+                'wednesday_start1' => $data['wednesday-start1'],
+                'wednesday_end1' => $data['wednesday-end1'],
+                'wednesday_start2' => $data['wednesday-start2'],
+                'wednesday_end2' => $data['wednesday-end2'],
+
+                'thursday_start1' => $data['thursday-start1'],
+                'thursday_end1' => $data['thursday-end1'],
+                'thursday_start2' => $data['thursday-start2'],
+                'thursday_end2' => $data['thursday-end2'],
+
+                'friday_start1' => $data['friday-start1'],
+                'friday_end1' => $data['friday-end1'],
+                'friday_start2' => $data['friday-start2'],
+                'friday_end2' => $data['friday-end2'],
+
+                'saturday_start1' => $data['saturday-start1'],
+                'saturday_end1' => $data['saturday-end1'],
+                'saturday_start2' => $data['saturday-start2'],
+                'saturday_end2' => $data['saturday-end2'],
+
+                'sunday_start1' => $data['sunday-start1'],
+                'sunday_end1' => $data['sunday-end1'],
+                'sunday_start2' => $data['sunday-start2'],
+                'sunday_end2' => $data['sunday-end2'],
+
+                'place_id' => $place->id,
+            ]);
+        }
 
         foreach ($place->tags as $tag){
             $place->tags()->detach($tag->id);

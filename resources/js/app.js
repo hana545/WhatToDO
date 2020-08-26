@@ -51,6 +51,15 @@ const app = new Vue({
         showMap: true,
         showLoc: false,
 
+        show_monday: false,
+        show_tuesday: false,
+
+        show_wednesday: false,
+        show_thursday: false,
+        show_friday: false,
+        show_saturday: false,
+        show_sunday: false,
+
         defaultlat: 45.099998,
         defaultlng: 15.200000,
 

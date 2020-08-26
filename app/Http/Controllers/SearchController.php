@@ -24,8 +24,8 @@ class SearchController extends Controller
         $user = Auth::user();
         $places = Place::where('approved', '=', '1')->get();
         //dd($places, $place);
-        $categories = Category::all();
-        $tags = Tag::all();
+        $categories = Category::all()->sortBy('name');
+        $tags = Tag::all()->sortBy('name');
         $range = 15;
         $rangeEnabled = 0;
         //dd(session('lat'));
@@ -113,8 +113,8 @@ class SearchController extends Controller
         //$response = Http::get('http://ip-api.com/json');
         //dd(request());
         //for search and remembering filter variables
-        $categories = Category::all();
-        $tags = Tag::all();
+        $categories = Category::all()->sortBy('name');
+        $tags = Tag::all()->sortBy('name');
         $categories_req = request('category');
         $tags_req = request('tag');
         $random = request('random');

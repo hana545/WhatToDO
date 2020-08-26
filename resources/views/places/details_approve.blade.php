@@ -70,7 +70,7 @@
                             </div>
                             <div class="col-8  text-center text-white">
                                 @foreach($place->tags as $tag)
-                                    <label class="btn blue-tag col-auto px-2 m-1">
+                                    <label class=" blue-tag col-auto px-2 m-1">
                                         {{ $tag->name}}
                                     </label>
                                 @endforeach

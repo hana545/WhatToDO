@@ -25,7 +25,6 @@
                     <strong>Error</strong> Enable your location for accurate results
                 </div>
                 @endif
-                {{session('timezone')}} {{strtolower(date("l", time()))}}{{date("H:i", time())}}
             </div>
             <div class="col-lg-8">
                 <!-- Search form -->
@@ -82,14 +81,14 @@
                         <div class="container text-white" >
                             <div class=" text-center" >
                                 There are no matching objects
-                                <label class="btn blue-tag col-auto px-2 m-1">
+                                <label class=" blue-tag col-auto px-2 m-1">
                                    in range of {{$range}}km
                                 </label>
                                 @if(!empty($categories_req) || !empty($tags_req) || !empty($search_name))
                                     with
                                 @endif
                                 @if(!empty($search_name))
-                                    <label class="btn blue-tag col-auto px-2 m-1">
+                                    <label class=" blue-tag col-auto px-2 m-1">
                                         Search:{{ $search_name}}
                                     </label>
                                 @endif
@@ -97,7 +96,7 @@
                                     @foreach ($categories as $category)
                                         @foreach($categories_req as $checked)
                                             @if($category->id == $checked)
-                                                <label class="btn blue-tag col-auto px-2 m-1">
+                                                <label class=" blue-tag col-auto px-2 m-1">
                                                     {{ $category->name}}
                                                 </label>
                                             @endif
@@ -108,7 +107,7 @@
                                     @foreach ($tags as $tag)
                                         @foreach($tags_req as $checked)
                                             @if($tag->id == $checked)
-                                                <label class="btn blue-tag col-auto px-2 m-1">
+                                                <label class=" blue-tag col-auto px-2 m-1">
                                                     {{ $tag->name}}
                                                 </label>
                                             @endif

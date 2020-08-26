@@ -28,12 +28,12 @@ class HomeController extends Controller
         return view('home');
     }
     public function createTag(){
-        $tags = Tag::all();
+        $tags = Tag::all()->sortBy('name');
 
         return view('admin.createTag', compact('tags'));
     }
     public function createCategory(){
-        $categories = Category::all();
+        $categories = Category::all()->sortBy('name');
 
         return view('admin.createCategory', compact('categories'));
     }
