@@ -135,23 +135,23 @@ const app = new Vue({
                     this.llat = coordinates.lat;
                     this.llng = coordinates.lng;
                     this.myLocation = L.latLng(this.llat, this.llng);
-                    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
                     if(this.llat == null || this.llng == null){
                         this.center = L.latLng(this.defaultlat, this.defaultlng);
                         this.zoom = 5;
                     }
-                    console.log(tz, this.myLocation, this.llat);
+                    console.log(this.myLocation, this.llat);
                     //send to session
 
                         $.ajax({
                             url:'/getgeo',
                             type:'get',
-                            data:{latitude:this.llat, longitude:this.llng, timezone:tz},
+                            data:{latitude:this.llat, longitude:this.llng},
 
 
                             success:function(data)
                             {
-                                 alert('success');
+                                 //alert('success');
                             }
                         });
                     });
@@ -198,7 +198,7 @@ const app = new Vue({
         },
         AlertTimeout: function () {
             setTimeout(function () {
-                $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                $(".timeout").fadeTo(500, 0).slideUp(500, function(){
                     $(this).remove();
                 });
             }, 3000);
@@ -240,6 +240,18 @@ const app = new Vue({
             document.getElementById("inputRangeValue").value = range;
 
         },
+        GetTimezone : function () {
+            const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            $.ajax({
+                url:'/gettimezone',
+                type:'get',
+                data:{timezone:tz},
+                success:function(data)
+                {
+                    //alert('success');
+                }
+            });
+        }
     },
     mounted: function () {
         this.GetLocation();
@@ -247,11 +259,12 @@ const app = new Vue({
         this.CheckNav();
         this.AdjustCenterForSavedLoc();
         this.GoogleAutocomplete();
-
+        this.GetTimezone();
 
     },
     created: function () {
         window.addEventListener('scroll', this.scrollNav);
+
 
     },
     destroyed: function () {

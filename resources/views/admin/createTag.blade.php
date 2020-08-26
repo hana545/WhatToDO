@@ -46,7 +46,7 @@ $user = Auth::user();
                                 <div class="row">
                                     <div class="col">{{$tag->name}}</div>
                                     <form action="/tag/delete/{{$tag->id}}" method="post" class="col">
-                                        <input class="btn btn-sm btn-danger" type="submit" value="Delete" />
+                                        <button class="btn btn-sm btn-danger" type="submit" ><i class="fa fa-trash"></i></button>
                                         @method('delete')
                                         @csrf
                                     </form>

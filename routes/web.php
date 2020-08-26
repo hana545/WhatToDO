@@ -31,6 +31,7 @@ Route::get('/user/unsuspend/{user}', 'UsersController@unsuspend')->name('unsuspe
 Route::get('/search', 'SearchController@index')->name('search');
 Route::post('/search', 'SearchController@search')->name('search_objects');
 Route::get('/getgeo', 'SearchController@getCoordinates');
+Route::get('/gettimezone', 'SearchController@getTimezone');
 
 ///for tags
 Route::get('/tag/create', 'HomeController@createTag')->name('add_tag')->middleware('auth')->middleware('admin');

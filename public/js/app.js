@@ -77145,25 +77145,22 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         _this.llat = coordinates.lat;
         _this.llng = coordinates.lng;
         _this.myLocation = L.latLng(_this.llat, _this.llng);
-        var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
         if (_this.llat == null || _this.llng == null) {
           _this.center = L.latLng(_this.defaultlat, _this.defaultlng);
           _this.zoom = 5;
         }
 
-        console.log(tz, _this.myLocation, _this.llat); //send to session
+        console.log(_this.myLocation, _this.llat); //send to session
 
         $.ajax({
           url: '/getgeo',
           type: 'get',
           data: {
             latitude: _this.llat,
-            longitude: _this.llng,
-            timezone: tz
+            longitude: _this.llng
           },
-          success: function success(data) {
-            alert('success');
+          success: function success(data) {//alert('success');
           }
         });
       });
@@ -77206,7 +77203,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     },
     AlertTimeout: function AlertTimeout() {
       setTimeout(function () {
-        $(".alert").fadeTo(500, 0).slideUp(500, function () {
+        $(".timeout").fadeTo(500, 0).slideUp(500, function () {
           $(this).remove();
         });
       }, 3000);
@@ -77243,6 +77240,18 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
       var range = event.target.value;
       document.getElementById("rangeValue").innerHTML = range;
       document.getElementById("inputRangeValue").value = range;
+    },
+    GetTimezone: function GetTimezone() {
+      var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      $.ajax({
+        url: '/gettimezone',
+        type: 'get',
+        data: {
+          timezone: tz
+        },
+        success: function success(data) {//alert('success');
+        }
+      });
     }
   },
   mounted: function mounted() {
@@ -77251,6 +77260,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     this.CheckNav();
     this.AdjustCenterForSavedLoc();
     this.GoogleAutocomplete();
+    this.GetTimezone();
   },
   created: function created() {
     window.addEventListener('scroll', this.scrollNav);

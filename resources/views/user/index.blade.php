@@ -4,22 +4,22 @@
 
 
     <div class="container">
-        <div class=" order-lg-2 justify-content-center my-5 text-light">
+        <div class=" order-lg-2 justify-content-center mt-5 text-light">
 
             <div class="text-center">
 
                 @if(session()->has('message'))
-                    <div class="alert alert-success" role="alert" style="border-width: 1px; border-color: #27864f">
+                    <div class="alert alert-success timeout" role="alert" style="border-width: 1px; border-color: #27864f">
                         <strong>Success</strong> {{ session()->get('message') }}
                     </div>
                 @endif
                 @if(session()->has('success'))
-                    <div class="alert alert-success" role="alert" style="border-width: 1px; border-color: #27864f">
+                    <div class="alert alert-success timeout" role="alert" style="border-width: 1px; border-color: #27864f">
                         <strong>Success</strong> {{ session()->get('success') }}
                     </div>
                 @endif
                 @if(session()->has('error'))
-                    <div class="alert alert-danger" role="alert" style="border-width: 1px; border-color: #27864f">
+                    <div class="alert alert-danger timeout" role="alert" style="border-width: 1px; border-color: #27864f">
                         <strong>Error</strong> {{ session()->get('error') }}
                     </div>
                 @endif

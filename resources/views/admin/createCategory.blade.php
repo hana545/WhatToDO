@@ -48,14 +48,16 @@ $user = Auth::user();
                     <h2>Existing categories</h2>
                     <ul class="row">
                         @foreach($categories as $category)
-                            <form action="/category/delete/{{$category->id}}" method="post" class=" col-lg-3 my-2">
-                                    <div class="row">
-                                        <div class="col-6">{{$category->name}}</div>
-                                        <div class="col-6"><input class="btn btn-danger" type="submit" value="Delete" />
-                                    </div>
-                                @method('delete')
-                                @csrf
-                            </form>
+                            <div class="col-sm-3 my-2">
+                                <div class="row">
+                                    <div class="col">{{$category->name}}</div>
+                                    <form action="/category/delete/{{$category->id}}" method="post" class="col">
+                                        <button class="btn btn-sm btn-danger" type="submit" ><i class="fa fa-trash"></i></button>
+                                        @method('delete')
+                                        @csrf
+                                    </form>
+                                </div>
+                            </div>
                         @endforeach
                     </ul>
                 </div>

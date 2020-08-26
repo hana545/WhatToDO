@@ -7,24 +7,25 @@
                 <h2>What do you want to search?</h2>
 
                 @if(session()->has('message'))
-                    <div class="alert alert-success" role="alert" style="border-width: 1px; border-color: #27864f">
+                    <div class="alert alert-success timeout" role="alert" style="border-width: 1px; border-color: #27864f">
                         <strong>Success</strong> {{ session()->get('message') }}
                     </div>
                 @endif
                 @if(session()->has('error'))
-                    <div class="alert alert-danger" role="alert" style="border-width: 1px; border-color: #27864f">
+                    <div class="alert alert-danger timeout" role="alert" style="border-width: 1px; border-color: #27864f">
                         <strong>Error</strong> {{ session()->get('error') }}
                     </div>
                 @endif
                 @if($errors->first('text_review'))
-                    <div class="alert alert-danger" role="alert" style="border-width: 1px; border-color: #27864f">
+                    <div class="alert alert-danger timeout" role="alert" style="border-width: 1px; border-color: #27864f">
                         <strong>Error</strong> {{ $errors->first('text_review') }}
                     </div>
                 @endif
-{{$lat}}   {{  $lng}}
-                @if(!$lat || !$lng) <div class="card alert-danger"  style="border-width: 1px; border-color: #27864f">
-                    <strong>Error</strong> Enable your location
-                </div>  {{$lat}} {{  $lng}}@endif
+                @if(!$lat || !$lng) <div class="alert alert-danger"  style="border-width: 1px; border-color: #27864f">
+                    <strong>Error</strong> Enable your location for accurate results
+                </div>
+                @endif
+                {{session('timezone')}} {{strtolower(date("l", time()))}}{{date("H:i", time())}}
             </div>
             <div class="col-lg-8">
                 <!-- Search form -->
@@ -145,12 +146,11 @@
                                         </div>
 
                                         <h6 class="card-subtitle text-muted row">
-                                            <i class="fas fa-map-marker-alt col-sm-1"></i>
-                                            <p class="col-sm"> {{ $place->address }}</p>
+                                            <p class="col-sm">    <i class="fas fa-map-marker-alt"></i> {{ $place->address }}</p>
                                         </h6>
                                         <h6 class="card-text text-muted row">
                                             <p class="col-sm-5"> <i class="fas fa-tag"></i>   {{ $place->category->name }}</p>
-                                            <p class="col-sm-7">@if($place->open)<span class="text-success"><i class="fas fa-door-open"></i> Opened </span> @else <span class="text-danger"><i class=" fas fa-door-closed"></i> Closed</span> @endif</p></h6>
+                                            <p class="col-sm-7">@if($place->open == 1)<span class="text-success"><i class="fas fa-door-open"></i> Opened </span> @elseif($place->open == 0) <span class="text-danger"><i class=" fas fa-door-closed"></i> Closed</span> @else <span>No workhours</span></span>  @endif</p></h6>
 
                                         <button type="button" class="btn btn-blue  btn-md my-2 ml-4 center-block" data-toggle="modal" data-target="#modal{{$place->id}}">Details</button>
                                         <a href="#map"><button  class="btn btn-dark btn-sm"  v-on:click="showPlace({{$place->lat}},{{$place->lng}}); ShowMap()">Show on map</button></a>

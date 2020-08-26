@@ -18,6 +18,8 @@ class SearchController extends Controller
 
         $lat=session('lat');
         $lng=session('lng');
+        session()->forget('lat');
+        session()->forget('lng');
 
         $user = Auth::user();
         $places = Place::where('approved', '=', '1')->get();
@@ -69,20 +71,20 @@ class SearchController extends Controller
                 $dayend2 = strtolower(date("l", $t)) . '_end2';
                 $t = date("H:i", $t);
 
-                $place->open = false;
+                $place->open = 0;
 
                 if ($place->workhour->$daystart1 && $place->workhour->$dayend1) {
                     if ($place->workhour->$daystart1->format('H:i') <= $t && $place->workhour->$dayend1->format('H:i') >= $t) {
-                        $place->open = true;
+                        $place->open = 1;
                     }
                 }
                 if ($place->workhour->$daystart2 && $place->workhour->$dayend2) {
                     if ($place->workhour->$daystart2->format('H:i') <= $t && $place->workhour->$dayend2->format('H:i') >= $t) {
-                        $place->open = true;
+                        $place->open = 1;
                     }
                 }
             } else {
-                $place->open = true;
+                $place->open = 3;
             }
         }
 
@@ -139,6 +141,9 @@ class SearchController extends Controller
 
         $lat=session('lat');
         $lng=session('lng');
+        session()->forget('lat');
+        session()->forget('lng');
+
         $mysaveloc = false;
         $mysavelocname = 'My saved location';
         if(request('location') != 1){
@@ -254,6 +259,11 @@ class SearchController extends Controller
     {
         session(['lat' => $request->latitude]);
         session(['lng' => $request->longitude]);
+
+    }
+
+    public function getTimezone(Request $request)
+    {
         session(['timezone' => $request->timezone]);
 
 
