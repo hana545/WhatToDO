@@ -77061,8 +77061,10 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     show: false,
     showMap: true,
     showLoc: false,
-    clat: null,
-    clng: null,
+    defaultlat: 45.099998,
+    defaultlng: 15.200000,
+    clat: 45.099998,
+    clng: 15.200000,
     center: null,
     llat: null,
     llng: null,
@@ -77131,7 +77133,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     showMe: function showMe() {
       this.center = L.latLng(this.llat, this.llng);
       this.myLocation = L.latLng(this.llat, this.llng);
-      this.zoom = 14;
+      this.zoom = 13;
     },
     GetLocation: function GetLocation() {
       var _this = this;
@@ -77144,7 +77146,13 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         _this.llng = coordinates.lng;
         _this.myLocation = L.latLng(_this.llat, _this.llng);
         var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        console.log(tz); //send to session
+
+        if (_this.llat == null || _this.llng == null) {
+          _this.center = L.latLng(_this.defaultlat, _this.defaultlng);
+          _this.zoom = 5;
+        }
+
+        console.log(tz, _this.myLocation, _this.llat); //send to session
 
         $.ajax({
           url: '/getgeo',
@@ -77154,10 +77162,26 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
             longitude: _this.llng,
             timezone: tz
           },
-          success: function success(data) {// alert('success');
+          success: function success(data) {
+            alert('success');
           }
         });
       });
+    },
+    AdjustCenterForSavedLoc: function AdjustCenterForSavedLoc() {
+      if (this.$refs.mylat) this.clat = this.$refs.mylat.value;
+      if (this.$refs.mylng) this.clng = this.$refs.mylng.value;
+      console.log(this.clng);
+
+      if (this.clat === '' || this.clng === '') {
+        console.log('centardef');
+        this.center = L.latLng(this.defaultlat, this.defaultlng);
+        this.zoom = 5;
+      } else {
+        console.log('centarcc');
+        this.center = L.latLng(this.clat, this.clng);
+        this.savedLoc = L.latLng(this.clat, this.clng);
+      }
     },
     scrollNav: function scrollNav(event) {
       //if collapsed navbar is opened and scroll is on top, add
@@ -77203,12 +77227,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
 
       infoArea.textContent = '- ' + fileName;
       infoArea.style.display = 'initial';
-    },
-    AdjustCenterForSavedLoc: function AdjustCenterForSavedLoc() {
-      if (this.$refs.mylat) this.clat = this.$refs.mylat.value;
-      if (this.$refs.mylng) this.clng = this.$refs.mylng.value;
-      this.center = L.latLng(this.clat, this.clng);
-      this.savedLoc = L.latLng(this.clat, this.clng);
     },
     GoogleAutocomplete: function GoogleAutocomplete() {
       if (document.getElementById('google_address')) {

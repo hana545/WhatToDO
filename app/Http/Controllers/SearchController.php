@@ -15,10 +15,6 @@ use function MongoDB\BSON\toJSON;
 class SearchController extends Controller
 {
     public function index(){
-        //$response = Http::post('https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyAY9df1pMrDrLQ7JcEFuBZh0CdtpUFMdAY');
-        //$lat=$response->json()['lat'];
-        //$lng=$response->json()['lon'];
-       // dd($response);
 
         $lat=session('lat');
         $lng=session('lng');
@@ -35,15 +31,19 @@ class SearchController extends Controller
 
 
         foreach ($places as $place) {
-            $place->dist = $this->getDistance($lat, $lng, $place->lat, $place->lng);
+            if($lat && $lng){
+                $place->dist = $this->getDistance($lat, $lng, $place->lat, $place->lng);
+            } else {
+                $place->dist = 1;
+            }
             $place->UserReview = new Review();
             $place->hasReview = false;
-            if ($place->reviews->isNotEmpty()){
+            if ($place->reviews->isNotEmpty()) {
                 $count = 0;
                 $sum = 0;
                 foreach ($place->reviews as $review) {
 
-                    if($user) {
+                    if ($user) {
                         if ($review->user->id == $user->id) {
                             $place->hasReview = true;
                             $place->UserReview = $review;
@@ -56,30 +56,35 @@ class SearchController extends Controller
 
                 }
                 $place->avgStar = $sum / $count;
-            }else {
+            } else {
                 $place->avgStar = 0;
             }
-            date_default_timezone_set(session('timezone'));
-            $t=time();
-            $daystart1= strtolower(date("l",$t)).'_start1';
-            $dayend1= strtolower(date("l",$t)).'_end1';
-            $daystart2= strtolower(date("l",$t)).'_start2';
-            $dayend2= strtolower(date("l",$t)).'_end2';
-            $t=date("H:i",$t);
 
-            $place->open = false;
+            if ($place->workhour) {
+                if(session('timezone')) date_default_timezone_set(session('timezone'));
+                $t = time();
+                $daystart1 = strtolower(date("l", $t)) . '_start1';
+                $dayend1 = strtolower(date("l", $t)) . '_end1';
+                $daystart2 = strtolower(date("l", $t)) . '_start2';
+                $dayend2 = strtolower(date("l", $t)) . '_end2';
+                $t = date("H:i", $t);
 
-            if($place->workhour->$daystart1 && $place->workhour->$dayend1){
-                if( $place->workhour->$daystart1->format('H:i')  <= $t  && $place->workhour->$dayend1->format('H:i') >= $t){
-                    $place->open = true;
+                $place->open = false;
+
+                if ($place->workhour->$daystart1 && $place->workhour->$dayend1) {
+                    if ($place->workhour->$daystart1->format('H:i') <= $t && $place->workhour->$dayend1->format('H:i') >= $t) {
+                        $place->open = true;
+                    }
                 }
-            }
-            if ($place->workhour->$daystart2 && $place->workhour->$dayend2){
-                if($place->workhour->$daystart2->format('H:i') <= $t &&  $place->workhour->$dayend2->format('H:i')  >= $t){
-                  $place->open = true;
+                if ($place->workhour->$daystart2 && $place->workhour->$dayend2) {
+                    if ($place->workhour->$daystart2->format('H:i') <= $t && $place->workhour->$dayend2->format('H:i') >= $t) {
+                        $place->open = true;
+                    }
                 }
+            } else {
+                $place->open = true;
             }
-        };
+        }
 
         if(!$rangeEnabled) {
             $places = $places->where('dist', '<=', $range)->sortBy('dist');
@@ -147,7 +152,7 @@ class SearchController extends Controller
 
         foreach ($places as $num => $place) {
             $flag = false;
-            if(!empty($tags_req)) {
+            if (!empty($tags_req)) {
                 foreach ($place->tags as $tag) {
                     if (in_array($tag->id, $tags_req)) {
                         $flag = true;
@@ -158,15 +163,20 @@ class SearchController extends Controller
                     continue;
                 }
             }
-            $place->dist = $this->getDistance($lat, $lng, $place->lat, $place->lng);
+            if($lat && $lng)  {
+                $place->dist = $this->getDistance($lat, $lng, $place->lat, $place->lng);
+            } else {
+                $place->dist = 1;
+            }
+
             $place->UserReview = new Review();
             $place->hasReview = false;
-            if ($place->reviews->isNotEmpty()){
+            if ($place->reviews->isNotEmpty()) {
                 $count = 0;
                 $sum = 0;
                 foreach ($place->reviews as $review) {
 
-                    if($user) {
+                    if ($user) {
                         if ($review->user->id == $user->id) {
                             $place->hasReview = true;
                             $place->UserReview = $review;
@@ -177,31 +187,33 @@ class SearchController extends Controller
                     $count++;
 
 
-
                 }
                 $place->avgStar = $sum / $count;
-            }else {
+            } else {
                 $place->avgStar = 0;
             }
-            date_default_timezone_set(session('timezone'));
-            $t=time();
-            $daystart1= strtolower(date("l",$t)).'_start1';
-            $dayend1= strtolower(date("l",$t)).'_end1';
-            $daystart2= strtolower(date("l",$t)).'_start2';
-            $dayend2= strtolower(date("l",$t)).'_end2'; $t=date("H:i",$t);
-            $place->open = false;
-            if($place->workhour->$daystart1 && $place->workhour->$dayend1){
-                if( $place->workhour->$daystart1->format('H:i')  <= $t  && $place->workhour->$dayend1 >= $t){
-                   $place->open = true;
+            if ($place->workohour){
+                if(session('timezone')) date_default_timezone_set(session('timezone'));
+                $t = time();
+                $daystart1 = strtolower(date("l", $t)) . '_start1';
+                $dayend1 = strtolower(date("l", $t)) . '_end1';
+                $daystart2 = strtolower(date("l", $t)) . '_start2';
+                $dayend2 = strtolower(date("l", $t)) . '_end2';
+                $t = date("H:i", $t);
+                $place->open = false;
+                if ($place->workhour->$daystart1 && $place->workhour->$dayend1) {
+                    if ($place->workhour->$daystart1->format('H:i') <= $t && $place->workhour->$dayend1 >= $t) {
+                        $place->open = true;
+                    }
+                } else if ($place->workhour->$daystart2 && $place->workhour->$dayend2) {
+                    if ($place->workhour->$daystart2->format('H:i') <= $t && $place->workhour->$dayend2 >= $t) {
+                        $place->open = true;
+                    }
                 }
-            } else if ($place->workhour->$daystart2 && $place->workhour->$dayend2){
-                if( $place->workhour->$daystart2->format('H:i')  <= $t  && $place->workhour->$dayend2 >= $t){
-                    $place->open = true;
-                }
+            } else {
+            $place->open = true;
             }
-
-
-        };
+        }
         if(!$rangeEnabled) {
             $places = $places->where('dist', '<=', $range)->sortBy('dist');
         } else {

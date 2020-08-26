@@ -51,8 +51,11 @@ const app = new Vue({
         showMap: true,
         showLoc: false,
 
-        clat: null,
-        clng: null,
+        defaultlat: 45.099998,
+        defaultlng: 15.200000,
+
+        clat: 45.099998,
+        clng: 15.200000,
         center: null,
 
         llat: null,
@@ -122,8 +125,9 @@ const app = new Vue({
         showMe: function() {
             this.center = L.latLng(this.llat, this.llng);
             this.myLocation = L.latLng(this.llat, this.llng);
-            this.zoom = 14;
+            this.zoom = 13;
         },
+
         GetLocation(){
             this.$getLocation({enableHighAccuracy: true})
                 .then(coordinates => {
@@ -132,20 +136,40 @@ const app = new Vue({
                     this.llng = coordinates.lng;
                     this.myLocation = L.latLng(this.llat, this.llng);
                     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                    console.log(tz);
+                    if(this.llat == null || this.llng == null){
+                        this.center = L.latLng(this.defaultlat, this.defaultlng);
+                        this.zoom = 5;
+                    }
+                    console.log(tz, this.myLocation, this.llat);
                     //send to session
-                    $.ajax({
-                        url:'/getgeo',
-                        type:'get',
-                        data:{latitude:this.llat, longitude:this.llng, timezone:tz},
+
+                        $.ajax({
+                            url:'/getgeo',
+                            type:'get',
+                            data:{latitude:this.llat, longitude:this.llng, timezone:tz},
 
 
-                        success:function(data)
-                        {
-                            // alert('success');
-                        }
+                            success:function(data)
+                            {
+                                 alert('success');
+                            }
+                        });
                     });
-                });
+        },
+        AdjustCenterForSavedLoc: function(){
+            if(this.$refs.mylat) this.clat = this.$refs.mylat.value;
+            if(this.$refs.mylng) this.clng = this.$refs.mylng.value;
+
+            console.log(this.clng)
+            if(this.clat === '' || this.clng === ''){
+                console.log('centardef');
+                this.center = L.latLng(this.defaultlat, this.defaultlng);
+                this.zoom = 5;
+            } else {
+                console.log('centarcc')
+                this.center = L.latLng(this.clat, this.clng);
+                this.savedLoc  = L.latLng(this.clat, this.clng);
+            }
         },
         scrollNav: function (event) {
             //if collapsed navbar is opened and scroll is on top, add
@@ -199,12 +223,6 @@ const app = new Vue({
 
         },
 
-        AdjustCenterForSavedLoc: function(){
-            if(this.$refs.mylat) this.clat = this.$refs.mylat.value;
-            if(this.$refs.mylng) this.clng = this.$refs.mylng.value;
-            this.center = L.latLng(this.clat, this.clng);
-            this.savedLoc  = L.latLng(this.clat, this.clng);
-        },
 
         GoogleAutocomplete (){
             if (document.getElementById('google_address')){

@@ -21,7 +21,10 @@
                         <strong>Error</strong> {{ $errors->first('text_review') }}
                     </div>
                 @endif
-
+{{$lat}}   {{  $lng}}
+                @if(!$lat || !$lng) <div class="card alert-danger"  style="border-width: 1px; border-color: #27864f">
+                    <strong>Error</strong> Enable your location
+                </div>  {{$lat}} {{  $lng}}@endif
             </div>
             <div class="col-lg-8">
                 <!-- Search form -->

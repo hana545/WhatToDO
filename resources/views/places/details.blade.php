@@ -134,6 +134,7 @@
                             </div>
                         @endif
                         @include('places.workhours', ['place' => $place])
+                        {{session('timezone')}} {{strtolower(date("l", time()))}}{{date("H:i", time())}}
                         @if($place->images)
                             <div class="p-3 border-bottom border-top text-center text-white-muted grey-box">
                                 <h6> <i>Pictures</i></h6>
