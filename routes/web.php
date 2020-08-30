@@ -24,23 +24,21 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('/user/profile', 'UsersController@index')->name('user')->middleware('auth');
 Route::post('/user/change_password', 'UsersController@updatePassword')->name('change_password')->middleware('auth');;
 Route::post('/user/change_username', 'UsersController@updateUsername')->name('change_username')->middleware('auth');;
-Route::get('/user/suspend/{user}', 'UsersController@suspend')->name('suspend_user')->middleware('auth')->middleware('admin');
-Route::get('/user/unsuspend/{user}', 'UsersController@unsuspend')->name('unsuspend_user')->middleware('auth')->middleware('admin');
 
 //for searching
-Route::get('/search', 'SearchController@index')->name('search');
-Route::post('/search', 'SearchController@search')->name('search_objects');
-Route::get('/getgeo', 'SearchController@getCoordinates');
-Route::get('/gettimezone', 'SearchController@getTimezone');
+Route::get('/search', 'HomeController@search')->name('search');
+Route::post('/search', 'HomeController@searchFilter')->name('search_objects');
+Route::get('/getgeo', 'HomeController@getCoordinates');
+Route::get('/gettimezone', 'HomeController@getTimezone');
 
 ///for tags
-Route::get('/tag/create', 'HomeController@createTag')->name('add_tag')->middleware('auth')->middleware('admin');
-Route::post('/tag/store', 'HomeController@storeTag')->name('store_tag')->middleware('auth')->middleware('admin');
-Route::delete('/tag/delete/{tag}', 'HomeController@destroyTag')->name('delete_tag')->middleware('auth')->middleware('admin');
+Route::get('/tag/create', 'TagCategoryController@createTag')->name('add_tag')->middleware('auth')->middleware('admin');
+Route::post('/tag/store', 'TagCategoryController@storeTag')->name('store_tag')->middleware('auth')->middleware('admin');
+Route::delete('/tag/delete/{tag}', 'TagCategoryController@destroyTag')->name('delete_tag')->middleware('auth')->middleware('admin');
 ////for category
-Route::get('/category/create', 'HomeController@createCategory')->name('add_category')->middleware('auth')->middleware('admin');
-Route::post('/category/store', 'HomeController@storeCategory')->name('store_category')->middleware('auth')->middleware('admin');
-Route::delete('/category/delete/{category}', 'HomeController@destroyCategory')->name('delete_category')->middleware('auth')->middleware('admin');
+Route::get('/category/create', 'TagCategoryController@createCategory')->name('add_category')->middleware('auth')->middleware('admin');
+Route::post('/category/store', 'TagCategoryController@storeCategory')->name('store_category')->middleware('auth')->middleware('admin');
+Route::delete('/category/delete/{category}', 'TagCategoryController@destroyCategory')->name('delete_category')->middleware('auth')->middleware('admin');
 
 //for places/objects
 Route::get('/place/create', 'PlacesController@create')->name('add_object')->middleware([ 'auth', 'suspended']);
@@ -72,5 +70,8 @@ Route::delete('/approve/place/delete/{place}', 'PlacesController@destroy_from_ap
 //users
 Route::get('/admin/manage', 'AdminController@manageAdminsUsers')->name('manageAdminsUsers')->middleware('admin');
 Route::post('/admin/registerUser', 'AdminController@registerUser')->name('registerNewUser')->middleware('admin');
+//suspend/unsuspend
+Route::get('/admin/suspend/{user}', 'UsersController@suspend')->name('suspend_user')->middleware('auth')->middleware('admin');
+Route::get('/admin/unsuspend/{user}', 'UsersController@unsuspend')->name('unsuspend_user')->middleware('auth')->middleware('admin');
 ///
 

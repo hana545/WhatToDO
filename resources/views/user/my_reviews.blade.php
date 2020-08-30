@@ -22,26 +22,7 @@
                             <h5>{{$review->place->name}}</h5>
                         </div>
                         <section class='rating-widget col-md-3'>
-                            <div class='rating-stars'>
-                                <ul id='stars' class="col-md-6"  >
-                                    <li class='star-small @if($review->star >= 1) selected  @endif' title='Awful' data-value='1' >
-                                        <i class='fa fa-star fa-fw'></i>
-                                    </li>
-                                    <li class='star-small @if($review->star >= 2) selected  @endif' title='Bad' data-value='2'>
-                                        <i class='fa fa-star fa-fw'></i>
-                                    </li>
-                                    <li class='star-small @if($review->star >= 3) selected  @endif' title='Good' data-value='3'>
-                                        <i class='fa fa-star fa-fw'></i>
-                                    </li>
-                                    <li class='star-small @if($review->star >= 4) selected  @endif' title='Very good' data-value='4'>
-                                        <i class='fa fa-star fa-fw'></i>
-                                    </li>
-                                    <li class='star-small @if($review->star >= 5) selected  @endif'  title='Excellent!!!' data-value='5'>
-                                        <i class='fa fa-star fa-fw'></i>
-                                    </li>
-
-                                </ul>
-                            </div>
+                            @include('reviews.star_small_rating', ['star' => $review->star ?? 0])
                         </section>
                         <div class="col-md-4">
                             {{$review->description}}

@@ -14,26 +14,7 @@
                             <h6> <i>{{ $place->description }}</i></h6>
                             <h6>
                                 <section class='rating-widget'>
-                                    <!-- Rating Stars Box -->
-                                    <div class='rating-stars text-center'>
-                                        <ul id='stars'>
-                                            <li class='star-static @if($place->avgStar >= 1) selected  @endif' title='Awful' data-value='1' >
-                                                <i class='fa fa-star fa-fw'></i>
-                                            </li>
-                                            <li class='star-static @if($place->avgStar >= 2) selected  @endif' title='Bad' data-value='2'>
-                                                <i class='fa fa-star fa-fw'></i>
-                                            </li>
-                                            <li class='star-static @if($place->avgStar >= 3) selected  @endif' title='Good' data-value='3'>
-                                                <i class='fa fa-star fa-fw'></i>
-                                            </li>
-                                            <li class='star-static @if($place->avgStar >= 4) selected  @endif' title='Very good' data-value='4'>
-                                                <i class='fa fa-star fa-fw'></i>
-                                            </li>
-                                            <li class='star-static @if($place->avgStar >= 5) selected  @endif'  title='Excellent!!!' data-value='5'>
-                                                <i class='fa fa-star fa-fw'></i>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                   @include('reviews.star_static_rating', ['star' => $place->avgStar ?? 0])
                                 </section>
                             </h6>
 

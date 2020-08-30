@@ -88,6 +88,7 @@ class PlacesController extends Controller
         $address = $data['address'];
         $address = str_replace(" ","+", $address);
         $response = Http::get('https://maps.googleapis.com/maps/api/geocode/json?address='.$address.'&key=AIzaSyAY9df1pMrDrLQ7JcEFuBZh0CdtpUFMdAY');
+
         $latlng = $response->json()['results'][0]['geometry']['location'];
         $lat = $latlng['lat'];
         $lng = $latlng['lng'];

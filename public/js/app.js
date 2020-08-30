@@ -1899,18 +1899,15 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Map-Leaflet.vue?vue&type=script&lang=js&":
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Star-rating.vue?vue&type=script&lang=js&":
 /*!**********************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Map-Leaflet.vue?vue&type=script&lang=js& ***!
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Star-rating.vue?vue&type=script&lang=js& ***!
   \**********************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue2_leaflet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue2-leaflet */ "./node_modules/vue2-leaflet/dist/vue2-leaflet.es.js");
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 //
 //
 //
@@ -1935,108 +1932,90 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: __webpack_require__(/*! leaflet/dist/images/marker-icon-2x.png */ "./node_modules/leaflet/dist/images/marker-icon-2x.png"),
-  iconUrl: __webpack_require__(/*! leaflet/dist/images/marker-icon.png */ "./node_modules/leaflet/dist/images/marker-icon.png"),
-  shadowUrl: __webpack_require__(/*! leaflet/dist/images/marker-shadow.png */ "./node_modules/leaflet/dist/images/marker-shadow.png")
-});
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    places: [Object, String, Array],
-    find: [Boolean, Number]
+    avg_star: {
+      type: [Object, String, Array, Number],
+      "default": 0
+    },
+    star_static: {
+      type: [Boolean],
+      "default": false
+    },
+    star_small: {
+      type: [Boolean],
+      "default": false
+    },
+    star_hover: {
+      type: [Boolean],
+      "default": false
+    },
+    selected: {
+      type: [Boolean],
+      "default": false
+    },
+    chosen: {
+      type: [Boolean],
+      "default": false
+    }
   },
   data: function data() {
-    var _L$icon;
+    return {};
+  },
+  methods: {
+    starRating: function starRating() {
+      /* 1. Visualizing things on Hover - See next part for action on click */
+      $('.stars_click li').on('mouseover', function () {
+        var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
+        // Now highlight all the stars that's not after the current hovered star
 
-    return {
-      center: null,
-      url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
-      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      zoom: 12,
-      marker: null,
-      dicon: L.icon((_L$icon = {
-        iconUrl: 'https://www.pngkey.com/png/full/933-9338142_icon-marker-circle.png'
-      }, _defineProperty(_L$icon, "iconUrl", 'https://cdn1.iconfinder.com/data/icons/ui-5/502/marker-512.png'), _defineProperty(_L$icon, "iconSize", [40, 40]), _L$icon)),
-      greenIcon: L.icon({
-        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-      }),
-      redIcon: L.icon({
-        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-      }),
-      goldIcon: L.icon({
-        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png',
-        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-      }),
-      showInside: false,
-      myLocation: "You are here",
-      location: null,
-      gettingLocation: false,
-      errorStr: null
-    };
+        $(this).parent().children('li.star').each(function (e) {
+          if (e < onStar) {
+            $(this).addClass('hover');
+          } else {
+            $(this).removeClass('hover');
+          }
+        });
+      }).on('mouseout', function () {
+        $(this).parent().children('li.star').each(function (e) {
+          $(this).removeClass('hover');
+        });
+      });
+      /* 2. Action to perform on click */
+
+      $('.stars_click li').on('click', function () {
+        var onStar = parseInt($(this).data('value'), 10); // The star currently selected
+
+        var stars = $(this).parent().children('li.star');
+        var i = 0;
+
+        for (i = 0; i < stars.length; i++) {
+          $(stars[i]).removeClass('selected');
+          $(stars[i]).removeClass('chosen');
+        }
+
+        for (i = 0; i < onStar; i++) {
+          $(stars[i]).addClass('selected');
+        } // JUST RESPONSE (Not needed)
+        //var ratingValue = parseInt($('.stars_click li.selected').last().data('value'), 10);
+
+
+        var ratingValue = i;
+        var msg = "Thanks! You are rating this place with " + ratingValue + " stars.";
+        $('.success-box').fadeIn(200);
+        $('.success-box img').attr('src', "https://superiusidea.hr/wp-content/uploads/2014/06/kvacica.png");
+        $('.success-box img').show();
+        $('.success-box div.text-message').html("<span>" + msg + "</span>");
+        $('.StarValue').attr('value', ratingValue);
+      });
+      $('.stars-button').on('click', function () {
+        $('.success-box img').attr('src', "");
+        $('.success-box img').hide();
+      });
+    }
   },
-  methods: {},
-  components: {
-    LMap: vue2_leaflet__WEBPACK_IMPORTED_MODULE_0__["LMap"],
-    LTileLayer: vue2_leaflet__WEBPACK_IMPORTED_MODULE_0__["LTileLayer"],
-    LMarker: vue2_leaflet__WEBPACK_IMPORTED_MODULE_0__["LMarker"],
-    LPopup: vue2_leaflet__WEBPACK_IMPORTED_MODULE_0__["LPopup"],
-    LTooltip: vue2_leaflet__WEBPACK_IMPORTED_MODULE_0__["LTooltip"]
-  },
-  computed: {},
-  events: {},
   mounted: function mounted() {
-    var _this = this;
-
-    this.$getLocation({
-      enableHighAccuracy: true
-    }).then(function (coordinates) {
-      _this.gettingLocation = true;
-      _this.center = L.latLng(coordinates.lat, coordinates.lng); //console.log('mouted-api.sh ', coordinates.lat, coordinates.lng);
-    });
-  },
-  updated: function updated() {
-    var _this2 = this;
-
-    this.$getLocation({
-      enableHighAccuracy: true,
-      timeout: 10000
-    }).then(function (coordinates) {
-      _this2.center = L.latLng(coordinates.lat, coordinates.lng); //console.log('updated-api.sh ', coordinates.lat, coordinates.lng);
-    });
+    this.starRating();
   }
 });
 
@@ -52448,9 +52427,9 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Map-Leaflet.vue?vue&type=template&id=bfb1715e&":
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Star-rating.vue?vue&type=template&id=1641345d&":
 /*!**************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Map-Leaflet.vue?vue&type=template&id=bfb1715e& ***!
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Star-rating.vue?vue&type=template&id=1641345d& ***!
   \**************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -52463,97 +52442,88 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col-md-9" }, [
-      _vm.gettingLocation
-        ? _c(
-            "div",
-            { staticStyle: { height: "800px" }, attrs: { id: "#map" } },
-            [
-              _c(
-                "l-map",
-                { ref: "mymap", attrs: { center: _vm.center, zoom: _vm.zoom } },
-                [
-                  _c("l-tile-layer", {
-                    attrs: { url: _vm.url, attribution: _vm.attribution }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "l-marker",
-                    { attrs: { "lat-lng": _vm.center, icon: _vm.redIcon } },
-                    [_c("l-tooltip", { attrs: { content: _vm.myLocation } })],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _vm._l(_vm.places, function(place) {
-                    return _c(
-                      "li",
-                      { key: place.name },
-                      [
-                        _c(
-                          "l-marker",
-                          {
-                            attrs: {
-                              "lat-lng": { lat: place.lat, lng: place.lng }
-                            }
-                          },
-                          [_c("l-tooltip", { attrs: { content: place.name } })],
-                          1
-                        )
-                      ],
-                      1
-                    )
-                  })
-                ],
-                2
-              )
-            ],
-            1
-          )
-        : _vm._e()
-    ]),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "col-md-3 overflow-auto border-left ",
-        staticStyle: { height: "900px" }
-      },
-      _vm._l(_vm.places, function(place) {
-        return _vm.places
-          ? _c("div", [
-              _c("div", { staticClass: "col-sm my-4" }, [
-                _c("div", { staticClass: "card zoom " }, [
-                  _c("div", { staticClass: "card-body" }, [
-                    _c("h4", { staticClass: "card-title p-2" }, [
-                      _vm._v(_vm._s(place.name))
-                    ]),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "card-text" }, [
-                      _vm._v(_vm._s(place.description))
-                    ]),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "card-text" }, [
-                      _vm._v(_vm._s(place.category_id))
-                    ]),
-                    _vm._v(" "),
-                    _c("button", { staticClass: "btn btn-secondary" }, [
-                      _vm._v("Show me")
-                    ])
-                  ])
-                ])
-              ])
-            ])
-          : _c("div", { staticClass: "card" }, [
-              _c("div", { staticClass: "card-body" }, [
-                _vm._v(
-                  "\n                There are no matching objects\n            "
-                )
-              ])
-            ])
-      }),
-      0
-    )
+  return _c("div", { staticClass: "rating-stars text-center" }, [
+    _c("ul", { class: { stars_click: _vm.star_hover } }, [
+      _c(
+        "li",
+        {
+          class: {
+            chosen: _vm.avg_star >= 1 && _vm.chosen,
+            selected: _vm.avg_star >= 1 && _vm.selected,
+            star: _vm.star_hover,
+            star_hover: _vm.star_hover,
+            star_static: _vm.star_static,
+            star_small: _vm.star_small
+          },
+          attrs: { title: "Awful", "data-value": "1" }
+        },
+        [_c("i", { staticClass: "fa fa-star fa-fw" })]
+      ),
+      _vm._v(" "),
+      _c(
+        "li",
+        {
+          class: {
+            chosen: _vm.avg_star >= 2 && _vm.chosen,
+            selected: _vm.avg_star >= 2 && _vm.selected,
+            star: _vm.star_hover,
+            star_hover: _vm.star_hover,
+            star_static: _vm.star_static,
+            star_small: _vm.star_small
+          },
+          attrs: { title: "Bad", "data-value": "2" }
+        },
+        [_c("i", { staticClass: "fa fa-star fa-fw" })]
+      ),
+      _vm._v(" "),
+      _c(
+        "li",
+        {
+          class: {
+            chosen: _vm.avg_star >= 3 && _vm.chosen,
+            selected: _vm.avg_star >= 3 && _vm.selected,
+            star: _vm.star_hover,
+            star_hover: _vm.star_hover,
+            star_static: _vm.star_static,
+            star_small: _vm.star_small
+          },
+          attrs: { title: "Good", "data-value": "3" }
+        },
+        [_c("i", { staticClass: "fa fa-star fa-fw" })]
+      ),
+      _vm._v(" "),
+      _c(
+        "li",
+        {
+          class: {
+            chosen: _vm.avg_star >= 4 && _vm.chosen,
+            selected: _vm.avg_star >= 4 && _vm.selected,
+            star: _vm.star_hover,
+            star_hover: _vm.star_hover,
+            star_static: _vm.star_static,
+            star_small: _vm.star_small
+          },
+          attrs: { title: "Very good", "data-value": "4" }
+        },
+        [_c("i", { staticClass: "fa fa-star fa-fw" })]
+      ),
+      _vm._v(" "),
+      _c(
+        "li",
+        {
+          class: {
+            chosen: _vm.avg_star >= 5 && _vm.chosen,
+            selected: _vm.avg_star >= 5 && _vm.selected,
+            star: _vm.star_hover,
+            star_hover: _vm.star_hover,
+            star_static: _vm.star_static,
+            star_small: _vm.star_small
+          },
+          attrs: { title: "Excellent!!!", "data-value": "5" }
+        },
+        [_c("i", { staticClass: "fa fa-star fa-fw" })]
+      )
+    ])
   ])
 }
 var staticRenderFns = []
@@ -77048,7 +77018,7 @@ L.Icon.Default.mergeOptions({
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_browser_geolocation__WEBPACK_IMPORTED_MODULE_3___default.a);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('map-component', __webpack_require__(/*! ./components/Map-Leaflet.vue */ "./resources/js/components/Map-Leaflet.vue")["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('star-rating', __webpack_require__(/*! ./components/Star-rating.vue */ "./resources/js/components/Star-rating.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -77058,18 +77028,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('map-component', __webpack_
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app',
   data: {
-    show: false,
     showMap: true,
     showLoc: false,
-    show_monday: false,
-    show_tuesday: false,
-    show_wednesday: false,
-    show_thursday: false,
-    show_friday: false,
-    show_saturday: false,
-    show_sunday: false,
-    defaultlat: 45.099998,
-    defaultlng: 15.200000,
     clat: 45.099998,
     clng: 15.200000,
     center: null,
@@ -77100,7 +77060,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
       popupAnchor: [1, -34],
       shadowSize: [41, 41]
     }),
-    count: 0,
     location: null,
     gettingLocation: false,
     errorStr: null
@@ -77118,9 +77077,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     find: [Boolean, Number]
   },
   methods: {
-    toggleShow: function toggleShow() {
-      this.show = !this.show;
-    },
     toggleShowMap: function toggleShowMap() {
       this.showMap = !this.showMap;
     },
@@ -77156,9 +77112,8 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         if (_this.llat == null || _this.llng == null) {
           _this.center = L.latLng(_this.defaultlat, _this.defaultlng);
           _this.zoom = 5;
-        }
+        } //send to session
 
-        console.log(_this.myLocation, _this.llat); //send to session
 
         $.ajax({
           url: '/getgeo',
@@ -77175,14 +77130,11 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     AdjustCenterForSavedLoc: function AdjustCenterForSavedLoc() {
       if (this.$refs.mylat) this.clat = this.$refs.mylat.value;
       if (this.$refs.mylng) this.clng = this.$refs.mylng.value;
-      console.log(this.clng);
 
       if (this.clat === '' || this.clng === '') {
-        console.log('centardef');
         this.center = L.latLng(this.defaultlat, this.defaultlng);
         this.zoom = 5;
       } else {
-        console.log('centarcc');
         this.center = L.latLng(this.clat, this.clng);
         this.savedLoc = L.latLng(this.clat, this.clng);
       }
@@ -77259,6 +77211,56 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
         success: function success(data) {//alert('success');
         }
       });
+    },
+    starRating: function starRating() {
+      /* 1. Visualizing things on Hover - See next part for action on click */
+      $('#stars li').on('mouseover', function () {
+        var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
+        // Now highlight all the stars that's not after the current hovered star
+
+        $(this).parent().children('li.star').each(function (e) {
+          if (e < onStar) {
+            $(this).addClass('hover');
+          } else {
+            $(this).removeClass('hover');
+          }
+        });
+      }).on('mouseout', function () {
+        $(this).parent().children('li.star').each(function (e) {
+          $(this).removeClass('hover');
+        });
+      });
+      /* 2. Action to perform on click */
+
+      $('#stars li').on('click', function () {
+        var onStar = parseInt($(this).data('value'), 10); // The star currently selected
+
+        var stars = $(this).parent().children('li.star');
+        var i = 0;
+
+        for (i = 0; i < stars.length; i++) {
+          $(stars[i]).removeClass('selected');
+          $(stars[i]).removeClass('chosen');
+        }
+
+        for (i = 0; i < onStar; i++) {
+          $(stars[i]).addClass('selected');
+        } // JUST RESPONSE (Not needed)
+        //var ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
+
+
+        var ratingValue = i;
+        var msg = "Thanks! You are rating this place with " + ratingValue + " stars.";
+        $('.success-box').fadeIn(200);
+        $('.success-box img').attr('src', "https://superiusidea.hr/wp-content/uploads/2014/06/kvacica.png");
+        $('.success-box img').show();
+        $('.success-box div.text-message').html("<span>" + msg + "</span>");
+        $('.StarValue').attr('value', ratingValue);
+      });
+      $('.stars-button').on('click', function () {
+        $('.success-box img').attr('src', "");
+        $('.success-box img').hide();
+      });
     }
   },
   mounted: function mounted() {
@@ -77268,6 +77270,8 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
     this.AdjustCenterForSavedLoc();
     this.GoogleAutocomplete();
     this.GetTimezone();
+    if (this.$refs.savedlocation && this.$refs.savedlocation.checked) this.showLoc = true;
+    this.starRating();
   },
   created: function created() {
     window.addEventListener('scroll', this.scrollNav);
@@ -77275,214 +77279,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   destroyed: function destroyed() {
     window.removeEventListener('scroll', this.scrollNav);
   }
-}); ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*
-$("#multiple_images").on('change', function() {
-
-    var input = document.getElementById( 'multiple_images' );
-    var infoArea = document.getElementById( 'file-upload-filename' );
-    // the change event gives us the input it occurred in
-    var input = event.srcElement;
-
-    if(input.files.length > 1){
-        var fileName = input.files.length + ' files'
-    } else {
-        // the input has an array of files in the `files` property, each one has a name that you can use. We're just using the name here.
-        var fileName = input.files[0].name;
-    }
-
-
-    // use fileName however fits your app best, i.e. add it into a div
-    infoArea.textContent = '- ' + fileName;
-    infoArea.style.display = 'initial';
-    if (fileName.length < 15){
-        document.getElementById( 'length_filename' ).style.width = '40%';
-    } else if (fileName.length < 30) {
-        document.getElementById('length_filename').style.width = '50%';
-    } else if (fileName.length < 50) {
-        document.getElementById('length_filename').style.width = '80%';
-    } else {
-        document.getElementById('length_filename').style.width = '100%';
-    }
 });
-
-$(document).ready(function(){
-    $('#rangeIndicator').on('change', function(e){
-        var id = e.target.value;
-        document.getElementById("rangeValue").innerHTML = id;
-        document.getElementById("inputRangeValue").value = id;
-
-    });
-    $('#rangeIndicator').change();
-});
-*/
-
-$(document).ready(function () {
-  /* 1. Visualizing things on Hover - See next part for action on click */
-  $('#stars li').on('mouseover', function () {
-    var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
-    // Now highlight all the stars that's not after the current hovered star
-
-    $(this).parent().children('li.star').each(function (e) {
-      if (e < onStar) {
-        $(this).addClass('hover');
-      } else {
-        $(this).removeClass('hover');
-      }
-    });
-  }).on('mouseout', function () {
-    $(this).parent().children('li.star').each(function (e) {
-      $(this).removeClass('hover');
-    });
-  });
-  /* 2. Action to perform on click */
-
-  $('#stars li').on('click', function () {
-    var onStar = parseInt($(this).data('value'), 10); // The star currently selected
-
-    var stars = $(this).parent().children('li.star');
-    var i = 0;
-
-    for (i = 0; i < stars.length; i++) {
-      $(stars[i]).removeClass('selected');
-      $(stars[i]).removeClass('chosen');
-    }
-
-    for (i = 0; i < onStar; i++) {
-      $(stars[i]).addClass('selected');
-    } // JUST RESPONSE (Not needed)
-    //var ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
-
-
-    var ratingValue = i;
-    var msg = "Thanks! You are rating this place with " + ratingValue + " stars.";
-    responseMessage(msg);
-    $('.StarValue').attr('value', ratingValue);
-  });
-  $('.stars-button').on('click', function () {
-    console.log('click, clear');
-    $('.success-box img').attr('src', "");
-    $('.success-box img').hide();
-  });
-});
-
-function responseMessage(msg) {
-  $('.success-box').fadeIn(200);
-  $('.success-box img').attr('src', "https://superiusidea.hr/wp-content/uploads/2014/06/kvacica.png");
-  $('.success-box img').show();
-  $('.success-box div.text-message').html("<span>" + msg + "</span>");
-} ///alert fade up
-
-/*
-window.setTimeout(function() {
-    $(".alert").fadeTo(500, 0).slideUp(500, function(){
-        $(this).remove();
-    });
-}, 2000);*/
-////
-// Scrolling Effect for nav
-
-/*
-$(window).on("scroll", function() {
-    if($(window).scrollTop()) {
-        $(".navbar").addClass('bg-black');
-    } else {
-        $(".navbar").removeClass('bg-black');
-    }
-})/*
-
-
-const $dropdown = $(".dropdown");
-const $dropdownToggle = $(".dropdown-toggle");
-const $dropdownMenu = $(".dropdown-menu");
-const showClass = "show";
-
-$(window).on("load resize", function() {
-    if (this.matchMedia("(min-width: 768px)").matches) {
-        $dropdown.hover(
-            function() {
-                const $this = $(this);
-                $this.addClass(showClass);
-                $this.find($dropdownToggle).attr("aria-expanded", "true");
-                $this.find($dropdownMenu).addClass(showClass);
-            },
-            function() {
-                const $this = $(this);
-                $this.removeClass(showClass);
-                $this.find($dropdownToggle).attr("aria-expanded", "false");
-                $this.find($dropdownMenu).removeClass(showClass);
-            }
-        );
-    } else {
-        $dropdown.off("mouseenter mouseleave");
-    }
-});
-
-
-////_________________map______
-/*
-var map = L.map('mapid');
-
-L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
-
-if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition);
-} else {
-    console.log("Geolocation is not supported by this browser.");
-}
-
-
-function showPosition(position) {
-    var lat = position.coords.latitude;
-    var lng = position.coords.longitude;
-    console.log('lat:', lat);
-    console.log('lng:', lng);
-    map.setView([lat,lng], 15);
-    L.marker([lat,lng]).addTo(map);
-}
-
-
-
-/*
-
-var mylocation;
-var radius_circle;
-
-
-function onLocationFound(e)
-
-    {
-        var radius = e.accuracy / 2;
-        var location = e.latlng;
-        if (mylocation) map.removeLayer(mylocation);
-        if (radius_circle) map.removeLayer(radius_circle);
-        mylocation = L.marker(location);
-        map.addLayer(mylocation);
-        radius_circle = L.circle(location, radius);
-        map.addLayer( radius_circle);
-    }
-}
-
-
-function onLocationError(e) {
-    alert(e.message);
-}
-
-$("#locate").on("click", function(){
-    map.on('locationfound', onLocationFound);
-    map.on('locationerror', onLocationError);
-
-    map.locate({setView: true, maxZoom: 16});
-});
-
-*/
 
 /***/ }),
 
@@ -77531,17 +77328,17 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /***/ }),
 
-/***/ "./resources/js/components/Map-Leaflet.vue":
+/***/ "./resources/js/components/Star-rating.vue":
 /*!*************************************************!*\
-  !*** ./resources/js/components/Map-Leaflet.vue ***!
+  !*** ./resources/js/components/Star-rating.vue ***!
   \*************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Map_Leaflet_vue_vue_type_template_id_bfb1715e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Map-Leaflet.vue?vue&type=template&id=bfb1715e& */ "./resources/js/components/Map-Leaflet.vue?vue&type=template&id=bfb1715e&");
-/* harmony import */ var _Map_Leaflet_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Map-Leaflet.vue?vue&type=script&lang=js& */ "./resources/js/components/Map-Leaflet.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Star_rating_vue_vue_type_template_id_1641345d___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Star-rating.vue?vue&type=template&id=1641345d& */ "./resources/js/components/Star-rating.vue?vue&type=template&id=1641345d&");
+/* harmony import */ var _Star_rating_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Star-rating.vue?vue&type=script&lang=js& */ "./resources/js/components/Star-rating.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -77551,9 +77348,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Map_Leaflet_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Map_Leaflet_vue_vue_type_template_id_bfb1715e___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Map_Leaflet_vue_vue_type_template_id_bfb1715e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Star_rating_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Star_rating_vue_vue_type_template_id_1641345d___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Star_rating_vue_vue_type_template_id_1641345d___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -77563,38 +77360,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/Map-Leaflet.vue"
+component.options.__file = "resources/js/components/Star-rating.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/Map-Leaflet.vue?vue&type=script&lang=js&":
+/***/ "./resources/js/components/Star-rating.vue?vue&type=script&lang=js&":
 /*!**************************************************************************!*\
-  !*** ./resources/js/components/Map-Leaflet.vue?vue&type=script&lang=js& ***!
+  !*** ./resources/js/components/Star-rating.vue?vue&type=script&lang=js& ***!
   \**************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Map_Leaflet_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./Map-Leaflet.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Map-Leaflet.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Map_Leaflet_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Star_rating_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./Star-rating.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Star-rating.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Star_rating_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/Map-Leaflet.vue?vue&type=template&id=bfb1715e&":
+/***/ "./resources/js/components/Star-rating.vue?vue&type=template&id=1641345d&":
 /*!********************************************************************************!*\
-  !*** ./resources/js/components/Map-Leaflet.vue?vue&type=template&id=bfb1715e& ***!
+  !*** ./resources/js/components/Star-rating.vue?vue&type=template&id=1641345d& ***!
   \********************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Map_Leaflet_vue_vue_type_template_id_bfb1715e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Map-Leaflet.vue?vue&type=template&id=bfb1715e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Map-Leaflet.vue?vue&type=template&id=bfb1715e&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Map_Leaflet_vue_vue_type_template_id_bfb1715e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Star_rating_vue_vue_type_template_id_1641345d___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Star-rating.vue?vue&type=template&id=1641345d& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Star-rating.vue?vue&type=template&id=1641345d&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Star_rating_vue_vue_type_template_id_1641345d___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Map_Leaflet_vue_vue_type_template_id_bfb1715e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Star_rating_vue_vue_type_template_id_1641345d___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

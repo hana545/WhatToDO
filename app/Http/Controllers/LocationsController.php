@@ -18,12 +18,15 @@ class LocationsController extends Controller
             'name' => 'required|min:3',
             'address' => 'required|min:3',
         ]);
+/*
         $address = $data['address'];
         $address = str_replace(" ","+", $address);
         $response = Http::get('https://maps.googleapis.com/maps/api/geocode/json?address='.$address.'&key=AIzaSyAY9df1pMrDrLQ7JcEFuBZh0CdtpUFMdAY');
         $latlng = $response->json()['results'][0]['geometry']['location'];
         $lat = $latlng['lat'];
-        $lng = $latlng['lng'];
+        $lng = $latlng['lng'];*/
+        $lat = Geocoder::getCoordinatesForAddress($data['address'])['lat'];
+        $lng = Geocoder::getCoordinatesForAddress($data['address'])['lng'];
         $location = Location::create([
             'name' => $data['name'],
             'address' => $data['address'],
@@ -49,6 +52,7 @@ class LocationsController extends Controller
         } else {
             $address = $data['address'];
             $address = str_replace(" ","+", $address);
+            $address = utf8_decode($address);
             $response = Http::get('https://maps.googleapis.com/maps/api/geocode/json?address='.$address.'&key=AIzaSyAY9df1pMrDrLQ7JcEFuBZh0CdtpUFMdAY');
             $latlng = $response->json()['results'][0]['geometry']['location'];
             $lat = $latlng['lat'];

@@ -28,6 +28,8 @@
                 <div class="text-danger pb-3">{{ $errors->first('new-password') }}</div>
                 <div class="text-danger pb-3">{{ $errors->first('new-password_confirmation') }}</div>
                 <div class="text-danger pb-3">{{ $errors->first('username') }}</div>
+                <div class="text-danger pb-3">{{ $errors->first('name') }}</div>
+                <div class="text-danger pb-3">{{ $errors->first('address') }}</div>
             </div>
             <ul class="nav nav-pills nav-fill" id="v-pills-tab">
 
@@ -83,7 +85,7 @@
                     @include('user.user_settings',  ['user' => $user])
                 </div>
                 @foreach($user->reviews as $review)
-                    @include('user.my_review',  ['review' => $review])
+                    @include('reviews.my_review',  ['review' => $review])
                 @endforeach
                 @foreach($user->places as $place)
                     @include('places.details',  ['place' => $place])
