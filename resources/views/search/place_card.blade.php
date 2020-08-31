@@ -1,5 +1,5 @@
 
-<div class="my-3" v-bind:class="{ 'col-md' : !showMap}">
+<div class="py-3" v-bind:class="{ 'col-md-3' : !showMap}">
     <div class="card zoom ">
         <div class="card-body">
             <div class='text-center row'>

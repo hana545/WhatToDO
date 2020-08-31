@@ -6451,7 +6451,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css?66f3":
+/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css":
 /*!*******************************************************************************************************************************!*\
   !*** ./node_modules/css-loader??ref--6-1!./node_modules/postcss-loader/src??ref--6-2!./node_modules/leaflet/dist/leaflet.css ***!
   \*******************************************************************************************************************************/
@@ -31622,7 +31622,7 @@ window.L = exports;
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../css-loader??ref--6-1!../../postcss-loader/src??ref--6-2!./leaflet.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css?66f3");
+var content = __webpack_require__(/*! !../../css-loader??ref--6-1!../../postcss-loader/src??ref--6-2!./leaflet.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -77213,10 +77213,10 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
       });
     },
     starRating: function starRating() {
-      /* 1. Visualizing things on Hover - See next part for action on click */
+      /* 1. Visualizing things on hover*/
       $('#stars li').on('mouseover', function () {
-        var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
-        // Now highlight all the stars that's not after the current hovered star
+        var onStar = parseInt($(this).data('value'), 10); // the star currently mouse on
+        // now highlight all the stars before hovered star
 
         $(this).parent().children('li.star').each(function (e) {
           if (e < onStar) {
@@ -77233,7 +77233,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
       /* 2. Action to perform on click */
 
       $('#stars li').on('click', function () {
-        var onStar = parseInt($(this).data('value'), 10); // The star currently selected
+        var onStar = parseInt($(this).data('value'), 10); //the star currently selected
 
         var stars = $(this).parent().children('li.star');
         var i = 0;
@@ -77245,9 +77245,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
 
         for (i = 0; i < onStar; i++) {
           $(stars[i]).addClass('selected');
-        } // JUST RESPONSE (Not needed)
-        //var ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
-
+        }
 
         var ratingValue = i;
         var msg = "Thanks! You are rating this place with " + ratingValue + " stars.";

@@ -72,12 +72,12 @@
         </div>
         <div class="container-fluid justify-content-center m-1 mb-0 ">
 
-            <a href="#map" class=""><button class="btn btn-blue m-2"  v-on:click="showMe()" id="locate">Show my location!</button></a>
-            @if($mysaveloc) <button class="btn btn-blue m-2"  v-on:click="showPlace({{$lat}},{{$lng}})"><span v-if="showMap">Show {{$mysavelocname}}</span></button> @endif
+            <a href="#map" id="btn_myLocation"><button class="btn btn-blue m-2" v-show="showMap" v-on:click="showMe()" id="locate">Show my location!</button></a>
+            @if($mysaveloc)<a href="#map" class=""> <button class="btn btn-blue m-2" v-show="showMap"  v-on:click="showPlace({{$lat}},{{$lng}})"><span>Show {{$mysavelocname}}</span></button></a> @endif
              <button class="btn btn-blue m-2"  v-on:click="toggleShowMap()"><span v-if="showMap">Hide map</span><span v-if="!showMap">Show map</span></button>
 
             <div class="row">
-                <div class="overflow-auto" v-bind:class="{ 'col-md-3' : showMap, 'row': !showMap}" @if($places->count() > 3) style="height: 700px" @endif>
+                <div id="places_list" class="overflow-auto" v-bind:class="{ 'col-md-3 px-2' : showMap, 'row mx-3 h-75': !showMap}" @if($places->count() > 3) style="height: 700px" @endif>
                     @if(!$find)
                         <div class="container text-white" >
                             <div class=" text-center" >
@@ -143,9 +143,9 @@
                                 @endforeach
                             @endif
                             <l-control position="topleft" >
-                                <button v-on:click="showMe"  class="btn m-2" style="background: honeydew">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                </button>
+                                <a href="#btn_myLocation" class="btn m-2" style="background: honeydew">
+                                    <i class="fas fa-backspace"></i>
+                                </a>
                             </l-control>
                             <l-control position="topright" class="p-2" style="background: honeydew">
                                 <h4>Legend</h4>
