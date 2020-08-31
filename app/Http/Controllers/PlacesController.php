@@ -85,13 +85,10 @@ class PlacesController extends Controller
             'category' => 'required',
             'multiple_images.*' => 'sometimes|file|image|max:8000',
         ]);
-        $address = $data['address'];
-        $address = str_replace(" ","+", $address);
-        $response = Http::get('https://maps.googleapis.com/maps/api/geocode/json?address='.$address.'&key=AIzaSyAY9df1pMrDrLQ7JcEFuBZh0CdtpUFMdAY');
 
-        $latlng = $response->json()['results'][0]['geometry']['location'];
-        $lat = $latlng['lat'];
-        $lng = $latlng['lng'];
+        $lat = Geocoder::getCoordinatesForAddress($data['address'])['lat'];
+        $lng = Geocoder::getCoordinatesForAddress($data['address'])['lng'];
+
         $place = Place::create([
             'name' =>  $data['name'],
             'search_name' =>  $data['name'],
@@ -292,12 +289,8 @@ class PlacesController extends Controller
             $lat = $place->lat;
             $lng = $place->lng;
         } else {
-            $address = $data['address'];
-            $address = str_replace(" ","+", $address);
-            $response = Http::get('https://maps.googleapis.com/maps/api/geocode/json?address='.$address.'&key=AIzaSyAY9df1pMrDrLQ7JcEFuBZh0CdtpUFMdAY');
-            $latlng = $response->json()['results'][0]['geometry']['location'];
-            $lat = $latlng['lat'];
-            $lng = $latlng['lng'];
+            $lat = Geocoder::getCoordinatesForAddress($data['address'])['lat'];
+            $lng = Geocoder::getCoordinatesForAddress($data['address'])['lng'];
         }
         $place->update([
             'name' => $data['name'],
