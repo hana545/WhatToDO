@@ -10,16 +10,13 @@ use App\User;
 
 class AdminController extends Controller
 {
+
     public function manageAdminsUsers(){
         $users = User::where('type', 0)->get();
         $admins = User::where('type', 1)->get();
         $authuser = Auth::user();
      //   dd($users);
         return view('admin.manageAdminsUsers', compact('users', 'admins', 'authuser'));
-
-    }
-
-    public function destroy(User $user){
 
     }
 

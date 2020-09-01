@@ -4,23 +4,23 @@
 
 
     <div class="container">
-        <div class=" order-lg-2 justify-content-center my-5 text-light">
+        <div class=" order-lg-2 justify-content-center mt-5 text-light">
 
             <div class="text-center">
 
                 @if(session()->has('message'))
-                    <div class="alert alert-success" role="alert" style="border-width: 1px; border-color: #27864f">
+                    <div class="alert alert-success timeout" role="alert" style="border-width: 1px; border-color: #27864f">
                         <strong>Success</strong> {{ session()->get('message') }}
                     </div>
                 @endif
                 @if(session()->has('success'))
-                    <div class="alert alert-success" role="alert" style="border-width: 1px; border-color: #27864f">
+                    <div class="alert alert-success timeout" role="alert" style="border-width: 1px; border-color: #27864f">
                         <strong>Success</strong> {{ session()->get('success') }}
                     </div>
                 @endif
                 @if(session()->has('error'))
-                    <div class="alert alert-danger" role="alert" style="border-width: 1px; border-color: #27864f">
-                        <strong>Success</strong> {{ session()->get('error') }}
+                    <div class="alert alert-danger timeout" role="alert" style="border-width: 1px; border-color: #27864f">
+                        <strong>Error</strong> {{ session()->get('error') }}
                     </div>
                 @endif
 
@@ -28,6 +28,8 @@
                 <div class="text-danger pb-3">{{ $errors->first('new-password') }}</div>
                 <div class="text-danger pb-3">{{ $errors->first('new-password_confirmation') }}</div>
                 <div class="text-danger pb-3">{{ $errors->first('username') }}</div>
+                <div class="text-danger pb-3">{{ $errors->first('name') }}</div>
+                <div class="text-danger pb-3">{{ $errors->first('address') }}</div>
             </div>
             <ul class="nav nav-pills nav-fill" id="v-pills-tab">
 
@@ -50,13 +52,13 @@
                 <div class="tab-pane active" id="default">
                     <div class="text-white m-4 p-5">
                         <div class="text-center">
-                            <h3>Hello {{ Auth::user()->name }}.</h3>
+                            <h3> Hello {{ Auth::user()->name }}.</h3>
+                            <img class="img-fluid" src="{{asset('images/illustrations/mobile_user.svg')}}" style="height: 180px; width: 410px;">
 
-                            <img class=" m-3 " style="height: 225px; " src="{{asset('images/illustrations/mobile_user.svg')}}">
-                            @if(Auth::user()->suspended == true)
+                        @if(Auth::user()->suspended == true)
                                 <h5 class="text-danger">Your account have been suspended. You cant add new places, reviews or save you locations any more</h5>
                             @else
-                                <h5>Here you can edit your reveiws, update you account and so much more...</h5>
+                                <h5>Here you can edit your reviews, update you account and so much more...</h5>
                             @endif
 
                         </div>
@@ -83,7 +85,7 @@
                     @include('user.user_settings',  ['user' => $user])
                 </div>
                 @foreach($user->reviews as $review)
-                    @include('user.my_review',  ['review' => $review])
+                    @include('reviews.my_review',  ['review' => $review])
                 @endforeach
                 @foreach($user->places as $place)
                     @include('places.details',  ['place' => $place])

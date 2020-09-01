@@ -40,7 +40,9 @@ class Place extends Model
         return $this->hasMany(Website::class);
     }
 
-    //workhours
+    public function workhour() {
+        return $this->hasOne(Workhour::class);
+    }
 
     public function reviews() {
         return $this->hasMany(Review::class);

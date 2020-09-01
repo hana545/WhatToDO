@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Location;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Geocoder\Facades\Geocoder;
+
+use Illuminate\Support\Facades\Http;
+use function MongoDB\BSON\toJSON;
 
 class LocationsController extends Controller
 {
@@ -15,11 +19,14 @@ class LocationsController extends Controller
             'address' => 'required|min:3',
         ]);
 
+        $lat = Geocoder::getCoordinatesForAddress($data['address'])['lat'];
+        $lng = Geocoder::getCoordinatesForAddress($data['address'])['lng'];
+
         $location = Location::create([
             'name' => $data['name'],
             'address' => $data['address'],
-            'lat' => 45.3190435,
-            'lng' => 14.475843,
+            'lat' => $lat,
+            'lng' => $lng,
             'user_id' => Auth::user()->id,
         ]);
 
@@ -34,10 +41,18 @@ class LocationsController extends Controller
         ]);
 
         $user = Auth::user();
-
+        if ($location->address == $data['address']){
+            $lat = $location->lat;
+            $lng = $location->lng;
+        } else {
+            $lat = Geocoder::getCoordinatesForAddress($data['address'])['lat'];
+            $lng = Geocoder::getCoordinatesForAddress($data['address'])['lng'];
+        }
         $location->update([
             'name' => $data['name'],
             'address' => $data['address'],
+            'lat' => $lat,
+            'lng' => $lng,
         ]);
 
         return redirect('/user/profile')->with('message', 'You updated a location '. $location->name);

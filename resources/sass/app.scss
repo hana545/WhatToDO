@@ -48,9 +48,9 @@ body {
 }
 
 .blue-tag {
-    color: rgb(0,0,0,0.8);
-    background-color: rgba(38,191,186,1);
-    border-color:rgba(38,191,186,1);
+    color: whitesmoke;
+    background-color:darkslategrey;
+
 
 }
 //simple button - light blue (black) - hover:dark blue(white)
@@ -110,12 +110,13 @@ body {
     color: darkslategrey;//#0f6674;
     background-color: lightblue;
     border: #0f6674;
-    font-weight: lighter;
+    font-weight: bolder;
 }
 .btn-outline-bluedark:active,
 .btn-outline-bluedark:focus,
 .btn-outline-bluedark:hover {
     color: whitesmoke;
+    font-weight: bolder;
     background-color: #0f6674;
 }
 //change active color
@@ -164,6 +165,10 @@ body {
     background-color: rgb(0,0,0,0.5);
 }
 
+.grey-box {
+    background-color: rgb(0,0,0,0.2);
+}
+
 .zoom:hover{
     transform: scale(1.1);
     transition: all ease 400ms;
@@ -191,7 +196,14 @@ hr.light-muted-100{
     maring-top: .8rem;
     margin-bottom: 1rem;
 }
-
+//for legend on map
+.dot {
+    height: 10px;
+    width: 10px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+}
 ////////////navbar
 
 .navbar .nav-item:not(:last-child) {

@@ -166,7 +166,6 @@ return [
          * Package Service Providers...
          */
          Spatie\Geocoder\GeocoderServiceProvider::class,
-        GoogleMaps\ServiceProvider\GoogleMapsServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -230,7 +229,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         
         'Geocoder' => Spatie\Geocoder\Facades\Geocoder::class,
-        'GoogleMaps' => GoogleMaps\Facade\GoogleMapsFacade::class,
     ],
 
 ];

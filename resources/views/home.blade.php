@@ -2,6 +2,21 @@
 
 @section('content')
     <div class=" jumbotron-fluid bg-transparent" style="overflow: hidden">
+        @if(session()->has('message'))
+            <div class="alert alert-success" role="alert" style="border-width: 1px; border-color: #27864f">
+                <strong>Success</strong> {{ session()->get('message') }}
+            </div>
+        @endif
+        @if(session()->has('success'))
+            <div class="alert alert-success" role="alert" style="border-width: 1px; border-color: #27864f">
+                <strong>Success</strong> {{ session()->get('success') }}
+            </div>
+        @endif
+        @if(session()->has('error'))
+            <div class="alert alert-danger" role="alert" style="border-width: 1px; border-color: #27864f">
+                <strong>Error</strong> {{ session()->get('error') }}
+            </div>
+        @endif
         <div class="mt-5 container text-center">
             <h1  style="color: whitesmoke">Are you bored?</h1>
             <p class="lead" style="font-weight: revert; color: #9ebcdb">Search interesting places around you</p>

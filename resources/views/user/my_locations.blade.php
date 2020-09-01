@@ -22,11 +22,12 @@
                         <div class="col-5">
                             {{$location->address}}
                         </div>
-
-                        <div class="col-3">
+                        <form action="/location/delete/{{$location->id}}" method="post" class="col-3">
                             @if(Auth::user()->suspended == false)<div class="btn  btn-sm  btn-blue" data-toggle="modal" data-target="#modalLocation{{$location->id}}">Edit</div>@endif
-                            <a href="/location/delete/{{$location->id}}"><div class="btn  btn-sm  btn-danger"><i class="fa fa-trash"></i></div></a>
-                        </div>
+                            <button class="btn btn-sm btn-danger" type="submit"><i class="fa fa-trash"></i></button>
+                            @method('delete')
+                            @csrf
+                        </form>
                     </li>
                     <hr class="light-muted-100">
 

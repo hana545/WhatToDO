@@ -2,10 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Support\Facades\Auth;
 use Closure;
 
-class IsAdmin
+class HttpsProtocolMiddleware
 {
     /**
      * Handle an incoming request.
@@ -14,13 +13,13 @@ class IsAdmin
      * @param  \Closure  $next
      * @return mixed
      */
-
     public function handle($request, Closure $next)
     {
-        if (Auth::user() &&  Auth::user()->type == 1) {
-            return $next($request);
+        if (!$request->secure() && app()->environment('production')) {
+            return redirect()->secure($request->getRequestUri());
         }
 
-        return redirect('/')->with('error', 'You are not an admin');
+        return $next($request);
+
     }
 }

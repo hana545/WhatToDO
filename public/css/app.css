@@ -23936,9 +23936,8 @@ body {
 }
 
 .blue-tag {
-  color: rgba(0, 0, 0, 0.8);
-  background-color: #26bfba;
-  border-color: #26bfba;
+  color: whitesmoke;
+  background-color: darkslategrey;
 }
 
 .btn-blue {
@@ -23996,13 +23995,14 @@ body {
   color: darkslategrey;
   background-color: lightblue;
   border: #0f6674;
-  font-weight: lighter;
+  font-weight: bolder;
 }
 
 .btn-outline-bluedark:active,
 .btn-outline-bluedark:focus,
 .btn-outline-bluedark:hover {
   color: whitesmoke;
+  font-weight: bolder;
   background-color: #0f6674;
 }
 
@@ -24054,6 +24054,10 @@ body {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
+.grey-box {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
 .zoom:hover {
   transform: scale(1.1);
   transition: all ease 400ms;
@@ -24083,6 +24087,14 @@ hr.light-muted-100 {
   opacity: 50%;
   maring-top: 0.8rem;
   margin-bottom: 1rem;
+}
+
+.dot {
+  height: 10px;
+  width: 10px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
 }
 
 .navbar .nav-item:not(:last-child) {

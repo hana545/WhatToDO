@@ -18,8 +18,8 @@ class CreatePlacesTable extends Migration
             $table->string('name');
             $table->string('search_name');
             $table->string('address');
-            $table->decimal('lat', 12, 6)->nullable();
-            $table->decimal('lng', 12, 6)->nullable();
+            $table->decimal('lat', 12, 6);
+            $table->decimal('lng', 12, 6);
             $table->string('description');
             $table->longText('images')->nullable();
             $table->integer('user_id')->unsigned();

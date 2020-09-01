@@ -56,11 +56,11 @@
                                         </div>
                                         @if($user->suspended == false)
                                         <div class="col-sm-2">
-                                            <a href="/user/suspend/{{$user->id}}"><div class="btn btn-danger">Suspend</div></a>
+                                            <a href="/admin/suspend/{{$user->id}}"><div class="btn btn-danger">Suspend</div></a>
                                         </div>
                                         @else
                                             <div class="col-sm-2">
-                                                <a href="/user/unsuspend/{{$user->id}}"><div class="btn btn-outline-danger" style="background: honeydew">Unuspend</div></a>
+                                                <a href="/admin/unsuspend/{{$user->id}}"><div class="btn btn-outline-danger" style="background: honeydew">Unuspend</div></a>
                                             </div>
                                         @endif
                                     </li>
@@ -85,7 +85,7 @@
                                             {{$admin->email}}
                                         </div>
                                         <div class="col-md-2">
-                                            @if($admin->id != $authuser->id)<a href="#"><div class="btn btn-danger">Suspend</div></a>@endif
+
                                         </div>
                                     </li>
                                     <hr class="light-muted-100">
