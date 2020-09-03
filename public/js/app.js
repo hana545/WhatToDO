@@ -77030,6 +77030,8 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   data: {
     showMap: true,
     showLoc: false,
+    defaultlat: 45.099998,
+    defaultlng: 15.200000,
     clat: 45.099998,
     clng: 15.200000,
     center: null,
@@ -77133,7 +77135,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
 
       if (this.clat === '' || this.clng === '') {
         this.center = L.latLng(this.defaultlat, this.defaultlng);
-        this.zoom = 5;
+        this.zoom = 3;
       } else {
         this.center = L.latLng(this.clat, this.clng);
         this.savedLoc = L.latLng(this.clat, this.clng);

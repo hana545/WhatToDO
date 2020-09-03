@@ -1,14 +1,14 @@
 <div id="modalLocation{{$location->id}}" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content background-color-darkblue" >
-            <div class="modal-header text-center">
+            <div class="modal-header text-center ">
                 <h3 class="modal-title card-element-title text-white"> <strong>Edit {{$location->name}}</strong></h3>
 
                 <button type="button" class="btn btn-secondary float-lg-left" data-dismiss="modal"><i class="fas fa-times-circle"></i></button>
             </div>
             <div class="modal-body">
 
-                <div class="card-body">
+                <div class="card-body text-white">
                     <form role="form" method="POST" action="/location/update/{{$location->id}}" novalidate class="form-horizontal">
 
                         @csrf

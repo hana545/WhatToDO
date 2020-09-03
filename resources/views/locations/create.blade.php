@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body">
 
-                <div class="card-body">
+                <div class="card-body text-white">
                     <form role="form" method="POST" action="{{ route('store_location') }}" novalidate class="form-horizontal">
 
                         @csrf

@@ -47,9 +47,11 @@ Vue.component('star-rating', require('./components/Star-rating.vue').default);
 const app = new Vue({
     el: '#app',
     data: {
-
         showMap: true,
         showLoc: false,
+
+        defaultlat: 45.099998,
+        defaultlng: 15.200000,
 
         clat: 45.099998,
         clng: 15.200000,
@@ -125,12 +127,16 @@ const app = new Vue({
         },
 
         GetLocation(){
+
+
             this.$getLocation({enableHighAccuracy: true})
                 .then(coordinates => {
                     this.gettingLocation = true;
                     this.llat = coordinates.lat;
                     this.llng = coordinates.lng;
                     this.myLocation = L.latLng(this.llat, this.llng);
+
+
 
                     if(this.llat == null || this.llng == null){
                         this.center = L.latLng(this.defaultlat, this.defaultlng);
@@ -150,6 +156,8 @@ const app = new Vue({
                             }
                         });
                     });
+
+
         },
         AdjustCenterForSavedLoc: function(){
             if(this.$refs.mylat) this.clat = this.$refs.mylat.value;
@@ -157,7 +165,7 @@ const app = new Vue({
 
             if(this.clat === '' || this.clng === ''){
                 this.center = L.latLng(this.defaultlat, this.defaultlng);
-                this.zoom = 5;
+                this.zoom = 3;
             } else {
                 this.center = L.latLng(this.clat, this.clng);
                 this.savedLoc  = L.latLng(this.clat, this.clng);
@@ -226,6 +234,8 @@ const app = new Vue({
                 var autocomplete = new google.maps.places.Autocomplete(input1);
             }
         },
+
+
         ChangeRange: function (event) {
             var range = event.target.value;
             document.getElementById("rangeValue").innerHTML = range;
