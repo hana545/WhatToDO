@@ -2,7 +2,7 @@
     <div class="card-header text-center">
         @if(Auth::user()->suspended == false)
             @if($user->reviews->first())
-                <h4>{{ __('This is a list of all your reveiws') }}</h4>
+                <h4>{{ __('This is a list of all your reviews') }}</h4>
             @else
                 <h4>{{ __('You dont have any reviews yet. Go search and review') }}</h4>
             @endif

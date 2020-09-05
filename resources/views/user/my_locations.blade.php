@@ -2,7 +2,7 @@
     <div class="card-header text-center">
         @if(Auth::user()->suspended == false)
             @if($user->locations->first())
-                <h4>{{ __('This is a list of all your places') }}</h4>
+                <h4>{{ __('This is a list of all your locations') }}</h4>
             @else
                 <h4>{{ __('You didnt save any location. Save some') }}</h4>
             @endif

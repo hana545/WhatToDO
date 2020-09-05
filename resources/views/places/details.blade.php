@@ -65,7 +65,7 @@
                             <div class="row">
                                 <div class="col-4   text-center border-right text-white">
                                     <div class="p-2 mt-2">
-                                        <p> <i class="fas fa-th-list"></i> <strong>Phone:</strong></p>
+                                        <p> <i class="fas fa-phone-alt"> </i><strong> &nbsp Phone:</strong></p>
                                     </div>
                                 </div>
                                 <div class="col-8   text-center text-white">
@@ -81,7 +81,7 @@
                             <div class="row">
                                 <div class="col-4   text-center border-right text-white">
                                     <div class="p-2">
-                                        <p> <i class="fas fa-th-list"></i> <strong>Email:</strong></p>
+                                        <p> <i class="fas fa-at"></i><strong> &nbsp Email:</strong></p>
                                     </div>
                                 </div>
                                 <div class="col-8   text-center text-white">
@@ -97,7 +97,7 @@
                             <div class="row">
                                 <div class="col-4   text-center border-right text-white">
                                     <div class="p-2">
-                                        <p> <i class="fas fa-th-list"></i> <strong>Websites:</strong></p>
+                                        <p><i class="fas fa-at"></i> <strong> &nbsp Websites:</strong></p>
                                     </div>
                                 </div>
                                 <div class="col-8  text-center text-white">

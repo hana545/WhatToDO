@@ -229,13 +229,15 @@ class HomeController extends Controller
             $daystart2 = strtolower(date("l", $t)) . '_start2';
             $dayend2 = strtolower(date("l", $t)) . '_end2';
             $t = date("H:i", $t);
+
             $place->open = 0;
             if ($place->workhour->$daystart1 && $place->workhour->$dayend1) {
-                if ($place->workhour->$daystart1->format('H:i') <= $t && $place->workhour->$dayend1 >= $t) {
+                if ($place->workhour->$daystart1->format('H:i') <= $t && $place->workhour->$dayend1->format('H:i') >= $t) {
                     $place->open = 1;
+
                 }
             } else if ($place->workhour->$daystart2 && $place->workhour->$dayend2) {
-                if ($place->workhour->$daystart2->format('H:i') <= $t && $place->workhour->$dayend2 >= $t) {
+                if ($place->workhour->$daystart2->format('H:i') <= $t && $place->workhour->$dayend2->format('H:i') >= $t) {
                     $place->open = 1;
                 }
             }

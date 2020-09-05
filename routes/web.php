@@ -43,10 +43,10 @@ Route::delete('/category/delete/{category}', 'TagCategoryController@destroyCateg
 //for places/objects
 Route::get('/place/create', 'PlacesController@create')->name('add_object')->middleware([ 'auth', 'suspended']);
 Route::post('/place/store', 'PlacesController@store')->name('store_object')->middleware([ 'auth', 'suspended']);
-Route::get('/place/edit/{place}', 'PlacesController@edit')->name('edit_object')->middleware([ 'auth', 'suspended']);
-Route::post('/place/update/{place}', 'PlacesController@update')->name('update_object')->middleware([ 'auth', 'suspended']);
-Route::delete('/search/place/delete/{place}', 'PlacesController@destroy_from_search')->name('delete_object_search')->middleware('auth')->middleware('admin');
-Route::delete('/user/place/delete/{place}', 'PlacesController@destroy_from_userProfile')->name('delete_object_userProfile')->middleware('auth');;
+Route::get('/place/edit/{place}', 'PlacesController@edit')->middleware([ 'auth', 'suspended']);
+Route::post('/place/update/{place}', 'PlacesController@update')->middleware([ 'auth', 'suspended']);
+Route::delete('/search/place/delete/{place}', 'PlacesController@destroy_from_search')->middleware([ 'auth', 'admin']);
+Route::delete('/user/place/delete/{place}', 'PlacesController@destroy_from_userProfile')->middleware('auth');
 
 
 //for reviews

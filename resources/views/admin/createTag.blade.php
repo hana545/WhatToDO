@@ -16,11 +16,15 @@ $user = Auth::user();
                         <h2>Create a new tag</br></h2>
                     </div>
                     @if(session()->has('message'))
-                        <div class="alert alert-success" role="alert" style="border-width: 1px; border-color: #27864f">
+                        <div class="alert alert-success timeout" role="alert" style="border-width: 1px; border-color: #27864f">
                             <strong>Success</strong> {{ session()->get('message') }}
                         </div>
                     @endif
-
+                    @if(session()->has('error'))
+                        <div class="alert alert-danger timeout" role="alert" style="border-width: 1px; border-color: #27864f">
+                            <strong>Error</strong> {{ session()->get('error') }}
+                        </div>
+                    @endif
                     <form action="{{route('store_tag')}}" method="POST">
 
                             <label for='name'>Name:</label>

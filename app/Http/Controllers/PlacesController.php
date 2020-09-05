@@ -23,16 +23,12 @@ class PlacesController extends Controller
     }
 
     public function create(){
-        $days = ['Monday', 'Tuesday', 'Wendseday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
         $categories = Category::all()->sortBy('name');
         $tags = Tag::all()->sortBy('name');
 
-        $place= new Place;
-        $workhours = new Workhour;
-        $place->workhours = $this->CheckWorkhours($workhours);
-        $update=false;
-        return view('places.create', compact('days','categories', 'tags', 'update', 'place'));
+        return view('places.create', compact('categories', 'tags'));
     }
+
     public function store(){
         $user = Auth::user();
 
@@ -46,6 +42,8 @@ class PlacesController extends Controller
             'phone2' => 'nullable|numeric',
             'email2' => 'nullable|min:3|max:40|email',
             'website2' => 'nullable|min:3|max:70|url',
+            'category' => 'required',
+            'multiple_images.*' => 'sometimes|file|image|max:8000',
 
             'monday-start1' => 'nullable|date_format:H:i|required_with:monday-end1',
             'monday-end1' => 'nullable|date_format:H:i|after:monday-start1|required_with:monday-start1',
@@ -82,8 +80,7 @@ class PlacesController extends Controller
             'sunday-start2' => 'nullable|date_format:H:i|after:sunday-end1|required_with:sunday-end2',
             'sunday-end2' => 'nullable|date_format:H:i|after:sunday-start2|required_with:sunday-start2',
 
-            'category' => 'required',
-            'multiple_images.*' => 'sometimes|file|image|max:8000',
+
         ]);
 
         $lat = Geocoder::getCoordinatesForAddress($data['address'])['lat'];
@@ -102,19 +99,16 @@ class PlacesController extends Controller
         ]);
 
         if(request()->has('multiple_images')) {
-            // dd('uco');
             foreach($data['multiple_images'] as $img) {
 
                 $img_name = $img->store('uploads', 'public');
                 $img_data[] = $img_name;
             }
 
-
             $place->images = json_encode($img_data);
             $place->save();
-           // dd( $place->images);
+
         }
-       // $place->save();
 
         if(!is_null($data['phone1'])) {
             $phone1 = Phone::create([
@@ -223,13 +217,13 @@ class PlacesController extends Controller
     }
 
     public function edit(Place $place){
-        $days = ['Monday', 'Tuesday', 'Wendseday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
         $categories = Category::all();
         $tags = Tag::all();
         $place->workhours = [];
         if($place->workhour) $place->workhours = $this->CheckWorkhours($place->workhour);
         $update=true;
-        return view('places.create', compact('days','categories', 'tags', 'place', 'update'));
+        return view('places.edit', compact('categories', 'tags', 'place', 'update'));
     }
     public function update(Place $place){
 
