@@ -17,7 +17,7 @@
                                     <form @if( $place->hasReview) action="/search/review/update/{{$place->UserReview->id}}"  @else action="/review/store/{{$place->id}}" @endif method="POST">
                                         <section class='rating-widget'>
                                             <!-- Rating Stars Box -->
-                                            @include('reviews.star_hover_rating', ['star' => $place->avgStar ?? 0])
+                                            @include('reviews.star_hover_rating', ['star' => $place->UserReview->star ?? 0])
 
                                             <div class='success-box'>
                                                 <img alt='tick image'class="tick_image" width='32' style="display: none;"/>
