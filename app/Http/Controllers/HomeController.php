@@ -128,6 +128,7 @@ class HomeController extends Controller
         $mysaveloc = false;
         $mysavelocname = 'My saved location';
         if(request('location') != 1){
+            if (!request('savedLocation')) return redirect('/search')->with('error', 'Choose your saved location');
             $savedLocationString = request('savedLocation');
             $savedLocation = json_decode($savedLocationString, true);
             $mysaveloc = true;

@@ -76,6 +76,18 @@
                                 @endforeach
                             </div>
                         </div>
+                        <div class="row ">
+                            <div class="col-4   text-center border-right text-white">
+                                <div class="p-2">
+                                    <p> <i class="fas fa-address-card"> </i>  <strong>Created by:</strong></p>
+                                </div>
+                            </div>
+                            <div class="col-8  text-center text-white">
+                                <div class="p-2">
+                                    <p>{{$place->user->email}}</p>
+                                </div>
+                            </div>
+                        </div>
                         @if ($place->phones->isNotEmpty() || $place->emails->isNotEmpty() || $place->website->isNotEmpty())
                             <div class="p-3 border-bottom border-top text-center text-white-muted grey-box">
                                 <h6> <i>Contact</i></h6>

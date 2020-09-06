@@ -32,7 +32,10 @@ $user = Auth::user();
                                 </h6>
                                 <h6 class="card-text text-muted row">
                                     <p class="col-sm-5"> <i class="fas fa-tag"></i>   {{ $place->category->name }}</p>
+                                <h6 class="card-text text-muted row">
+                                    <p class="col-sm"> <i class="fas fa-address-card"> </i> {{$place->user->email}}</p>
                                 </h6>
+
                                 <form action="approve/place/delete/{{$place->id}}" method="post" class="">
                                     <button type="button" class="btn btn-lightblue  btn-md my-2 ml-4 center-block" data-toggle="modal" data-target="#modal{{$place->id}}">Details</button>
                                     <a href="approve/{{$place->id}}"><div class="btn btn-blue">Approve</div></a>
