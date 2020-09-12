@@ -138,13 +138,13 @@
                             @if($randomPlace)
                                 <l-marker :lat-lng="{'lat': {{$randomPlace->lat}}, 'lng': {{$randomPlace->lng}}}" ><l-tooltip :content="'{{$randomPlace->name}}'"></l-tooltip></l-marker>
                             @else
-                                @foreach($places as $place)
-                                    <l-marker :lat-lng="{'lat': {{$place->lat}}, 'lng': {{$place->lng}}}"><l-tooltip :content="'{{$place->name}}'"></l-tooltip></l-marker>
-                                @endforeach
+                            @foreach($places as $place)
+                                <l-marker :lat-lng="{'lat': {{$place->lat}}, 'lng': {{$place->lng}}}"><l-tooltip :content="'{{$place->name}}'"></l-tooltip></l-marker>
+                            @endforeach
                             @endif
                             <l-control position="topleft" >
                                 <a href="#btn_myLocation" class="btn m-2" style="background: honeydew">
-                                    <i class="fas fa-backspace"></i>
+                                <i class="fas fa-backspace"></i>
                                 </a>
                             </l-control>
                             <l-control position="topright" class="p-2" style="background: honeydew">

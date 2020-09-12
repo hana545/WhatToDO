@@ -225,13 +225,22 @@ const app = new Vue({
 
 
         GoogleAutocomplete (){
+            //for creating/editing objects
             if (document.getElementById('google_address')){
                 var input = document.getElementById('google_address');
                 var autocomplete = new google.maps.places.Autocomplete(input);
             }
+            //for creating users location
             if (document.getElementById('google_location')){
                 var input1 = document.getElementById('google_location');
                 var autocomplete = new google.maps.places.Autocomplete(input1);
+            }
+            //for editing users locations
+            if (document.getElementsByName('location_google')){
+                var input2 = document.getElementsByClassName('location_google');
+                for (var i = 0; i < input2.length; i++) {
+                    var autocomplete = new google.maps.places.Autocomplete(input2[i]);
+                }
             }
         },
 

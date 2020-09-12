@@ -55,7 +55,7 @@
                             <h3> Hello {{ Auth::user()->name }}.</h3>
                             <img class="img-fluid" src="{{asset('images/illustrations/mobile_user.svg')}}" style="height: 180px; width: 410px;">
 
-                        @if(Auth::user()->suspended == true)
+                            @if(Auth::user()->suspended == true)
                                 <h5 class="text-danger">Your account have been suspended. You cant add new places, reviews or save you locations any more</h5>
                             @else
                                 <h5>Here you can edit your reviews, update you account and so much more...</h5>

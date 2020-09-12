@@ -19,9 +19,9 @@ $user = Auth::user();
         @endif
 
         @if(!$places->isEmpty())
-            <div class="row pl-4">
+            <div class="row px-4">
                 @foreach($places as $place)
-                    <div class="my-3">
+                    <div class="m-2">
                         <div class="card zoom ">
                             <div class="card-body">
                                 <div class="text-center row">

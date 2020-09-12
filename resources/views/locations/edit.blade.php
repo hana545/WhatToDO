@@ -26,7 +26,7 @@
                             <label for="address" class="col-md-4 col-form-label text-md-right">Address</label>
 
                             <div class="col-md-6">
-                                <input type="text" class="form-control" name="address"  value="{{old('name', $location->address ?? '')}}">
+                                <input type="text" class="form-control location_google" name="address" value="{{old('name', $location->address ?? '')}}">
                                 <div class="text-danger pb-3">{{ $errors->first('address') }}</div>
                             </div>
                         </div>

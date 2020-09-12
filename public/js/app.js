@@ -6451,7 +6451,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css?66f3":
+/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css":
 /*!*******************************************************************************************************************************!*\
   !*** ./node_modules/css-loader??ref--6-1!./node_modules/postcss-loader/src??ref--6-2!./node_modules/leaflet/dist/leaflet.css ***!
   \*******************************************************************************************************************************/
@@ -31622,7 +31622,7 @@ window.L = exports;
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../css-loader??ref--6-1!../../postcss-loader/src??ref--6-2!./leaflet.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css?66f3");
+var content = __webpack_require__(/*! !../../css-loader??ref--6-1!../../postcss-loader/src??ref--6-2!./leaflet.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/leaflet/dist/leaflet.css");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -77187,14 +77187,25 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
       infoArea.style.display = 'initial';
     },
     GoogleAutocomplete: function GoogleAutocomplete() {
+      //for creating/editing objects
       if (document.getElementById('google_address')) {
         var input = document.getElementById('google_address');
         var autocomplete = new google.maps.places.Autocomplete(input);
-      }
+      } //for creating users location
+
 
       if (document.getElementById('google_location')) {
         var input1 = document.getElementById('google_location');
         var autocomplete = new google.maps.places.Autocomplete(input1);
+      } //for editing users locations
+
+
+      if (document.getElementsByName('location_google')) {
+        var input2 = document.getElementsByClassName('location_google');
+
+        for (var i = 0; i < input2.length; i++) {
+          var autocomplete = new google.maps.places.Autocomplete(input2[i]);
+        }
       }
     },
     ChangeRange: function ChangeRange(event) {
